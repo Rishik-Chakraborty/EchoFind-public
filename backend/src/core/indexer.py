@@ -15,13 +15,41 @@ def process_upload(job_id: int, file_path: str):
         )
         db.commit()
 
-        # Step 1: Fragment audio file
-        fragmenter = AudioFragmenter()
-        chunks = fragmenter.fragment(file_path)
+        # Step 1: Run Demucs Source Separation
+        import subprocess
+        upload_dir = os.path.dirname(file_path)
+        separated_dir = os.path.join(upload_dir, "separated")
+        os.makedirs(separated_dir, exist_ok=True)
+        
+        try:
+            # Run demucs (outputs to separated/htdemucs/filename/*.wav)
+            print(f"Running Demucs on {file_path}...")
+            subprocess.run(["demucs", "-n", "htdemucs", "--out", separated_dir, file_path], check=True)
+        except Exception as e:
+            print(f"Warning: Demucs failed: {e}. Proceeding with original audio only.")
 
-        # Step 2: Register file in audio_files
+        # Gather files to fragment: original + stems
+        files_to_fragment = [file_path]
+        base_name = os.path.splitext(os.path.basename(file_path))[0]
+        stems_dir = os.path.join(separated_dir, "htdemucs", base_name)
+        if os.path.exists(stems_dir):
+            for stem in ["vocals.wav", "drums.wav", "bass.wav", "other.wav"]:
+                stem_path = os.path.join(stems_dir, stem)
+                if os.path.exists(stem_path):
+                    files_to_fragment.append(stem_path)
+
+        # Step 2: Fragment all gathered audio files
+        fragmenter = AudioFragmenter()
+        all_chunks = []
+        for f in files_to_fragment:
+            try:
+                all_chunks.extend(fragmenter.fragment(f))
+            except Exception as e:
+                print(f"Warning: Failed to fragment {f}: {e}")
+
+        # Step 3: Register file in audio_files
         filename = os.path.basename(file_path)
-        duration = max((c["end_time"] for c in chunks), default=0.0)
+        duration = max((c["end_time"] for c in all_chunks), default=0.0)
 
         res = db.execute(
             text("""
@@ -37,8 +65,8 @@ def process_upload(job_id: int, file_path: str):
         embedder = ClapEmbedder()
 
         batch_size = 32
-        for i in range(0, len(chunks), batch_size):
-            batch = chunks[i : i + batch_size]
+        for i in range(0, len(all_chunks), batch_size):
+            batch = all_chunks[i : i + batch_size]
             arrays = [c["array"] for c in batch]
 
             # Embed the batch

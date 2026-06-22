@@ -100,4 +100,31 @@ class AudioFragmenter:
                     "array": chunk_array,
                 })
 
+        # --- Dynamic Onset Segmentation ---
+        try:
+            # Detect transient events
+            onset_frames = librosa.onset.onset_detect(y=audio, sr=self.sample_rate)
+            onset_times = librosa.frames_to_time(onset_frames, sr=self.sample_rate)
+            
+            # For each onset, create a precise 500ms chunk (-100ms to +400ms)
+            for t in onset_times:
+                s_time = max(0.0, t - 0.1)
+                e_time = min(total_samples / self.sample_rate, t + 0.4)
+                
+                s_idx = int(s_time * self.sample_rate)
+                e_idx = int(e_time * self.sample_rate)
+                chunk_array = audio[s_idx:e_idx]
+                
+                if len(chunk_array) == 0 or self._rms_db(chunk_array) < self.SILENCE_THRESHOLD_DB:
+                    continue
+                    
+                chunks.append({
+                    "start_time": s_time,
+                    "end_time": e_time,
+                    "resolution_type": "onset",
+                    "array": chunk_array,
+                })
+        except Exception as e:
+            print(f"Warning: Onset detection failed: {e}")
+
         return chunks

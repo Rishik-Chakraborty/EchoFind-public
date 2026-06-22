@@ -17,9 +17,8 @@ os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 class ClapEmbedder:
     """Singleton wrapper around the LAION-CLAP model.
 
-    Uses the larger ``laion/larger_clap_music_and_speech`` variant which
-    produces significantly better embeddings for general audio events
-    (environmental sounds, speech, music) compared to ``clap-htsat-fused``.
+    Uses the ``laion/clap-htsat-fused`` variant which produces 
+    superior embeddings for pure environmental sounds (birds, sirens, etc).
 
     - Loads the model on CPU (MPS has known memory allocation bugs with CLAP).
     - Provides ``embed_audio_batch`` for a list of ``np.ndarray`` chunks.
@@ -40,7 +39,7 @@ class ClapEmbedder:
     def _initialize(self):
         # Force CPU; MPS has known memory allocation bugs with CLAP
         self.device = torch.device("cpu")
-        model_name = "laion/larger_clap_music_and_speech"
+        model_name = "laion/clap-htsat-fused"
         self.model = ClapModel.from_pretrained(model_name).to(self.device)
         self.processor = AutoProcessor.from_pretrained(model_name)
         self.model.eval()
