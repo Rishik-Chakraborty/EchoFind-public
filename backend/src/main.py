@@ -2,6 +2,7 @@ import os
 from fastapi import FastAPI, UploadFile, File, BackgroundTasks, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
+from fastapi.middleware.cors import CORSMiddleware
 from .db import get_db
 from .schemas import UploadResponse, SearchRequest, SearchResult
 from .core.indexer import process_upload
@@ -9,6 +10,15 @@ from .core.embedder import ClapEmbedder
 from .core.audio_dsp import AudioFragmenter
 
 app = FastAPI()
+
+# Add CORS Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/health")
 def health():

@@ -1,10 +1,10 @@
 fastapi==0.110.0
 uvicorn[standard]==0.27.0
 SQLAlchemy==2.0.30
-psycopg2-binary==2.9.9
+psycopg[binary]
 librosa==0.10.2
 soundfile==0.12.1
-numpy==1.26.4
-torch==2.2.2+cpu; sys_platform == "darwin" or sys_platform == "linux"
-transformers==4.40.2
-pydantic==2.7.1
+numpy
+torch
+transformers
+pydantic
