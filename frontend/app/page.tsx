@@ -22,20 +22,21 @@ export default function Home() {
 
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Poll job status until completed
+  // Poll job status until completed or failed
   useEffect(() => {
     if (!jobId) return;
 
     const interval = setInterval(async () => {
       try {
-        // Since we are running locally, status check is mocked or we query back
-        // For simplicity, we poll a status check endpoint or wait.
-        // We will assume backend auto-processes immediately. Let's check status.
-        setUploadStatus("processing");
-        // We will stop polling after 5s for simplicity, or we can add status endpoint
-        clearInterval(interval);
-        setTimeout(() => setUploadStatus("completed"), 3000);
+        const res = await fetch(`http://127.0.0.1:8000/api/v1/jobs/${jobId}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        setUploadStatus(data.status);
+        if (data.status === "completed" || data.status === "failed") {
+          clearInterval(interval);
+        }
       } catch (err) {
+        console.error("Status poll error:", err);
         setUploadStatus("failed");
         clearInterval(interval);
       }
