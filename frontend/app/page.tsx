@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 interface SearchResult {
   file_id: number;
@@ -129,8 +130,27 @@ export default function Home() {
               v3.1
             </span>
           </div>
-          <div className="text-xs text-zinc-400 font-medium hidden sm:block">
-            Neural Temporal-Spatial Audio Retrieval
+          <div className="flex items-center gap-4">
+            <div className="text-xs text-zinc-400 font-medium hidden sm:block">
+              Neural Temporal-Spatial Audio Retrieval
+            </div>
+            <Show when="signed-out">
+              <div className="flex items-center gap-2">
+                <SignInButton mode="modal">
+                  <button className="text-xs font-medium text-zinc-300 hover:text-zinc-50 transition border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 px-3 py-1.5 rounded-md cursor-pointer">
+                    Sign In
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button className="text-xs font-medium text-zinc-950 transition border border-zinc-100 bg-zinc-100 hover:bg-zinc-200 px-3 py-1.5 rounded-md cursor-pointer">
+                    Sign Up
+                  </button>
+                </SignUpButton>
+              </div>
+            </Show>
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
           </div>
         </div>
       </header>
