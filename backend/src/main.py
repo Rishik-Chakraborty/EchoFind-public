@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
+from collections import defaultdict
+import numpy as np
 from .db import get_db
 from .schemas import UploadResponse, SearchRequest, SearchResult
 from .core.indexer import process_upload
@@ -86,6 +88,8 @@ def cross_resolution_fusion(candidates, window_s=2.0):
         return {}
 
 
+
+    # Build chunk lookup by start_time
     chunks_at = defaultdict(list)
     for c in candidates:
         chunks_at[c.start_time].append(c)
