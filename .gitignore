@@ -1,0 +1,32 @@
+# Audio files — test samples should not live in the repo
+*.mp3
+*.wav
+*.flac
+*.ogg
+*.m4a
+
+# Uploaded files directory
+backend/uploads/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+backend/venv/
+*.egg-info/
+.eggs/
+
+# Environment
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# Graphify knowledge graph output
+graphify-out/
+
+# Node / Next.js (handled in frontend/.gitignore but belt-and-suspenders)
+node_modules/
+.next/
