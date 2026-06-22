@@ -277,6 +277,7 @@ export default function Home() {
                       else if (res.resolution_type === "1s") colorClass = "bg-sky-500/20 hover:bg-sky-500/35 border-sky-500";
                       else if (res.resolution_type === "2s") colorClass = "bg-amber-500/20 hover:bg-amber-500/35 border-amber-500";
                       else if (res.resolution_type === "5s") colorClass = "bg-emerald-500/20 hover:bg-emerald-500/35 border-emerald-500";
+                      else if (res.resolution_type === "10s") colorClass = "bg-indigo-500/20 hover:bg-indigo-500/35 border-indigo-500";
 
                       return (
                         <button
@@ -324,6 +325,10 @@ export default function Home() {
                       <span className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-sm bg-emerald-500/25 border-l border-emerald-500" />
                         <span>5s (Ambient)</span>
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-sm bg-indigo-500/25 border-l border-indigo-500" />
+                        <span>10s (Native)</span>
                       </span>
                     </div>
                     <span>{duration.toFixed(1)}s</span>
@@ -390,6 +395,7 @@ export default function Home() {
                       else if (res.resolution_type === "1s") resolutionBadge = "border-sky-500/20 bg-sky-500/5 text-sky-400";
                       else if (res.resolution_type === "2s") resolutionBadge = "border-amber-500/20 bg-amber-500/5 text-amber-400";
                       else if (res.resolution_type === "5s") resolutionBadge = "border-emerald-500/20 bg-emerald-500/5 text-emerald-400";
+                      else if (res.resolution_type === "10s") resolutionBadge = "border-indigo-500/20 bg-indigo-500/5 text-indigo-400";
 
                       return (
                         <tr 

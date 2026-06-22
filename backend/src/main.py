@@ -79,6 +79,7 @@ _RESOLUTION_WEIGHTS = {
     "1s":    0.97,
     "2s":    0.95,
     "5s":    0.93,
+    "10s":   1.05,
 }
 
 
@@ -176,6 +177,7 @@ _FLOOR_THRESHOLDS = {
     "1s":    0.86,
     "2s":    0.84,
     "5s":    0.80,
+    "10s":   0.75,
 }
 
 
@@ -300,6 +302,9 @@ _QUERY_EXPANSIONS = [
     "{q} sound effect",
     "recording of {q}",
     "audio of {q}",
+    "A high quality professional foley recording of {q}",
+    "Clear audio of {q}",
+    "{q} playing in the foreground",
 ]
 
 def _build_queries(text: str, n: int = 7) -> List[str]:
@@ -344,6 +349,15 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
         vecs.append(v * weight)
     vecs = np.stack(vecs)
     mean_vec = vecs.mean(axis=0)
+    mean_vec = mean_vec / (np.linalg.norm(mean_vec) + 1e-9)
+
+    # Negative contrastive subtraction
+    negative_phrases = ["silence", "white noise", "static background noise", "generic conversation"]
+    neg_vecs = np.stack([embedder.embed_text_query(p) for p in negative_phrases])
+    mean_neg = neg_vecs.mean(axis=0)
+    mean_neg = mean_neg / (np.linalg.norm(mean_neg) + 1e-9)
+
+    mean_vec = mean_vec - 0.2 * mean_neg
     mean_vec = mean_vec / (np.linalg.norm(mean_vec) + 1e-9)
 
     # --- Step 3: Retrieve candidates ---
