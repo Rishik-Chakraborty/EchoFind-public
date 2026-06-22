@@ -4,103 +4,175 @@
   "graph": {},
   "nodes": [
     {
+      "label": "layout.tsx",
+      "file_type": "code",
+      "source_file": "layout.tsx",
+      "source_location": "L1",
+      "id": "layout_tsx",
+      "community": 7,
+      "norm_label": "layout.tsx"
+    },
+    {
+      "label": "geistSans",
+      "file_type": "code",
+      "source_file": "layout.tsx",
+      "source_location": "L5",
+      "id": "app_layout_geistsans",
+      "community": 7,
+      "norm_label": "geistsans"
+    },
+    {
+      "label": "geistMono",
+      "file_type": "code",
+      "source_file": "layout.tsx",
+      "source_location": "L10",
+      "id": "app_layout_geistmono",
+      "community": 7,
+      "norm_label": "geistmono"
+    },
+    {
+      "label": "metadata",
+      "file_type": "code",
+      "source_file": "layout.tsx",
+      "source_location": "L15",
+      "id": "app_layout_metadata",
+      "community": 7,
+      "norm_label": "metadata"
+    },
+    {
+      "label": "RootLayout()",
+      "file_type": "code",
+      "source_file": "layout.tsx",
+      "source_location": "L20",
+      "id": "app_layout_rootlayout",
+      "community": 7,
+      "norm_label": "rootlayout()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "page.tsx",
+      "source_location": "L1",
+      "id": "page_tsx",
+      "community": 3,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "SearchResult",
+      "file_type": "code",
+      "source_file": "page.tsx",
+      "source_location": "L5",
+      "id": "app_page_searchresult",
+      "community": 3,
+      "norm_label": "searchresult"
+    },
+    {
+      "label": "Home()",
+      "file_type": "code",
+      "source_file": "page.tsx",
+      "source_location": "L13",
+      "id": "app_page_home",
+      "community": 3,
+      "norm_label": "home()"
+    },
+    {
       "label": "main.py",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L1",
-      "id": "main_py",
       "community": 5,
-      "norm_label": "main.py"
+      "norm_label": "main.py",
+      "id": "main_py"
     },
     {
       "label": "health()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L25",
-      "id": "src_main_health",
       "community": 5,
-      "norm_label": "health()"
+      "norm_label": "health()",
+      "id": "src_main_health"
     },
     {
       "label": "upload_audio()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L29",
-      "id": "src_main_upload_audio",
       "community": 5,
-      "norm_label": "upload_audio()"
+      "norm_label": "upload_audio()",
+      "id": "src_main_upload_audio"
     },
     {
       "label": "get_job_status()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L54",
-      "id": "src_main_get_job_status",
       "community": 5,
-      "norm_label": "get_job_status()"
+      "norm_label": "get_job_status()",
+      "id": "src_main_get_job_status"
     },
     {
       "label": "_temporal_rerank()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L65",
-      "id": "src_main_temporal_rerank",
       "community": 3,
-      "norm_label": "_temporal_rerank()"
+      "norm_label": "_temporal_rerank()",
+      "id": "src_main_temporal_rerank"
     },
     {
       "label": "_build_queries()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L140",
-      "id": "src_main_build_queries",
       "community": 6,
-      "norm_label": "_build_queries()"
+      "norm_label": "_build_queries()",
+      "id": "src_main_build_queries"
     },
     {
       "label": "search()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L152",
-      "id": "src_main_search",
       "community": 6,
-      "norm_label": "search()"
+      "norm_label": "search()",
+      "id": "src_main_search"
     },
     {
       "label": "Poll job indexing status.",
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L55",
-      "id": "src_main_rationale_55",
       "community": 5,
-      "norm_label": "poll job indexing status."
+      "norm_label": "poll job indexing status.",
+      "id": "src_main_rationale_55"
     },
     {
       "label": "Merge overlapping/adjacent chunks into contiguous acoustic events and     boost",
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L66",
-      "id": "src_main_rationale_66",
       "community": 3,
-      "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events and     boost"
+      "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events and     boost",
+      "id": "src_main_rationale_66"
     },
     {
       "label": "Return up to n query phrasings for ensemble embedding.",
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L141",
-      "id": "src_main_rationale_141",
       "community": 6,
-      "norm_label": "return up to n query phrasings for ensemble embedding."
+      "norm_label": "return up to n query phrasings for ensemble embedding.",
+      "id": "src_main_rationale_141"
     },
     {
       "label": "Semantic audio search with query ensemble + temporal reranking.      Steps:",
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L153",
-      "id": "src_main_rationale_153",
       "community": 6,
-      "norm_label": "semantic audio search with query ensemble + temporal reranking.      steps:"
+      "norm_label": "semantic audio search with query ensemble + temporal reranking.      steps:",
+      "id": "src_main_rationale_153"
     },
     {
       "label": "README.md",
@@ -161,7 +233,7 @@
       "file_type": "code",
       "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L5",
-      "community": 7,
+      "community": 1,
       "norm_label": "audiofragmenter",
       "id": "core_audio_dsp_audiofragmenter"
     },
@@ -170,7 +242,7 @@
       "file_type": "code",
       "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L24",
-      "community": 7,
+      "community": 1,
       "norm_label": ".__init__()",
       "id": "core_audio_dsp_audiofragmenter_init"
     },
@@ -179,7 +251,7 @@
       "file_type": "code",
       "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L33",
-      "community": 8,
+      "community": 1,
       "norm_label": ".load_audio()",
       "id": "core_audio_dsp_audiofragmenter_load_audio"
     },
@@ -206,7 +278,7 @@
       "file_type": "rationale",
       "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L6",
-      "community": 7,
+      "community": 1,
       "norm_label": "process raw audio files into multi-resolution overlapping chunks.      resolutio",
       "id": "core_audio_dsp_rationale_6"
     },
@@ -215,7 +287,7 @@
       "file_type": "rationale",
       "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L34",
-      "community": 8,
+      "community": 1,
       "norm_label": "load an audio file, resample to target sample_rate, mono, float32.",
       "id": "core_audio_dsp_rationale_34"
     },
@@ -242,7 +314,7 @@
       "file_type": "code",
       "source_file": "backend/src/core/embedder.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 0,
       "norm_label": "embedder.py",
       "id": "backend_src_core_embedder_py"
     },
@@ -353,45 +425,100 @@
       "community": 0,
       "norm_label": "get_db()",
       "id": "src_db_get_db"
-    },
-    {
-      "label": "page.tsx",
-      "file_type": "code",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L1",
-      "community": 3,
-      "norm_label": "page.tsx",
-      "id": "frontend_app_page_tsx"
-    },
-    {
-      "label": "SearchResult",
-      "file_type": "code",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L5",
-      "community": 3,
-      "norm_label": "searchresult",
-      "id": "app_page_searchresult"
-    },
-    {
-      "label": "Home()",
-      "file_type": "code",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L13",
-      "community": 3,
-      "norm_label": "home()",
-      "id": "app_page_home"
     }
   ],
   "links": [
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_geistsans",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_geistmono",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_metadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_rootlayout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "page.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "page_tsx",
+      "target": "app_page_searchresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "page.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "page_tsx",
+      "target": "app_page_home",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/src/main.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "src_main_temporal_rerank",
+      "target": "app_page_searchresult"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/src/main.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "src_main_search",
+      "target": "app_page_searchresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "main.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_py",
-      "target": "src_main_health",
-      "confidence_score": 1.0
+      "target": "src_main_health"
     },
     {
       "relation": "contains",
@@ -399,9 +526,9 @@
       "source_file": "main.py",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_py",
-      "target": "src_main_upload_audio",
-      "confidence_score": 1.0
+      "target": "src_main_upload_audio"
     },
     {
       "relation": "contains",
@@ -409,9 +536,9 @@
       "source_file": "main.py",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_py",
-      "target": "src_main_get_job_status",
-      "confidence_score": 1.0
+      "target": "src_main_get_job_status"
     },
     {
       "relation": "contains",
@@ -419,9 +546,9 @@
       "source_file": "main.py",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_py",
-      "target": "src_main_temporal_rerank",
-      "confidence_score": 1.0
+      "target": "src_main_temporal_rerank"
     },
     {
       "relation": "contains",
@@ -429,9 +556,9 @@
       "source_file": "main.py",
       "source_location": "L140",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_py",
-      "target": "src_main_build_queries",
-      "confidence_score": 1.0
+      "target": "src_main_build_queries"
     },
     {
       "relation": "contains",
@@ -439,9 +566,9 @@
       "source_file": "main.py",
       "source_location": "L152",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_py",
-      "target": "src_main_search",
-      "confidence_score": 1.0
+      "target": "src_main_search"
     },
     {
       "relation": "rationale_for",
@@ -477,24 +604,13 @@
     {
       "relation": "calls",
       "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/src/main.py",
-      "source_location": "L119",
-      "weight": 1.0,
-      "source": "src_main_temporal_rerank",
-      "target": "app_page_searchresult"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "main.py",
       "source_location": "L170",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_main_search",
-      "target": "src_main_build_queries",
-      "confidence_score": 1.0
+      "target": "src_main_build_queries"
     },
     {
       "relation": "rationale_for",
@@ -502,9 +618,9 @@
       "source_file": "main.py",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_main_rationale_141",
-      "target": "src_main_build_queries",
-      "confidence_score": 1.0
+      "target": "src_main_build_queries"
     },
     {
       "relation": "rationale_for",
@@ -512,9 +628,9 @@
       "source_file": "main.py",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_main_rationale_153",
-      "target": "src_main_search",
-      "confidence_score": 1.0
+      "target": "src_main_search"
     },
     {
       "relation": "calls",
@@ -526,17 +642,6 @@
       "weight": 1.0,
       "source": "src_main_search",
       "target": "core_embedder_clapembedder"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/src/main.py",
-      "source_location": "L159",
-      "weight": 1.0,
-      "source": "src_main_search",
-      "target": "app_page_searchresult"
     },
     {
       "relation": "contains",
@@ -855,28 +960,8 @@
       "confidence_score": 1.0,
       "source": "backend_src_db_py",
       "target": "src_db_get_db"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_app_page_tsx",
-      "target": "app_page_searchresult"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_app_page_tsx",
-      "target": "app_page_home"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "0ef922a5958fe66447b752bf01ef626c8cc37ee1"
+  "built_at_commit": "fe05c1dee46cdd902c595281dd261a12fbcd72c9"
 }

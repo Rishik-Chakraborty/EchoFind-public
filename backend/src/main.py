@@ -12,7 +12,6 @@ from .core.embedder import ClapEmbedder
 
 app = FastAPI()
 
-# Add CORS Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -77,7 +76,6 @@ def _temporal_rerank(raw: list, gap_s: float = 0.5) -> List[SearchResult]:
     if not raw:
         return []
 
-    # Sort by start_time for merging
     sorted_chunks = sorted(raw, key=lambda r: r.start_time)
 
     events = []
@@ -93,7 +91,6 @@ def _temporal_rerank(raw: list, gap_s: float = 0.5) -> List[SearchResult]:
     for chunk in sorted_chunks[1:]:
         gap = chunk.start_time - current["end_time"]
         if gap <= gap_s:
-            # Merge: extend the event window, keep the best (lowest) score
             current["end_time"] = max(current["end_time"], chunk.end_time)
             if chunk.score < current["best_score"]:
                 current["best_score"] = chunk.score
@@ -111,7 +108,6 @@ def _temporal_rerank(raw: list, gap_s: float = 0.5) -> List[SearchResult]:
             }
     events.append(current)
 
-    # Apply continuity bonus: each additional merged chunk reduces distance by 3%
     results = []
     for ev in events:
         bonus = min(0.25, 0.03 * (ev["count"] - 1))
@@ -128,10 +124,8 @@ def _temporal_rerank(raw: list, gap_s: float = 0.5) -> List[SearchResult]:
     return results
 
 
-# Semantic expansions: CLAP works better with varied phrasings since it was
-# trained on audio-caption pairs, not single keywords.
 _QUERY_EXPANSIONS = {
-    1: [],   # 1 phrase  = just the original
+    1: [],
     2: ["a {q}", "the sound of {q}"],
     3: ["a {q}", "the sound of {q}", "{q} audio"],
     5: ["a {q}", "the sound of {q}", "{q} audio", "recording of {q}", "{q} noise"],
@@ -166,14 +160,11 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
 
     embedder = ClapEmbedder()
 
-    # --- Query ensemble: average embeddings across multiple phrasings ---
     phrases = _build_queries(request.text, n=5)
     vecs = np.stack([embedder.embed_text_query(p) for p in phrases])
-    # L2-normalise the mean so cosine distance stays meaningful
     mean_vec = vecs.mean(axis=0)
     mean_vec = mean_vec / (np.linalg.norm(mean_vec) + 1e-9)
 
-    # --- Retrieve generous candidate pool (200 candidates) ---
     sql = text("""
         SELECT file_id, start_time, end_time, resolution_type,
                (embedding <=> CAST(:query_vec AS vector)) AS score
@@ -183,8 +174,6 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
     """)
     rows = db.execute(sql, {"query_vec": str(mean_vec.tolist())}).fetchall()
 
-    # Per-resolution thresholds — short clips (250ms) produce noisier CLAP
-    # embeddings so they get a wider net; longer windows embed more robustly.
     THRESHOLDS = {
         "250ms": 0.88,
         "2s":    0.80,
@@ -202,6 +191,5 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
         if row[4] < THRESHOLDS.get(row[3], 0.80)
     ]
 
-    # Temporal rerank and return top-15 events
     events = _temporal_rerank(candidates)
     return events[:15]

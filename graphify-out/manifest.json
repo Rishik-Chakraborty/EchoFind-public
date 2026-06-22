@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/next-env.d.ts": {
-    "mtime": 1782095431.6207883,
-    "ast_hash": "d0f8375ae1199dc7acd3977fc33b78b8",
+    "mtime": 1782137469.1678038,
+    "ast_hash": "2a74d3909800ca5467fa83b0ab4a4890",
     "semantic_hash": ""
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/package.json": {
@@ -30,13 +30,13 @@
     "semantic_hash": ""
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/app/layout.tsx": {
-    "mtime": 1782094217.1477115,
-    "ast_hash": "94c34ef68b3949a75807a0211ec2273c",
+    "mtime": 1782137435.1681647,
+    "ast_hash": "af3e0b77d4cdb324bb5d9eba4139be51",
     "semantic_hash": ""
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/app/page.tsx": {
-    "mtime": 1782098980.1667912,
-    "ast_hash": "e0a8c2180fddb79c91faa93044a004f4",
+    "mtime": 1782137453.815522,
+    "ast_hash": "5ad58b0061c224228eb38b8e0ba3b173",
     "semantic_hash": ""
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/commit_tracker.py": {
