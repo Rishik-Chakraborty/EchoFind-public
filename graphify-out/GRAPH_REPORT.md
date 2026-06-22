@@ -1,16 +1,16 @@
 # Graph Report - EchoFind  (2026-06-22)
 
 ## Corpus Check
-- 21 files · ~6,392 words
+- 21 files · ~6,644 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 64 nodes · 79 edges · 8 communities (7 shown, 1 thin omitted)
+- 65 nodes · 74 edges · 8 communities (7 shown, 1 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `01cdac89`
+- Built from commit: `b2051101`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -25,28 +25,28 @@
 - [[_COMMUNITY_Community 8|Community 8]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `search()` - 9 edges
+1. `search()` - 8 edges
 2. `ClapEmbedder` - 8 edges
 3. `AudioFragmenter` - 7 edges
-4. `_temporal_rerank()` - 7 edges
-5. `_build_queries()` - 6 edges
+4. `_temporal_rerank()` - 6 edges
+5. `_build_queries()` - 5 edges
 6. `main()` - 5 edges
-7. `get_job_status()` - 4 edges
-8. `SearchResult` - 4 edges
-9. `EchoFind` - 4 edges
+7. `SearchResult` - 4 edges
+8. `EchoFind` - 4 edges
+9. `get_job_status()` - 3 edges
 10. `process_upload()` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Merge overlapping/adjacent chunks into contiguous acoustic events and     boost` --rationale_for--> `_temporal_rerank()`  [EXTRACTED]
-  main.py → backend/src/main.py
-- `Merge overlapping/adjacent chunks into contiguous acoustic events and     boost` --rationale_for--> `_temporal_rerank()`  [EXTRACTED]
-  main.py → backend/src/main.py
-- `Return up to n query phrasings for ensemble embedding.` --rationale_for--> `_build_queries()`  [EXTRACTED]
-  main.py → backend/src/main.py
-- `Return up to n query phrasings for ensemble embedding.` --rationale_for--> `_build_queries()`  [EXTRACTED]
-  main.py → backend/src/main.py
-- `Semantic audio search with query ensemble + temporal reranking.      Steps:` --rationale_for--> `search()`  [EXTRACTED]
-  main.py → backend/src/main.py
+- `search()` --calls--> `ClapEmbedder`  [EXTRACTED]
+  main.py → backend/src/core/embedder.py
+- `process_upload()` --calls--> `AudioFragmenter`  [EXTRACTED]
+  backend/src/core/indexer.py → backend/src/core/audio_dsp.py
+- `process_upload()` --calls--> `ClapEmbedder`  [EXTRACTED]
+  backend/src/core/indexer.py → backend/src/core/embedder.py
+- `_temporal_rerank()` --calls--> `SearchResult`  [INFERRED]
+  main.py → frontend/app/page.tsx
+- `search()` --calls--> `SearchResult`  [INFERRED]
+  main.py → frontend/app/page.tsx
 
 ## Communities (8 total, 1 thin omitted)
 
@@ -55,16 +55,16 @@ Cohesion: 0.18
 Nodes (5): ClapEmbedder, Singleton wrapper around the LAION-CLAP model.      Uses the larger ``laion/larg, Encode a list of audio numpy arrays into a (N, 512) ndarray.          The proces, Encode a text query into a (512,) ndarray., process_upload()
 
 ### Community 3 - "Community 3"
-Cohesion: 0.29
-Nodes (6): Home(), SearchResult, Merge overlapping/adjacent chunks into contiguous acoustic events and     boost, Merge overlapping/adjacent chunks into contiguous acoustic events and     boost, Merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro, _temporal_rerank()
+Cohesion: 0.20
+Nodes (10): Home(), SearchResult, Semantic audio search with query ensemble + temporal reranking.      Steps:, Semantic audio search with query ensemble + temporal reranking.      Steps:, Merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro, Semantic audio search with query ensemble + adaptive thresholds +     cross-reso, Merge overlapping/adjacent chunks into contiguous acoustic events and     boost, Merge overlapping/adjacent chunks into contiguous acoustic events and     boost (+2 more)
 
 ### Community 4 - "Community 4"
 Cohesion: 0.40
 Nodes (4): EchoFind, How to Build It: A Sequential Strategy, Key Technical Infrastructure (v3.0), Performance Expectations
 
 ### Community 5 - "Community 5"
-Cohesion: 0.18
-Nodes (13): _build_queries(), get_job_status(), health(), Return up to n query phrasings for ensemble embedding., Return up to n query phrasings for ensemble embedding., Semantic audio search with query ensemble + temporal reranking.      Steps:, Semantic audio search with query ensemble + temporal reranking.      Steps:, Return up to n query phrasings for ensemble embedding. (+5 more)
+Cohesion: 0.17
+Nodes (9): _build_queries(), cross_resolution_fusion(), get_job_status(), Return up to n query phrasings for ensemble embedding., Return up to n query phrasings for ensemble embedding., Return up to n query phrasings for ensemble embedding., Poll job indexing status., Poll job indexing status. (+1 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.60
@@ -86,11 +86,11 @@ Nodes (6): AudioFragmenter, Load an audio file, resample to target sample_rate, 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `ClapEmbedder` connect `Community 2` to `Community 5`?**
-  _High betweenness centrality (0.271) - this node is a cross-community bridge._
-- **Why does `search()` connect `Community 5` to `Community 2`, `Community 3`?**
-  _High betweenness centrality (0.243) - this node is a cross-community bridge._
+- **Why does `ClapEmbedder` connect `Community 2` to `Community 3`?**
+  _High betweenness centrality (0.340) - this node is a cross-community bridge._
+- **Why does `search()` connect `Community 3` to `Community 2`, `Community 5`?**
+  _High betweenness centrality (0.325) - this node is a cross-community bridge._
 - **Why does `process_upload()` connect `Community 2` to `Community 8`?**
-  _High betweenness centrality (0.166) - this node is a cross-community bridge._
-- **What connects `Process raw audio files into multi-resolution overlapping chunks.      Resolutio`, `Load an audio file, resample to target sample_rate, mono, float32.          Appl`, `Compute the RMS energy of an audio array in decibels.` to the rest of the system?**
-  _25 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.198) - this node is a cross-community bridge._
+- **What connects `Poll job indexing status.`, `Fusion model: match multi-resolution chunks from different windows     and weigh`, `Merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro` to the rest of the system?**
+  _26 weakly-connected nodes found - possible documentation gaps or missing edges._

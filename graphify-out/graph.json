@@ -4,207 +4,18 @@
   "graph": {},
   "nodes": [
     {
-      "label": "audio_dsp.py",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L1",
-      "id": "backend_src_core_audio_dsp_py",
-      "community": 8,
-      "norm_label": "audio_dsp.py"
-    },
-    {
-      "label": "AudioFragmenter",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L5",
-      "id": "core_audio_dsp_audiofragmenter",
-      "community": 8,
-      "norm_label": "audiofragmenter"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L30",
-      "id": "core_audio_dsp_audiofragmenter_init",
-      "community": 8,
-      "norm_label": ".__init__()"
-    },
-    {
-      "label": ".load_audio()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L39",
-      "id": "core_audio_dsp_audiofragmenter_load_audio",
-      "community": 8,
-      "norm_label": ".load_audio()"
-    },
-    {
-      "label": "_rms_db()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L53",
-      "id": "core_audio_dsp_rms_db",
-      "community": 8,
-      "norm_label": "_rms_db()"
-    },
-    {
-      "label": "._chunk_indices()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L58",
-      "id": "core_audio_dsp_audiofragmenter_chunk_indices",
-      "community": 8,
-      "norm_label": "._chunk_indices()"
-    },
-    {
-      "label": ".fragment()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L70",
-      "id": "core_audio_dsp_audiofragmenter_fragment",
-      "community": 8,
-      "norm_label": ".fragment()"
-    },
-    {
-      "label": "Process raw audio files into multi-resolution overlapping chunks.      Resolutio",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L6",
-      "id": "core_audio_dsp_rationale_6",
-      "community": 8,
-      "norm_label": "process raw audio files into multi-resolution overlapping chunks.      resolutio"
-    },
-    {
-      "label": "Load an audio file, resample to target sample_rate, mono, float32.          Appl",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L40",
-      "id": "core_audio_dsp_rationale_40",
-      "community": 8,
-      "norm_label": "load an audio file, resample to target sample_rate, mono, float32.          appl"
-    },
-    {
-      "label": "Compute the RMS energy of an audio array in decibels.",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L54",
-      "id": "core_audio_dsp_rationale_54",
-      "community": 0,
-      "norm_label": "compute the rms energy of an audio array in decibels."
-    },
-    {
-      "label": "Return start/end sample index dicts for the given window and step.",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L59",
-      "id": "core_audio_dsp_rationale_59",
-      "community": 8,
-      "norm_label": "return start/end sample index dicts for the given window and step."
-    },
-    {
-      "label": "Generate multi-resolution chunks for *file_path*.          Each chunk dict:",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L71",
-      "id": "core_audio_dsp_rationale_71",
-      "community": 8,
-      "norm_label": "generate multi-resolution chunks for *file_path*.          each chunk dict:"
-    },
-    {
-      "label": "embedder.py",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L1",
-      "id": "backend_src_core_embedder_py",
-      "community": 2,
-      "norm_label": "embedder.py"
-    },
-    {
-      "label": "ClapEmbedder",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L16",
-      "id": "core_embedder_clapembedder",
-      "community": 2,
-      "norm_label": "clapembedder"
-    },
-    {
-      "label": ".__new__()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L30",
-      "id": "core_embedder_clapembedder_new",
-      "community": 2,
-      "norm_label": ".__new__()"
-    },
-    {
-      "label": "._initialize()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L36",
-      "id": "core_embedder_clapembedder_initialize",
-      "community": 2,
-      "norm_label": "._initialize()"
-    },
-    {
-      "label": ".embed_audio_batch()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L44",
-      "id": "core_embedder_clapembedder_embed_audio_batch",
-      "community": 2,
-      "norm_label": ".embed_audio_batch()"
-    },
-    {
-      "label": ".embed_text_query()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L68",
-      "id": "core_embedder_clapembedder_embed_text_query",
-      "community": 2,
-      "norm_label": ".embed_text_query()"
-    },
-    {
-      "label": "Singleton wrapper around the LAION-CLAP model.      Uses the larger ``laion/larg",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L17",
-      "id": "core_embedder_rationale_17",
-      "community": 2,
-      "norm_label": "singleton wrapper around the laion-clap model.      uses the larger ``laion/larg"
-    },
-    {
-      "label": "Encode a list of audio numpy arrays into a (N, 512) ndarray.          The proces",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L45",
-      "id": "core_embedder_rationale_45",
-      "community": 2,
-      "norm_label": "encode a list of audio numpy arrays into a (n, 512) ndarray.          the proces"
-    },
-    {
-      "label": "Encode a text query into a (512,) ndarray.",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L69",
-      "id": "core_embedder_rationale_69",
-      "community": 2,
-      "norm_label": "encode a text query into a (512,) ndarray."
-    },
-    {
       "label": "main.py",
       "file_type": "code",
-      "source_file": "backend/src/main.py",
+      "source_file": "main.py",
       "source_location": "L1",
-      "id": "backend_src_main_py",
+      "id": "main_py",
       "community": 5,
       "norm_label": "main.py"
     },
     {
       "label": "health()",
       "file_type": "code",
-      "source_file": "backend/src/main.py",
+      "source_file": "main.py",
       "source_location": "L24",
       "id": "src_main_health",
       "community": 5,
@@ -213,7 +24,7 @@
     {
       "label": "upload_audio()",
       "file_type": "code",
-      "source_file": "backend/src/main.py",
+      "source_file": "main.py",
       "source_location": "L28",
       "id": "src_main_upload_audio",
       "community": 5,
@@ -222,17 +33,26 @@
     {
       "label": "get_job_status()",
       "file_type": "code",
-      "source_file": "backend/src/main.py",
+      "source_file": "main.py",
       "source_location": "L53",
       "id": "src_main_get_job_status",
       "community": 5,
       "norm_label": "get_job_status()"
     },
     {
+      "label": "cross_resolution_fusion()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L76",
+      "id": "src_main_cross_resolution_fusion",
+      "community": 5,
+      "norm_label": "cross_resolution_fusion()"
+    },
+    {
       "label": "_temporal_rerank()",
       "file_type": "code",
-      "source_file": "backend/src/main.py",
-      "source_location": "L85",
+      "source_file": "main.py",
+      "source_location": "L171",
       "id": "src_main_temporal_rerank",
       "community": 3,
       "norm_label": "_temporal_rerank()"
@@ -240,8 +60,8 @@
     {
       "label": "_build_queries()",
       "file_type": "code",
-      "source_file": "backend/src/main.py",
-      "source_location": "L208",
+      "source_file": "main.py",
+      "source_location": "L294",
       "id": "src_main_build_queries",
       "community": 5,
       "norm_label": "_build_queries()"
@@ -249,74 +69,272 @@
     {
       "label": "search()",
       "file_type": "code",
-      "source_file": "backend/src/main.py",
-      "source_location": "L221",
+      "source_file": "main.py",
+      "source_location": "L307",
       "id": "src_main_search",
-      "community": 5,
+      "community": 3,
       "norm_label": "search()"
     },
     {
       "label": "Poll job indexing status.",
       "file_type": "rationale",
-      "source_file": "backend/src/main.py",
+      "source_file": "main.py",
       "source_location": "L54",
       "id": "src_main_rationale_54",
       "community": 5,
       "norm_label": "poll job indexing status."
     },
     {
+      "label": "Fusion model: match multi-resolution chunks from different windows     and weigh",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L77",
+      "id": "src_main_rationale_77",
+      "community": 5,
+      "norm_label": "fusion model: match multi-resolution chunks from different windows     and weigh"
+    },
+    {
       "label": "Merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro",
       "file_type": "rationale",
-      "source_file": "backend/src/main.py",
-      "source_location": "L86",
-      "id": "src_main_rationale_86",
+      "source_file": "main.py",
+      "source_location": "L172",
+      "id": "src_main_rationale_172",
       "community": 3,
       "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro"
     },
     {
       "label": "Return up to n query phrasings for ensemble embedding.",
       "file_type": "rationale",
-      "source_file": "backend/src/main.py",
-      "source_location": "L209",
-      "id": "src_main_rationale_209",
+      "source_file": "main.py",
+      "source_location": "L295",
+      "id": "src_main_rationale_295",
       "community": 5,
       "norm_label": "return up to n query phrasings for ensemble embedding."
     },
     {
       "label": "Semantic audio search with query ensemble + adaptive thresholds +     cross-reso",
       "file_type": "rationale",
-      "source_file": "backend/src/main.py",
-      "source_location": "L222",
-      "id": "src_main_rationale_222",
-      "community": 5,
+      "source_file": "main.py",
+      "source_location": "L308",
+      "id": "src_main_rationale_308",
+      "community": 3,
       "norm_label": "semantic audio search with query ensemble + adaptive thresholds +     cross-reso"
+    },
+    {
+      "label": "audio_dsp.py",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L1",
+      "community": 8,
+      "norm_label": "audio_dsp.py",
+      "id": "backend_src_core_audio_dsp_py"
+    },
+    {
+      "label": "AudioFragmenter",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L5",
+      "community": 8,
+      "norm_label": "audiofragmenter",
+      "id": "core_audio_dsp_audiofragmenter"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L30",
+      "community": 8,
+      "norm_label": ".__init__()",
+      "id": "core_audio_dsp_audiofragmenter_init"
+    },
+    {
+      "label": ".load_audio()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L39",
+      "community": 8,
+      "norm_label": ".load_audio()",
+      "id": "core_audio_dsp_audiofragmenter_load_audio"
+    },
+    {
+      "label": "_rms_db()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L53",
+      "community": 8,
+      "norm_label": "_rms_db()",
+      "id": "core_audio_dsp_rms_db"
+    },
+    {
+      "label": "._chunk_indices()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L58",
+      "community": 8,
+      "norm_label": "._chunk_indices()",
+      "id": "core_audio_dsp_audiofragmenter_chunk_indices"
+    },
+    {
+      "label": ".fragment()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L70",
+      "community": 8,
+      "norm_label": ".fragment()",
+      "id": "core_audio_dsp_audiofragmenter_fragment"
+    },
+    {
+      "label": "Process raw audio files into multi-resolution overlapping chunks.      Resolutio",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L6",
+      "community": 8,
+      "norm_label": "process raw audio files into multi-resolution overlapping chunks.      resolutio",
+      "id": "core_audio_dsp_rationale_6"
+    },
+    {
+      "label": "Load an audio file, resample to target sample_rate, mono, float32.          Appl",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L40",
+      "community": 8,
+      "norm_label": "load an audio file, resample to target sample_rate, mono, float32.          appl",
+      "id": "core_audio_dsp_rationale_40"
+    },
+    {
+      "label": "Compute the RMS energy of an audio array in decibels.",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L54",
+      "community": 0,
+      "norm_label": "compute the rms energy of an audio array in decibels.",
+      "id": "core_audio_dsp_rationale_54"
+    },
+    {
+      "label": "Return start/end sample index dicts for the given window and step.",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L59",
+      "community": 8,
+      "norm_label": "return start/end sample index dicts for the given window and step.",
+      "id": "core_audio_dsp_rationale_59"
+    },
+    {
+      "label": "Generate multi-resolution chunks for *file_path*.          Each chunk dict:",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L71",
+      "community": 8,
+      "norm_label": "generate multi-resolution chunks for *file_path*.          each chunk dict:",
+      "id": "core_audio_dsp_rationale_71"
+    },
+    {
+      "label": "embedder.py",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L1",
+      "community": 2,
+      "norm_label": "embedder.py",
+      "id": "backend_src_core_embedder_py"
+    },
+    {
+      "label": "ClapEmbedder",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L16",
+      "community": 2,
+      "norm_label": "clapembedder",
+      "id": "core_embedder_clapembedder"
+    },
+    {
+      "label": ".__new__()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L30",
+      "community": 2,
+      "norm_label": ".__new__()",
+      "id": "core_embedder_clapembedder_new"
+    },
+    {
+      "label": "._initialize()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L36",
+      "community": 2,
+      "norm_label": "._initialize()",
+      "id": "core_embedder_clapembedder_initialize"
+    },
+    {
+      "label": ".embed_audio_batch()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L44",
+      "community": 2,
+      "norm_label": ".embed_audio_batch()",
+      "id": "core_embedder_clapembedder_embed_audio_batch"
+    },
+    {
+      "label": ".embed_text_query()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L68",
+      "community": 2,
+      "norm_label": ".embed_text_query()",
+      "id": "core_embedder_clapembedder_embed_text_query"
+    },
+    {
+      "label": "Singleton wrapper around the LAION-CLAP model.      Uses the larger ``laion/larg",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L17",
+      "community": 2,
+      "norm_label": "singleton wrapper around the laion-clap model.      uses the larger ``laion/larg",
+      "id": "core_embedder_rationale_17"
+    },
+    {
+      "label": "Encode a list of audio numpy arrays into a (N, 512) ndarray.          The proces",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L45",
+      "community": 2,
+      "norm_label": "encode a list of audio numpy arrays into a (n, 512) ndarray.          the proces",
+      "id": "core_embedder_rationale_45"
+    },
+    {
+      "label": "Encode a text query into a (512,) ndarray.",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L69",
+      "community": 2,
+      "norm_label": "encode a text query into a (512,) ndarray.",
+      "id": "core_embedder_rationale_69"
     },
     {
       "label": "page.tsx",
       "file_type": "code",
       "source_file": "frontend/app/page.tsx",
       "source_location": "L1",
-      "id": "frontend_app_page_tsx",
       "community": 3,
-      "norm_label": "page.tsx"
+      "norm_label": "page.tsx",
+      "id": "frontend_app_page_tsx"
     },
     {
       "label": "SearchResult",
       "file_type": "code",
       "source_file": "frontend/app/page.tsx",
       "source_location": "L5",
-      "id": "app_page_searchresult",
       "community": 3,
-      "norm_label": "searchresult"
+      "norm_label": "searchresult",
+      "id": "app_page_searchresult"
     },
     {
       "label": "Home()",
       "file_type": "code",
       "source_file": "frontend/app/page.tsx",
       "source_location": "L13",
-      "id": "app_page_home",
       "community": 3,
-      "norm_label": "home()"
+      "norm_label": "home()",
+      "id": "app_page_home"
     },
     {
       "label": "commit_tracker.py",
@@ -373,15 +391,6 @@
       "id": "backend_commit_tracker_main"
     },
     {
-      "label": "main.py",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L1",
-      "community": 5,
-      "norm_label": "main.py",
-      "id": "main_py"
-    },
-    {
       "label": "Merge overlapping/adjacent chunks into contiguous acoustic events and     boost",
       "file_type": "rationale",
       "source_file": "main.py",
@@ -404,7 +413,7 @@
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L147",
-      "community": 5,
+      "community": 3,
       "norm_label": "semantic audio search with query ensemble + temporal reranking.      steps:",
       "id": "src_main_rationale_147"
     },
@@ -494,7 +503,7 @@
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L153",
-      "community": 5,
+      "community": 3,
       "norm_label": "semantic audio search with query ensemble + temporal reranking.      steps:",
       "id": "src_main_rationale_153"
     },
@@ -584,6 +593,251 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_py",
+      "target": "src_main_health"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_py",
+      "target": "src_main_upload_audio"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_py",
+      "target": "src_main_get_job_status"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "main_py",
+      "target": "src_main_cross_resolution_fusion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_py",
+      "target": "src_main_temporal_rerank"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_py",
+      "target": "src_main_build_queries"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L152",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_py",
+      "target": "src_main_search"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_54",
+      "target": "src_main_get_job_status"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_55",
+      "target": "src_main_get_job_status"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "src_main_rationale_77",
+      "target": "src_main_cross_resolution_fusion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L171",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_search",
+      "target": "src_main_temporal_rerank"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "src_main_rationale_172",
+      "target": "src_main_temporal_rerank",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/src/main.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "src_main_temporal_rerank",
+      "target": "app_page_searchresult"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_65",
+      "target": "src_main_temporal_rerank"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L66",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_66",
+      "target": "src_main_temporal_rerank"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L170",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_search",
+      "target": "src_main_build_queries"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L295",
+      "weight": 1.0,
+      "source": "src_main_rationale_295",
+      "target": "src_main_build_queries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L135",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_135",
+      "target": "src_main_build_queries"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_141",
+      "target": "src_main_build_queries"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L308",
+      "weight": 1.0,
+      "source": "src_main_rationale_308",
+      "target": "src_main_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/src/main.py",
+      "source_location": "L143",
+      "weight": 1.0,
+      "source": "src_main_search",
+      "target": "core_embedder_clapembedder"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/src/main.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "src_main_search",
+      "target": "app_page_searchresult"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L147",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_147",
+      "target": "src_main_search"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_153",
+      "target": "src_main_search"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L5",
       "weight": 1.0,
@@ -597,9 +851,9 @@
       "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_src_core_audio_dsp_py",
-      "target": "core_audio_dsp_rms_db",
-      "confidence_score": 1.0
+      "target": "core_audio_dsp_rms_db"
     },
     {
       "relation": "imports_from",
@@ -690,9 +944,9 @@
       "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_audio_dsp_rationale_40",
-      "target": "core_audio_dsp_audiofragmenter_load_audio",
-      "confidence_score": 1.0
+      "target": "core_audio_dsp_audiofragmenter_load_audio"
     },
     {
       "relation": "calls",
@@ -701,9 +955,9 @@
       "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_audio_dsp_audiofragmenter_fragment",
-      "target": "core_audio_dsp_rms_db",
-      "confidence_score": 1.0
+      "target": "core_audio_dsp_rms_db"
     },
     {
       "relation": "calls",
@@ -722,9 +976,9 @@
       "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_audio_dsp_rationale_59",
-      "target": "core_audio_dsp_audiofragmenter_chunk_indices",
-      "confidence_score": 1.0
+      "target": "core_audio_dsp_audiofragmenter_chunk_indices"
     },
     {
       "relation": "rationale_for",
@@ -732,9 +986,9 @@
       "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_audio_dsp_rationale_71",
-      "target": "core_audio_dsp_audiofragmenter_fragment",
-      "confidence_score": 1.0
+      "target": "core_audio_dsp_audiofragmenter_fragment"
     },
     {
       "relation": "contains",
@@ -745,17 +999,6 @@
       "confidence_score": 1.0,
       "source": "backend_src_core_embedder_py",
       "target": "core_embedder_clapembedder"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "backend_src_main_py",
-      "target": "backend_src_core_embedder_py",
-      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -823,17 +1066,6 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "backend/src/main.py",
-      "source_location": "L143",
-      "weight": 1.0,
-      "source": "src_main_search",
-      "target": "core_embedder_clapembedder"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
       "source_file": "backend/src/core/indexer.py",
       "source_location": "L37",
       "weight": 1.0,
@@ -857,9 +1089,9 @@
       "source_file": "backend/src/core/embedder.py",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_embedder_rationale_45",
-      "target": "core_embedder_clapembedder_embed_audio_batch",
-      "confidence_score": 1.0
+      "target": "core_embedder_clapembedder_embed_audio_batch"
     },
     {
       "relation": "rationale_for",
@@ -867,283 +1099,9 @@
       "source_file": "backend/src/core/embedder.py",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_embedder_rationale_69",
-      "target": "core_embedder_clapembedder_embed_text_query",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L24",
-      "weight": 1.0,
-      "source": "backend_src_main_py",
-      "target": "src_main_health",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L28",
-      "weight": 1.0,
-      "source": "backend_src_main_py",
-      "target": "src_main_upload_audio",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L53",
-      "weight": 1.0,
-      "source": "backend_src_main_py",
-      "target": "src_main_get_job_status",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L85",
-      "weight": 1.0,
-      "source": "backend_src_main_py",
-      "target": "src_main_temporal_rerank",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L208",
-      "weight": 1.0,
-      "source": "backend_src_main_py",
-      "target": "src_main_build_queries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L221",
-      "weight": 1.0,
-      "source": "backend_src_main_py",
-      "target": "src_main_search",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_health"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_upload_audio"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L54",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_54",
-      "target": "src_main_get_job_status"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L54",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_get_job_status"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L55",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_55",
-      "target": "src_main_get_job_status"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L171",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_search",
-      "target": "src_main_temporal_rerank"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L86",
-      "weight": 1.0,
-      "source": "src_main_rationale_86",
-      "target": "src_main_temporal_rerank",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/src/main.py",
-      "source_location": "L119",
-      "weight": 1.0,
-      "source": "src_main_temporal_rerank",
-      "target": "app_page_searchresult"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_temporal_rerank"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_65",
-      "target": "src_main_temporal_rerank"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L66",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_66",
-      "target": "src_main_temporal_rerank"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L170",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_search",
-      "target": "src_main_build_queries"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L209",
-      "weight": 1.0,
-      "source": "src_main_rationale_209",
-      "target": "src_main_build_queries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L140",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_build_queries"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L135",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_135",
-      "target": "src_main_build_queries"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L141",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_141",
-      "target": "src_main_build_queries"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L222",
-      "weight": 1.0,
-      "source": "src_main_rationale_222",
-      "target": "src_main_search",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/src/main.py",
-      "source_location": "L159",
-      "weight": 1.0,
-      "source": "src_main_search",
-      "target": "app_page_searchresult"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L152",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_search"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L147",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_147",
-      "target": "src_main_search"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L153",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_153",
-      "target": "src_main_search"
+      "target": "core_embedder_clapembedder_embed_text_query"
     },
     {
       "relation": "contains",
@@ -1151,9 +1109,9 @@
       "source_file": "frontend/app/page.tsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "frontend_app_page_tsx",
-      "target": "app_page_searchresult",
-      "confidence_score": 1.0
+      "target": "app_page_searchresult"
     },
     {
       "relation": "contains",
@@ -1161,9 +1119,9 @@
       "source_file": "frontend/app/page.tsx",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "frontend_app_page_tsx",
-      "target": "app_page_home",
-      "confidence_score": 1.0
+      "target": "app_page_home"
     },
     {
       "relation": "contains",
@@ -1392,5 +1350,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "01cdac893887c0a551a46111a2d57e3e2377d86e"
+  "built_at_commit": "b205110197d0b8e0dcee0733abc92af630480a22"
 }
