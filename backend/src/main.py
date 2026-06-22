@@ -72,6 +72,92 @@ _RESOLUTION_WEIGHTS = {
     "5s":    0.93,
 }
 
+
+def cross_resolution_fusion(candidates, window_s=2.0):
+    """
+    Fusion model: match multi-resolution chunks from different windows
+    and weight them by alignment confidence.
+
+    candidates: List[SearchResult]
+    window_s: Lookahead window for matching chunks (default: 2s)
+    Returns: dict mapping chunk_id -> fused_score (0-1)
+    """
+    if not candidates:
+        return {}
+
+    # Build chunk lookup by start_time
+    chunks_at = defaultdict(list)
+    for c in candidates:
+        chunks_at[c.start_time].append(c)
+
+    chunk_ids = sorted(chunks_at.keys())
+    fused = {}
+
+    for start in chunk_ids:
+        # Consider window: [start, start + window_s]
+        end_limit = start + window_s
+        current_candidates = []
+        for t in sorted(chunks_at.keys()):
+            if t >= start and t < end_limit:
+                current_candidates.extend(chunks_at[t])
+
+        if not current_candidates:
+            continue
+
+        # Group by resolution_type
+        per_res = defaultdict(list)
+        for c in current_candidates:
+            per_res[c.resolution_type].append(c)
+
+        # Compute fused score
+        f_scores = []
+        align_weight = 0.0
+
+        for res, res_list in per_res.items():
+            if not res_list:
+                continue
+
+            scores = [c.score for c in res_list]
+            avg_score = np.mean(scores)
+            f_scores.append(avg_score)
+
+            # Alignment confidence: more aligned chunks = higher weight
+            alignment_ratio = len(res_list) / len(current_candidates)
+            if alignment_ratio >= 0.5:
+                align_weight += 0.1
+            elif alignment_ratio >= 0.3:
+                align_weight += 0.05
+
+        if not f_scores:
+            continue
+
+        # Weighted geometric mean of resolution scores
+        f_scores = np.clip(f_scores, 1e-9, None)
+        fused_score = np.exp(np.mean(np.log(f_scores)))
+
+        # Resolution agreement bonus
+        num_res = len(f_scores)
+        if num_res > 1:
+            fused_score *= 0.2  # penalty for not agreeing
+
+        # Apply alignment confidence boost
+        fused_score += align_weight
+
+        # Normalize to [0,1]
+        fused_score = max(0.0, min(1.0, fused_score))
+
+        # Assign fused score to each candidate
+        for c in current_candidates:
+            current_id = getattr(c, "chunk_id", "unknown")
+            if current_id in fused:
+                fused[current_id] = max(fused[current_id], fused_score)
+            else:
+                fused[current_id] = fused_score
+
+    return fused
+
+
+
 # Hard floor thresholds per resolution.  Even with adaptive thresholds we
 # never accept candidates worse than these values.
 _FLOOR_THRESHOLDS = {

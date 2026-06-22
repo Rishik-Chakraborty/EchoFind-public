@@ -4,58 +4,373 @@
   "graph": {},
   "nodes": [
     {
+      "label": "audio_dsp.py",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L1",
+      "id": "backend_src_core_audio_dsp_py",
+      "community": 8,
+      "norm_label": "audio_dsp.py"
+    },
+    {
+      "label": "AudioFragmenter",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L5",
+      "id": "core_audio_dsp_audiofragmenter",
+      "community": 8,
+      "norm_label": "audiofragmenter"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L30",
+      "id": "core_audio_dsp_audiofragmenter_init",
+      "community": 8,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".load_audio()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L39",
+      "id": "core_audio_dsp_audiofragmenter_load_audio",
+      "community": 8,
+      "norm_label": ".load_audio()"
+    },
+    {
+      "label": "_rms_db()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L53",
+      "id": "core_audio_dsp_rms_db",
+      "community": 8,
+      "norm_label": "_rms_db()"
+    },
+    {
+      "label": "._chunk_indices()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L58",
+      "id": "core_audio_dsp_audiofragmenter_chunk_indices",
+      "community": 8,
+      "norm_label": "._chunk_indices()"
+    },
+    {
+      "label": ".fragment()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L70",
+      "id": "core_audio_dsp_audiofragmenter_fragment",
+      "community": 8,
+      "norm_label": ".fragment()"
+    },
+    {
+      "label": "Process raw audio files into multi-resolution overlapping chunks.      Resolutio",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L6",
+      "id": "core_audio_dsp_rationale_6",
+      "community": 8,
+      "norm_label": "process raw audio files into multi-resolution overlapping chunks.      resolutio"
+    },
+    {
+      "label": "Load an audio file, resample to target sample_rate, mono, float32.          Appl",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L40",
+      "id": "core_audio_dsp_rationale_40",
+      "community": 8,
+      "norm_label": "load an audio file, resample to target sample_rate, mono, float32.          appl"
+    },
+    {
+      "label": "Compute the RMS energy of an audio array in decibels.",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L54",
+      "id": "core_audio_dsp_rationale_54",
+      "community": 0,
+      "norm_label": "compute the rms energy of an audio array in decibels."
+    },
+    {
+      "label": "Return start/end sample index dicts for the given window and step.",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L59",
+      "id": "core_audio_dsp_rationale_59",
+      "community": 8,
+      "norm_label": "return start/end sample index dicts for the given window and step."
+    },
+    {
+      "label": "Generate multi-resolution chunks for *file_path*.          Each chunk dict:",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L71",
+      "id": "core_audio_dsp_rationale_71",
+      "community": 8,
+      "norm_label": "generate multi-resolution chunks for *file_path*.          each chunk dict:"
+    },
+    {
+      "label": "embedder.py",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L1",
+      "id": "backend_src_core_embedder_py",
+      "community": 2,
+      "norm_label": "embedder.py"
+    },
+    {
+      "label": "ClapEmbedder",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L16",
+      "id": "core_embedder_clapembedder",
+      "community": 2,
+      "norm_label": "clapembedder"
+    },
+    {
+      "label": ".__new__()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L30",
+      "id": "core_embedder_clapembedder_new",
+      "community": 2,
+      "norm_label": ".__new__()"
+    },
+    {
+      "label": "._initialize()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L36",
+      "id": "core_embedder_clapembedder_initialize",
+      "community": 2,
+      "norm_label": "._initialize()"
+    },
+    {
+      "label": ".embed_audio_batch()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L44",
+      "id": "core_embedder_clapembedder_embed_audio_batch",
+      "community": 2,
+      "norm_label": ".embed_audio_batch()"
+    },
+    {
+      "label": ".embed_text_query()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L68",
+      "id": "core_embedder_clapembedder_embed_text_query",
+      "community": 2,
+      "norm_label": ".embed_text_query()"
+    },
+    {
+      "label": "Singleton wrapper around the LAION-CLAP model.      Uses the larger ``laion/larg",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L17",
+      "id": "core_embedder_rationale_17",
+      "community": 2,
+      "norm_label": "singleton wrapper around the laion-clap model.      uses the larger ``laion/larg"
+    },
+    {
+      "label": "Encode a list of audio numpy arrays into a (N, 512) ndarray.          The proces",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L45",
+      "id": "core_embedder_rationale_45",
+      "community": 2,
+      "norm_label": "encode a list of audio numpy arrays into a (n, 512) ndarray.          the proces"
+    },
+    {
+      "label": "Encode a text query into a (512,) ndarray.",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L69",
+      "id": "core_embedder_rationale_69",
+      "community": 2,
+      "norm_label": "encode a text query into a (512,) ndarray."
+    },
+    {
+      "label": "main.py",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L1",
+      "id": "backend_src_main_py",
+      "community": 5,
+      "norm_label": "main.py"
+    },
+    {
+      "label": "health()",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L24",
+      "id": "src_main_health",
+      "community": 5,
+      "norm_label": "health()"
+    },
+    {
+      "label": "upload_audio()",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L28",
+      "id": "src_main_upload_audio",
+      "community": 5,
+      "norm_label": "upload_audio()"
+    },
+    {
+      "label": "get_job_status()",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L53",
+      "id": "src_main_get_job_status",
+      "community": 5,
+      "norm_label": "get_job_status()"
+    },
+    {
+      "label": "_temporal_rerank()",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L85",
+      "id": "src_main_temporal_rerank",
+      "community": 3,
+      "norm_label": "_temporal_rerank()"
+    },
+    {
+      "label": "_build_queries()",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L208",
+      "id": "src_main_build_queries",
+      "community": 5,
+      "norm_label": "_build_queries()"
+    },
+    {
+      "label": "search()",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L221",
+      "id": "src_main_search",
+      "community": 5,
+      "norm_label": "search()"
+    },
+    {
+      "label": "Poll job indexing status.",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L54",
+      "id": "src_main_rationale_54",
+      "community": 5,
+      "norm_label": "poll job indexing status."
+    },
+    {
+      "label": "Merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L86",
+      "id": "src_main_rationale_86",
+      "community": 3,
+      "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro"
+    },
+    {
+      "label": "Return up to n query phrasings for ensemble embedding.",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L209",
+      "id": "src_main_rationale_209",
+      "community": 5,
+      "norm_label": "return up to n query phrasings for ensemble embedding."
+    },
+    {
+      "label": "Semantic audio search with query ensemble + adaptive thresholds +     cross-reso",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L222",
+      "id": "src_main_rationale_222",
+      "community": 5,
+      "norm_label": "semantic audio search with query ensemble + adaptive thresholds +     cross-reso"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "frontend/app/page.tsx",
+      "source_location": "L1",
+      "id": "frontend_app_page_tsx",
+      "community": 3,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "SearchResult",
+      "file_type": "code",
+      "source_file": "frontend/app/page.tsx",
+      "source_location": "L5",
+      "id": "app_page_searchresult",
+      "community": 3,
+      "norm_label": "searchresult"
+    },
+    {
+      "label": "Home()",
+      "file_type": "code",
+      "source_file": "frontend/app/page.tsx",
+      "source_location": "L13",
+      "id": "app_page_home",
+      "community": 3,
+      "norm_label": "home()"
+    },
+    {
       "label": "commit_tracker.py",
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L1",
-      "id": "commit_tracker_py",
       "community": 6,
-      "norm_label": "commit_tracker.py"
+      "norm_label": "commit_tracker.py",
+      "id": "commit_tracker_py"
     },
     {
       "label": "load_previous_count()",
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L27",
-      "id": "backend_commit_tracker_load_previous_count",
       "community": 6,
-      "norm_label": "load_previous_count()"
+      "norm_label": "load_previous_count()",
+      "id": "backend_commit_tracker_load_previous_count"
     },
     {
       "label": "save_current_count()",
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L33",
-      "id": "backend_commit_tracker_save_current_count",
       "community": 6,
-      "norm_label": "save_current_count()"
+      "norm_label": "save_current_count()",
+      "id": "backend_commit_tracker_save_current_count"
     },
     {
       "label": "count_repo_lines()",
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L36",
-      "id": "backend_commit_tracker_count_repo_lines",
       "community": 6,
-      "norm_label": "count_repo_lines()"
+      "norm_label": "count_repo_lines()",
+      "id": "backend_commit_tracker_count_repo_lines"
     },
     {
       "label": "git()",
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L47",
-      "id": "backend_commit_tracker_git",
       "community": 6,
-      "norm_label": "git()"
+      "norm_label": "git()",
+      "id": "backend_commit_tracker_git"
     },
     {
       "label": "main()",
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L57",
-      "id": "backend_commit_tracker_main",
       "community": 6,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "backend_commit_tracker_main"
     },
     {
       "label": "main.py",
@@ -65,69 +380,6 @@
       "community": 5,
       "norm_label": "main.py",
       "id": "main_py"
-    },
-    {
-      "label": "health()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L24",
-      "community": 5,
-      "norm_label": "health()",
-      "id": "src_main_health"
-    },
-    {
-      "label": "upload_audio()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L28",
-      "community": 5,
-      "norm_label": "upload_audio()",
-      "id": "src_main_upload_audio"
-    },
-    {
-      "label": "get_job_status()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L53",
-      "community": 5,
-      "norm_label": "get_job_status()",
-      "id": "src_main_get_job_status"
-    },
-    {
-      "label": "_temporal_rerank()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L64",
-      "community": 3,
-      "norm_label": "_temporal_rerank()",
-      "id": "src_main_temporal_rerank"
-    },
-    {
-      "label": "_build_queries()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L134",
-      "community": 5,
-      "norm_label": "_build_queries()",
-      "id": "src_main_build_queries"
-    },
-    {
-      "label": "search()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L146",
-      "community": 3,
-      "norm_label": "search()",
-      "id": "src_main_search"
-    },
-    {
-      "label": "Poll job indexing status.",
-      "file_type": "rationale",
-      "source_file": "main.py",
-      "source_location": "L54",
-      "community": 5,
-      "norm_label": "poll job indexing status.",
-      "id": "src_main_rationale_54"
     },
     {
       "label": "Merge overlapping/adjacent chunks into contiguous acoustic events and     boost",
@@ -152,7 +404,7 @@
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L147",
-      "community": 3,
+      "community": 5,
       "norm_label": "semantic audio search with query ensemble + temporal reranking.      steps:",
       "id": "src_main_rationale_147"
     },
@@ -211,24 +463,6 @@
       "id": "page_tsx"
     },
     {
-      "label": "SearchResult",
-      "file_type": "code",
-      "source_file": "page.tsx",
-      "source_location": "L5",
-      "community": 3,
-      "norm_label": "searchresult",
-      "id": "app_page_searchresult"
-    },
-    {
-      "label": "Home()",
-      "file_type": "code",
-      "source_file": "page.tsx",
-      "source_location": "L13",
-      "community": 3,
-      "norm_label": "home()",
-      "id": "app_page_home"
-    },
-    {
       "label": "Poll job indexing status.",
       "file_type": "rationale",
       "source_file": "main.py",
@@ -260,7 +494,7 @@
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L153",
-      "community": 3,
+      "community": 5,
       "norm_label": "semantic audio search with query ensemble + temporal reranking.      steps:",
       "id": "src_main_rationale_153"
     },
@@ -310,182 +544,11 @@
       "id": "echofind_readme_how_to_build_it_a_sequential_strategy"
     },
     {
-      "label": "audio_dsp.py",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L1",
-      "community": 0,
-      "norm_label": "audio_dsp.py",
-      "id": "backend_src_core_audio_dsp_py"
-    },
-    {
-      "label": "AudioFragmenter",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L5",
-      "community": 8,
-      "norm_label": "audiofragmenter",
-      "id": "core_audio_dsp_audiofragmenter"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L24",
-      "community": 8,
-      "norm_label": ".__init__()",
-      "id": "core_audio_dsp_audiofragmenter_init"
-    },
-    {
-      "label": ".load_audio()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L33",
-      "community": 1,
-      "norm_label": ".load_audio()",
-      "id": "core_audio_dsp_audiofragmenter_load_audio"
-    },
-    {
-      "label": "._chunk_indices()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L38",
-      "community": 9,
-      "norm_label": "._chunk_indices()",
-      "id": "core_audio_dsp_audiofragmenter_chunk_indices"
-    },
-    {
-      "label": ".fragment()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L50",
-      "community": 1,
-      "norm_label": ".fragment()",
-      "id": "core_audio_dsp_audiofragmenter_fragment"
-    },
-    {
-      "label": "Process raw audio files into multi-resolution overlapping chunks.      Resolutio",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L6",
-      "community": 8,
-      "norm_label": "process raw audio files into multi-resolution overlapping chunks.      resolutio",
-      "id": "core_audio_dsp_rationale_6"
-    },
-    {
-      "label": "Load an audio file, resample to target sample_rate, mono, float32.",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L34",
-      "community": 1,
-      "norm_label": "load an audio file, resample to target sample_rate, mono, float32.",
-      "id": "core_audio_dsp_rationale_34"
-    },
-    {
-      "label": "Return start/end sample index dicts for the given window and step.",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L39",
-      "community": 9,
-      "norm_label": "return start/end sample index dicts for the given window and step.",
-      "id": "core_audio_dsp_rationale_39"
-    },
-    {
-      "label": "Generate multi-resolution chunks for *file_path*.          Each chunk dict:",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L51",
-      "community": 1,
-      "norm_label": "generate multi-resolution chunks for *file_path*.          each chunk dict:",
-      "id": "core_audio_dsp_rationale_51"
-    },
-    {
-      "label": "embedder.py",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L1",
-      "community": 0,
-      "norm_label": "embedder.py",
-      "id": "backend_src_core_embedder_py"
-    },
-    {
-      "label": "ClapEmbedder",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L16",
-      "community": 2,
-      "norm_label": "clapembedder",
-      "id": "core_embedder_clapembedder"
-    },
-    {
-      "label": ".__new__()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L26",
-      "community": 2,
-      "norm_label": ".__new__()",
-      "id": "core_embedder_clapembedder_new"
-    },
-    {
-      "label": "._initialize()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L32",
-      "community": 2,
-      "norm_label": "._initialize()",
-      "id": "core_embedder_clapembedder_initialize"
-    },
-    {
-      "label": ".embed_audio_batch()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L40",
-      "community": 2,
-      "norm_label": ".embed_audio_batch()",
-      "id": "core_embedder_clapembedder_embed_audio_batch"
-    },
-    {
-      "label": ".embed_text_query()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L66",
-      "community": 2,
-      "norm_label": ".embed_text_query()",
-      "id": "core_embedder_clapembedder_embed_text_query"
-    },
-    {
-      "label": "Singleton wrapper around the LAION-CLAP model.      - Loads the model on CPU (or",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L17",
-      "community": 2,
-      "norm_label": "singleton wrapper around the laion-clap model.      - loads the model on cpu (or",
-      "id": "core_embedder_rationale_17"
-    },
-    {
-      "label": "Encode a list of audio numpy arrays into a (N, 512) ndarray.          NOTE: The",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L41",
-      "community": 2,
-      "norm_label": "encode a list of audio numpy arrays into a (n, 512) ndarray.          note: the",
-      "id": "core_embedder_rationale_41"
-    },
-    {
-      "label": "Encode a text query into a (512,) ndarray.",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L67",
-      "community": 2,
-      "norm_label": "encode a text query into a (512,) ndarray.",
-      "id": "core_embedder_rationale_67"
-    },
-    {
       "label": "indexer.py",
       "file_type": "code",
       "source_file": "backend/src/core/indexer.py",
       "source_location": "L1",
-      "community": 0,
+      "community": 2,
       "norm_label": "indexer.py",
       "id": "backend_src_core_indexer_py"
     },
@@ -494,7 +557,7 @@
       "file_type": "code",
       "source_file": "backend/src/core/indexer.py",
       "source_location": "L8",
-      "community": 0,
+      "community": 2,
       "norm_label": "process_upload()",
       "id": "core_indexer_process_upload"
     },
@@ -503,7 +566,7 @@
       "file_type": "code",
       "source_file": "backend/src/db.py",
       "source_location": "L1",
-      "community": 0,
+      "community": 2,
       "norm_label": "db.py",
       "id": "backend_src_db_py"
     },
@@ -512,401 +575,12 @@
       "file_type": "code",
       "source_file": "backend/src/db.py",
       "source_location": "L23",
-      "community": 0,
+      "community": 2,
       "norm_label": "get_db()",
       "id": "src_db_get_db"
     }
   ],
   "links": [
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "commit_tracker.py",
-      "source_location": "L27",
-      "weight": 1.0,
-      "source": "commit_tracker_py",
-      "target": "backend_commit_tracker_load_previous_count",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "commit_tracker.py",
-      "source_location": "L33",
-      "weight": 1.0,
-      "source": "commit_tracker_py",
-      "target": "backend_commit_tracker_save_current_count",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "commit_tracker.py",
-      "source_location": "L36",
-      "weight": 1.0,
-      "source": "commit_tracker_py",
-      "target": "backend_commit_tracker_count_repo_lines",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "commit_tracker.py",
-      "source_location": "L47",
-      "weight": 1.0,
-      "source": "commit_tracker_py",
-      "target": "backend_commit_tracker_git",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "commit_tracker.py",
-      "source_location": "L57",
-      "weight": 1.0,
-      "source": "commit_tracker_py",
-      "target": "backend_commit_tracker_main",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "commit_tracker.py",
-      "source_location": "L58",
-      "weight": 1.0,
-      "source": "backend_commit_tracker_main",
-      "target": "backend_commit_tracker_load_previous_count",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "commit_tracker.py",
-      "source_location": "L64",
-      "weight": 1.0,
-      "source": "backend_commit_tracker_main",
-      "target": "backend_commit_tracker_save_current_count",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "commit_tracker.py",
-      "source_location": "L59",
-      "weight": 1.0,
-      "source": "backend_commit_tracker_main",
-      "target": "backend_commit_tracker_count_repo_lines",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "commit_tracker.py",
-      "source_location": "L68",
-      "weight": 1.0,
-      "source": "backend_commit_tracker_main",
-      "target": "backend_commit_tracker_git",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_health"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_upload_audio"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L54",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_get_job_status"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_temporal_rerank"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L140",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_build_queries"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L152",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_search"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L54",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_54",
-      "target": "src_main_get_job_status"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L55",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_55",
-      "target": "src_main_get_job_status"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L171",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_search",
-      "target": "src_main_temporal_rerank"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_65",
-      "target": "src_main_temporal_rerank"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/src/main.py",
-      "source_location": "L119",
-      "weight": 1.0,
-      "source": "src_main_temporal_rerank",
-      "target": "app_page_searchresult"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/main.py",
-      "source_location": "L66",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_66",
-      "target": "src_main_temporal_rerank"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L170",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_search",
-      "target": "src_main_build_queries"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L135",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_135",
-      "target": "src_main_build_queries"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L141",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_141",
-      "target": "src_main_build_queries"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L147",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_147",
-      "target": "src_main_search"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/src/main.py",
-      "source_location": "L159",
-      "weight": 1.0,
-      "source": "src_main_search",
-      "target": "app_page_searchresult"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L153",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_153",
-      "target": "src_main_search"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/src/main.py",
-      "source_location": "L143",
-      "weight": 1.0,
-      "source": "src_main_search",
-      "target": "core_embedder_clapembedder"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "layout.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "layout_tsx",
-      "target": "app_layout_geistsans"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "layout.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "layout_tsx",
-      "target": "app_layout_geistmono"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "layout.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "layout_tsx",
-      "target": "app_layout_metadata"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "layout.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "layout_tsx",
-      "target": "app_layout_rootlayout"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "page_tsx",
-      "target": "app_page_searchresult"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "page.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "page_tsx",
-      "target": "app_page_home"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_md",
-      "target": "echofind_readme_echofind"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "echofind_readme_echofind",
-      "target": "echofind_readme_key_technical_infrastructure_v3_0"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "echofind_readme_echofind",
-      "target": "echofind_readme_performance_expectations"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L27",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "echofind_readme_echofind",
-      "target": "echofind_readme_how_to_build_it_a_sequential_strategy"
-    },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
@@ -916,6 +590,16 @@
       "confidence_score": 1.0,
       "source": "backend_src_core_audio_dsp_py",
       "target": "core_audio_dsp_audiofragmenter"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "backend_src_core_audio_dsp_py",
+      "target": "core_audio_dsp_rms_db",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -1004,11 +688,22 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L34",
+      "source_location": "L40",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_rationale_34",
-      "target": "core_audio_dsp_audiofragmenter_load_audio"
+      "source": "core_audio_dsp_rationale_40",
+      "target": "core_audio_dsp_audiofragmenter_load_audio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter_fragment",
+      "target": "core_audio_dsp_rms_db",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -1025,21 +720,21 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L39",
+      "source_location": "L59",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_rationale_39",
-      "target": "core_audio_dsp_audiofragmenter_chunk_indices"
+      "source": "core_audio_dsp_rationale_59",
+      "target": "core_audio_dsp_audiofragmenter_chunk_indices",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L51",
+      "source_location": "L71",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_rationale_51",
-      "target": "core_audio_dsp_audiofragmenter_fragment"
+      "source": "core_audio_dsp_rationale_71",
+      "target": "core_audio_dsp_audiofragmenter_fragment",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -1050,6 +745,17 @@
       "confidence_score": 1.0,
       "source": "backend_src_core_embedder_py",
       "target": "core_embedder_clapembedder"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "backend_src_main_py",
+      "target": "backend_src_core_embedder_py",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -1117,6 +823,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
+      "source_file": "backend/src/main.py",
+      "source_location": "L143",
+      "weight": 1.0,
+      "source": "src_main_search",
+      "target": "core_embedder_clapembedder"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "backend/src/core/indexer.py",
       "source_location": "L37",
       "weight": 1.0,
@@ -1138,21 +855,509 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/core/embedder.py",
-      "source_location": "L41",
+      "source_location": "L45",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_embedder_rationale_41",
-      "target": "core_embedder_clapembedder_embed_audio_batch"
+      "source": "core_embedder_rationale_45",
+      "target": "core_embedder_clapembedder_embed_audio_batch",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/core/embedder.py",
-      "source_location": "L67",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "core_embedder_rationale_69",
+      "target": "core_embedder_clapembedder_embed_text_query",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "backend_src_main_py",
+      "target": "src_main_health",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "backend_src_main_py",
+      "target": "src_main_upload_audio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "backend_src_main_py",
+      "target": "src_main_get_job_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "backend_src_main_py",
+      "target": "src_main_temporal_rerank",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "source": "backend_src_main_py",
+      "target": "src_main_build_queries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L221",
+      "weight": 1.0,
+      "source": "backend_src_main_py",
+      "target": "src_main_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L25",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "core_embedder_rationale_67",
-      "target": "core_embedder_clapembedder_embed_text_query"
+      "source": "main_py",
+      "target": "src_main_health"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_py",
+      "target": "src_main_upload_audio"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_54",
+      "target": "src_main_get_job_status"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_py",
+      "target": "src_main_get_job_status"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_55",
+      "target": "src_main_get_job_status"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L171",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_search",
+      "target": "src_main_temporal_rerank"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "src_main_rationale_86",
+      "target": "src_main_temporal_rerank",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/src/main.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "src_main_temporal_rerank",
+      "target": "app_page_searchresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_py",
+      "target": "src_main_temporal_rerank"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_65",
+      "target": "src_main_temporal_rerank"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L66",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_66",
+      "target": "src_main_temporal_rerank"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L170",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_search",
+      "target": "src_main_build_queries"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L209",
+      "weight": 1.0,
+      "source": "src_main_rationale_209",
+      "target": "src_main_build_queries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L140",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_py",
+      "target": "src_main_build_queries"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L135",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_135",
+      "target": "src_main_build_queries"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_141",
+      "target": "src_main_build_queries"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L222",
+      "weight": 1.0,
+      "source": "src_main_rationale_222",
+      "target": "src_main_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/src/main.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "src_main_search",
+      "target": "app_page_searchresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L152",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_py",
+      "target": "src_main_search"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L147",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_147",
+      "target": "src_main_search"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_153",
+      "target": "src_main_search"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/page.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "frontend_app_page_tsx",
+      "target": "app_page_searchresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/page.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "frontend_app_page_tsx",
+      "target": "app_page_home",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "page.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "page_tsx",
+      "target": "app_page_searchresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "page.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "page_tsx",
+      "target": "app_page_home"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commit_tracker.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commit_tracker_py",
+      "target": "backend_commit_tracker_load_previous_count"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commit_tracker.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commit_tracker_py",
+      "target": "backend_commit_tracker_save_current_count"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commit_tracker.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commit_tracker_py",
+      "target": "backend_commit_tracker_count_repo_lines"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commit_tracker.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commit_tracker_py",
+      "target": "backend_commit_tracker_git"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commit_tracker.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commit_tracker_py",
+      "target": "backend_commit_tracker_main"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commit_tracker.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_commit_tracker_main",
+      "target": "backend_commit_tracker_load_previous_count"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commit_tracker.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_commit_tracker_main",
+      "target": "backend_commit_tracker_save_current_count"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commit_tracker.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_commit_tracker_main",
+      "target": "backend_commit_tracker_count_repo_lines"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "commit_tracker.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_commit_tracker_main",
+      "target": "backend_commit_tracker_git"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_geistsans"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_geistmono"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_metadata"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_rootlayout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_md",
+      "target": "echofind_readme_echofind"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "echofind_readme_echofind",
+      "target": "echofind_readme_key_technical_infrastructure_v3_0"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "echofind_readme_echofind",
+      "target": "echofind_readme_performance_expectations"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "echofind_readme_echofind",
+      "target": "echofind_readme_how_to_build_it_a_sequential_strategy"
     },
     {
       "relation": "imports_from",
@@ -1187,5 +1392,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "0c6c762099db9f32f3d6980ed709ed7841f58a06"
+  "built_at_commit": "01cdac893887c0a551a46111a2d57e3e2377d86e"
 }
