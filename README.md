@@ -18,6 +18,21 @@ EchoFind utilizes a streamlined AWS-native architecture designed for high availa
 
 * **Real-Time Streaming:** The system supports a parallel streaming pipeline (WebSockets) where a user can leave a microphone running and query an actively updating acoustic index without blocking the main web server.
 
+### How It Works: The Simplified Workflow
+
+At its core, EchoFind operates via a simple three-step process:
+
+1. **Acoustic Indexing (Audio-to-Vector):** 
+   When an audio clip is uploaded, it is sliced into multiple temporal resolutions (e.g., 250ms, 2s, and 5s). The **CLAP Audio Encoder** converts each slice into a **512-dimensional vector embedding** (a mathematical signature of the sound) and stores it in the database.
+
+2. **Query Processing (Text/Audio-to-Vector):** 
+   When a search is requested:
+   * A **Text Query** (e.g., *"dog barking"*) is converted into a 512-dimensional vector using the **CLAP Text Encoder**.
+   * An **Audio Query** (e.g., uploading a sound file of a siren) is converted using the **CLAP Audio Encoder**.
+
+3. **Vector Comparison (Nearest Neighbor Search):** 
+   The system calculates the closeness of the query vector to the indexed audio vectors using **cosine similarity** (cosine distance comparison via `pgvector`). The audio chunks with the highest similarity scores are returned to the user and highlighted on the playback timeline.
+
 ### Performance Expectations
 
 * **Indexing (Raw Upload):** Processing a 2-hour file on consumer hardware takes roughly 10 to 25 minutes, depending on CPU/GPU availability.
