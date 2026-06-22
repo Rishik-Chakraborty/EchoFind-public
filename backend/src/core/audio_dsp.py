@@ -21,6 +21,7 @@ class AudioFragmenter:
         "1s":    {"duration": 1.0,   "overlap": 0.50},
         "2s":    {"duration": 2.0,   "overlap": 0.50},
         "5s":    {"duration": 5.0,   "overlap": 0.50},
+        "10s":   {"duration": 10.0,  "overlap": 0.50},
     }
 
     # Chunks with RMS energy below this dB threshold are considered silence
@@ -55,6 +56,17 @@ class AudioFragmenter:
         rms = np.sqrt(np.mean(arr ** 2) + 1e-12)
         return 20.0 * np.log10(rms + 1e-12)
 
+    @staticmethod
+    def _tile_array(arr: np.ndarray, target_length: int) -> np.ndarray:
+        """Tile (repeat) an audio array until it hits target_length."""
+        if len(arr) == 0:
+            return np.zeros(target_length, dtype=np.float32)
+        if len(arr) >= target_length:
+            return arr[:target_length]
+        reps = (target_length // len(arr)) + 1
+        tiled = np.tile(arr, reps)
+        return tiled[:target_length]
+
     def _chunk_indices(self, total_samples: int, win: int, step: int) -> List[Dict[str, int]]:
         """Return start/end sample index dicts for the given window and step."""
         indices = []
@@ -82,6 +94,8 @@ class AudioFragmenter:
         total_samples = audio.shape[0]
         chunks: List[Dict] = []
 
+        target_length = 10 * self.sample_rate
+
         for res, cfg in self.windows.items():
             win, step = cfg["win"], cfg["step"]
             for idx in self._chunk_indices(total_samples, win, step):
@@ -92,11 +106,14 @@ class AudioFragmenter:
                 if self._rms_db(chunk_array) < self.SILENCE_THRESHOLD_DB:
                     continue
 
+                # Tile to 10s for CLAP to prevent zero-padding
+                tiled_array = self._tile_array(chunk_array, target_length)
+
                 chunks.append({
                     "start_time": s / self.sample_rate,
                     "end_time":   e / self.sample_rate,
                     "resolution_type": res,
-                    "array": chunk_array,
+                    "array": tiled_array,
                 })
 
         return chunks
