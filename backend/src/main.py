@@ -79,7 +79,7 @@ _RESOLUTION_WEIGHTS = {
     "1s":    0.97,
     "2s":    0.95,
     "5s":    0.93,
-    "10s":   1.05,
+    "10s":   0.90,
 }
 
 
@@ -184,22 +184,10 @@ _FLOOR_THRESHOLDS = {
 def _temporal_rerank(raw: list, gap_s: float = 1.0) -> List[SearchResult]:
     """Merge overlapping/adjacent chunks into contiguous acoustic events,
     apply cross-resolution fusion, and boost their score.
-
-    Algorithm:
-    1. Normalise scores to [0, 1] range so reranking logic is scale-invariant.
-    2. Sort candidates by start_time.
-    3. Merge any two chunks whose gap is <= gap_s into a single event.
-    4. Cross-resolution fusion: when an event contains matches from multiple
-       resolutions, compute a weighted geometric mean of their scores — if
-       both fine-grained and coarse-grained chunks agree, confidence rises.
-    5. Apply a continuity bonus: longer events get 4% per extra chunk
-       (capped at 30%).
-    6. Return results sorted by final score (ascending = better).
     """
     if not raw:
         return []
 
-    # --- Step 1: Normalise scores to [0, 1] ---
     scores = [r.score for r in raw]
     min_score = min(scores)
     max_score = max(scores)
@@ -207,82 +195,81 @@ def _temporal_rerank(raw: list, gap_s: float = 1.0) -> List[SearchResult]:
 
     sorted_chunks = sorted(raw, key=lambda r: r.start_time)
 
-    # --- Step 2–3: Merge adjacent chunks ---
     events = []
-    current = {
-        "file_id": sorted_chunks[0].file_id,
-        "start_time": sorted_chunks[0].start_time,
-        "end_time": sorted_chunks[0].end_time,
-        "resolutions": {sorted_chunks[0].resolution_type},
-        "scores": [(sorted_chunks[0].score - min_score) / score_range],
-        "res_types": [sorted_chunks[0].resolution_type],
-        "best_score": (sorted_chunks[0].score - min_score) / score_range,
-        "best_resolution": sorted_chunks[0].resolution_type,
-        "count": 1,
-    }
+    current_chunks = [sorted_chunks[0]]
 
     for chunk in sorted_chunks[1:]:
-        gap = chunk.start_time - current["end_time"]
-        norm_score = (chunk.score - min_score) / score_range
+        max_end = max(c.end_time for c in current_chunks)
+        gap = chunk.start_time - max_end
         if gap <= gap_s:
-            current["end_time"] = max(current["end_time"], chunk.end_time)
-            current["resolutions"].add(chunk.resolution_type)
-            current["scores"].append(norm_score)
-            current["res_types"].append(chunk.resolution_type)
-            if norm_score < current["best_score"]:
-                current["best_score"] = norm_score
-                current["best_resolution"] = chunk.resolution_type
-            current["count"] += 1
+            current_chunks.append(chunk)
         else:
-            events.append(current)
-            current = {
-                "file_id": chunk.file_id,
-                "start_time": chunk.start_time,
-                "end_time": chunk.end_time,
-                "resolutions": {chunk.resolution_type},
-                "scores": [norm_score],
-                "res_types": [chunk.resolution_type],
-                "best_score": norm_score,
-                "best_resolution": chunk.resolution_type,
-                "count": 1,
-            }
-    events.append(current)
+            events.append(current_chunks)
+            current_chunks = [chunk]
+    events.append(current_chunks)
 
-    # --- Step 4–5: Cross-resolution fusion + continuity bonus ---
+    def res_duration(r: str) -> float:
+        if r == "250ms": return 0.25
+        if r == "1s": return 1.0
+        if r == "2s": return 2.0
+        if r == "5s": return 5.0
+        if r == "10s": return 10.0
+        return 10.0
+
     results = []
-    for ev in events:
-        # Cross-resolution fusion: if multiple resolutions agree, compute
-        # weighted geometric mean — this rewards convergent evidence.
-        import numpy as np
+    import numpy as np
+    
+    for chunks in events:
+        file_id = chunks[0].file_id
+        start_time = min(c.start_time for c in chunks)
+        end_time = max(c.end_time for c in chunks)
+        
+        resolutions = set(c.resolution_type for c in chunks)
+        
+        # Find the absolute best score in this event
+        best_chunk_score = min(c.score for c in chunks)
+        
+        # Localization: find chunks within a 0.05 distance margin of the best score
+        # and pick the one with the shortest duration to use as the Seek timestamp.
+        close_chunks = [c for c in chunks if c.score <= best_chunk_score + 0.05]
+        best_local_chunk = min(close_chunks, key=lambda c: res_duration(c.resolution_type))
+        seek_time = best_local_chunk.start_time
 
-        if len(ev["resolutions"]) > 1:
+        # Scoring: cross-resolution fusion
+        if len(resolutions) > 1:
+            # We want the best score per resolution for fusion
+            res_best_scores = {}
+            for c in chunks:
+                ns = (c.score - min_score) / score_range
+                if c.resolution_type not in res_best_scores or ns < res_best_scores[c.resolution_type]:
+                    res_best_scores[c.resolution_type] = ns
+            
             weighted_scores = []
-            for s, r in zip(ev["scores"], ev["res_types"]):
+            for r, ns in res_best_scores.items():
                 w = _RESOLUTION_WEIGHTS.get(r, 1.0)
-                weighted_scores.append(s * w)
-            # Geometric mean of weighted scores
+                weighted_scores.append(ns * w)
+                
             arr = np.array(weighted_scores)
-            arr = np.clip(arr, 1e-9, None)  # avoid log(0)
+            arr = np.clip(arr, 1e-9, None)
             fused_score = np.exp(np.mean(np.log(arr)))
-            # Multi-resolution agreement bonus: 8% per extra resolution
-            resolution_bonus = 0.08 * (len(ev["resolutions"]) - 1)
+            
+            resolution_bonus = 0.08 * (len(resolutions) - 1)
             fused_score *= (1.0 - min(resolution_bonus, 0.20))
         else:
-            w = _RESOLUTION_WEIGHTS.get(ev["best_resolution"], 1.0)
-            fused_score = ev["best_score"] * w
+            best_ns = (best_chunk_score - min_score) / score_range
+            w = _RESOLUTION_WEIGHTS.get(list(resolutions)[0], 1.0)
+            fused_score = best_ns * w
 
-        # Continuity bonus: 4% per extra merged chunk, capped at 30%
-        continuity_bonus = min(0.30, 0.04 * (ev["count"] - 1))
+        continuity_bonus = min(0.30, 0.04 * (len(chunks) - 1))
         final_score = fused_score * (1.0 - continuity_bonus)
 
-        # Map back to original score scale for interpretability
         final_score_original = final_score * score_range + min_score
 
         results.append(SearchResult(
-            file_id=ev["file_id"],
-            start_time=ev["start_time"],
-            end_time=ev["end_time"],
-            resolution_type=ev["best_resolution"],
+            file_id=file_id,
+            start_time=seek_time,  # Precise localization!
+            end_time=end_time,
+            resolution_type=best_local_chunk.resolution_type,
             score=round(final_score_original, 6),
         ))
 
@@ -349,15 +336,6 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
         vecs.append(v * weight)
     vecs = np.stack(vecs)
     mean_vec = vecs.mean(axis=0)
-    mean_vec = mean_vec / (np.linalg.norm(mean_vec) + 1e-9)
-
-    # Negative contrastive subtraction
-    negative_phrases = ["silence", "white noise", "static background noise", "generic conversation"]
-    neg_vecs = np.stack([embedder.embed_text_query(p) for p in negative_phrases])
-    mean_neg = neg_vecs.mean(axis=0)
-    mean_neg = mean_neg / (np.linalg.norm(mean_neg) + 1e-9)
-
-    mean_vec = mean_vec - 0.2 * mean_neg
     mean_vec = mean_vec / (np.linalg.norm(mean_vec) + 1e-9)
 
     # --- Step 3: Retrieve candidates ---
