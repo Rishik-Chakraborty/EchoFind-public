@@ -52,7 +52,7 @@
       "label": "_temporal_rerank()",
       "file_type": "code",
       "source_file": "main.py",
-      "source_location": "L171",
+      "source_location": "L173",
       "id": "src_main_temporal_rerank",
       "community": 3,
       "norm_label": "_temporal_rerank()"
@@ -61,7 +61,7 @@
       "label": "_build_queries()",
       "file_type": "code",
       "source_file": "main.py",
-      "source_location": "L294",
+      "source_location": "L296",
       "id": "src_main_build_queries",
       "community": 5,
       "norm_label": "_build_queries()"
@@ -70,7 +70,7 @@
       "label": "search()",
       "file_type": "code",
       "source_file": "main.py",
-      "source_location": "L307",
+      "source_location": "L309",
       "id": "src_main_search",
       "community": 3,
       "norm_label": "search()"
@@ -97,8 +97,8 @@
       "label": "Merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro",
       "file_type": "rationale",
       "source_file": "main.py",
-      "source_location": "L172",
-      "id": "src_main_rationale_172",
+      "source_location": "L174",
+      "id": "src_main_rationale_174",
       "community": 3,
       "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro"
     },
@@ -106,8 +106,8 @@
       "label": "Return up to n query phrasings for ensemble embedding.",
       "file_type": "rationale",
       "source_file": "main.py",
-      "source_location": "L295",
-      "id": "src_main_rationale_295",
+      "source_location": "L297",
+      "id": "src_main_rationale_297",
       "community": 5,
       "norm_label": "return up to n query phrasings for ensemble embedding."
     },
@@ -115,10 +115,37 @@
       "label": "Semantic audio search with query ensemble + adaptive thresholds +     cross-reso",
       "file_type": "rationale",
       "source_file": "main.py",
-      "source_location": "L308",
-      "id": "src_main_rationale_308",
+      "source_location": "L310",
+      "id": "src_main_rationale_310",
       "community": 3,
       "norm_label": "semantic audio search with query ensemble + adaptive thresholds +     cross-reso"
+    },
+    {
+      "label": "Merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L172",
+      "community": 3,
+      "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro",
+      "id": "src_main_rationale_172"
+    },
+    {
+      "label": "Return up to n query phrasings for ensemble embedding.",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L295",
+      "community": 5,
+      "norm_label": "return up to n query phrasings for ensemble embedding.",
+      "id": "src_main_rationale_295"
+    },
+    {
+      "label": "Semantic audio search with query ensemble + adaptive thresholds +     cross-reso",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L308",
+      "community": 3,
+      "norm_label": "semantic audio search with query ensemble + adaptive thresholds +     cross-reso",
+      "id": "src_main_rationale_308"
     },
     {
       "label": "audio_dsp.py",
@@ -626,9 +653,9 @@
       "source_file": "main.py",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_py",
-      "target": "src_main_cross_resolution_fusion",
-      "confidence_score": 1.0
+      "target": "src_main_cross_resolution_fusion"
     },
     {
       "relation": "contains",
@@ -686,9 +713,9 @@
       "source_file": "main.py",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_main_rationale_77",
-      "target": "src_main_cross_resolution_fusion",
-      "confidence_score": 1.0
+      "target": "src_main_cross_resolution_fusion"
     },
     {
       "relation": "calls",
@@ -705,11 +732,21 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "main.py",
-      "source_location": "L172",
+      "source_location": "L174",
       "weight": 1.0,
-      "source": "src_main_rationale_172",
+      "source": "src_main_rationale_174",
       "target": "src_main_temporal_rerank",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L172",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_172",
+      "target": "src_main_temporal_rerank"
     },
     {
       "relation": "calls",
@@ -757,11 +794,21 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "main.py",
-      "source_location": "L295",
+      "source_location": "L297",
       "weight": 1.0,
-      "source": "src_main_rationale_295",
+      "source": "src_main_rationale_297",
       "target": "src_main_build_queries",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L295",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_295",
+      "target": "src_main_build_queries"
     },
     {
       "relation": "rationale_for",
@@ -787,11 +834,21 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "main.py",
-      "source_location": "L308",
+      "source_location": "L310",
       "weight": 1.0,
-      "source": "src_main_rationale_308",
+      "source": "src_main_rationale_310",
       "target": "src_main_search",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L308",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_rationale_308",
+      "target": "src_main_search"
     },
     {
       "relation": "calls",
@@ -1350,5 +1407,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b205110197d0b8e0dcee0733abc92af630480a22"
+  "built_at_commit": "0826e67f7ab35a57298d7bfbb181efb49b89423f"
 }
