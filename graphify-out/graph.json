@@ -4,139 +4,175 @@
   "graph": {},
   "nodes": [
     {
+      "label": "main.py",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L1",
+      "id": "main_py",
+      "community": 5,
+      "norm_label": "main.py"
+    },
+    {
+      "label": "health()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L24",
+      "id": "src_main_health",
+      "community": 5,
+      "norm_label": "health()"
+    },
+    {
+      "label": "upload_audio()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L28",
+      "id": "src_main_upload_audio",
+      "community": 5,
+      "norm_label": "upload_audio()"
+    },
+    {
+      "label": "get_job_status()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L53",
+      "id": "src_main_get_job_status",
+      "community": 5,
+      "norm_label": "get_job_status()"
+    },
+    {
+      "label": "_temporal_rerank()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L64",
+      "id": "src_main_temporal_rerank",
+      "community": 3,
+      "norm_label": "_temporal_rerank()"
+    },
+    {
+      "label": "_build_queries()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L134",
+      "id": "src_main_build_queries",
+      "community": 5,
+      "norm_label": "_build_queries()"
+    },
+    {
+      "label": "search()",
+      "file_type": "code",
+      "source_file": "main.py",
+      "source_location": "L146",
+      "id": "src_main_search",
+      "community": 3,
+      "norm_label": "search()"
+    },
+    {
+      "label": "Poll job indexing status.",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L54",
+      "id": "src_main_rationale_54",
+      "community": 5,
+      "norm_label": "poll job indexing status."
+    },
+    {
+      "label": "Merge overlapping/adjacent chunks into contiguous acoustic events and     boost",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L65",
+      "id": "src_main_rationale_65",
+      "community": 3,
+      "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events and     boost"
+    },
+    {
+      "label": "Return up to n query phrasings for ensemble embedding.",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L135",
+      "id": "src_main_rationale_135",
+      "community": 5,
+      "norm_label": "return up to n query phrasings for ensemble embedding."
+    },
+    {
+      "label": "Semantic audio search with query ensemble + temporal reranking.      Steps:",
+      "file_type": "rationale",
+      "source_file": "main.py",
+      "source_location": "L147",
+      "id": "src_main_rationale_147",
+      "community": 3,
+      "norm_label": "semantic audio search with query ensemble + temporal reranking.      steps:"
+    },
+    {
       "label": "layout.tsx",
       "file_type": "code",
       "source_file": "layout.tsx",
       "source_location": "L1",
-      "id": "layout_tsx",
       "community": 7,
-      "norm_label": "layout.tsx"
+      "norm_label": "layout.tsx",
+      "id": "layout_tsx"
     },
     {
       "label": "geistSans",
       "file_type": "code",
       "source_file": "layout.tsx",
       "source_location": "L5",
-      "id": "app_layout_geistsans",
       "community": 7,
-      "norm_label": "geistsans"
+      "norm_label": "geistsans",
+      "id": "app_layout_geistsans"
     },
     {
       "label": "geistMono",
       "file_type": "code",
       "source_file": "layout.tsx",
       "source_location": "L10",
-      "id": "app_layout_geistmono",
       "community": 7,
-      "norm_label": "geistmono"
+      "norm_label": "geistmono",
+      "id": "app_layout_geistmono"
     },
     {
       "label": "metadata",
       "file_type": "code",
       "source_file": "layout.tsx",
       "source_location": "L15",
-      "id": "app_layout_metadata",
       "community": 7,
-      "norm_label": "metadata"
+      "norm_label": "metadata",
+      "id": "app_layout_metadata"
     },
     {
       "label": "RootLayout()",
       "file_type": "code",
       "source_file": "layout.tsx",
       "source_location": "L20",
-      "id": "app_layout_rootlayout",
       "community": 7,
-      "norm_label": "rootlayout()"
+      "norm_label": "rootlayout()",
+      "id": "app_layout_rootlayout"
     },
     {
       "label": "page.tsx",
       "file_type": "code",
       "source_file": "page.tsx",
       "source_location": "L1",
-      "id": "page_tsx",
       "community": 3,
-      "norm_label": "page.tsx"
+      "norm_label": "page.tsx",
+      "id": "page_tsx"
     },
     {
       "label": "SearchResult",
       "file_type": "code",
       "source_file": "page.tsx",
       "source_location": "L5",
-      "id": "app_page_searchresult",
       "community": 3,
-      "norm_label": "searchresult"
+      "norm_label": "searchresult",
+      "id": "app_page_searchresult"
     },
     {
       "label": "Home()",
       "file_type": "code",
       "source_file": "page.tsx",
       "source_location": "L13",
-      "id": "app_page_home",
       "community": 3,
-      "norm_label": "home()"
-    },
-    {
-      "label": "main.py",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L1",
-      "community": 5,
-      "norm_label": "main.py",
-      "id": "main_py"
-    },
-    {
-      "label": "health()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L25",
-      "community": 5,
-      "norm_label": "health()",
-      "id": "src_main_health"
-    },
-    {
-      "label": "upload_audio()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L29",
-      "community": 5,
-      "norm_label": "upload_audio()",
-      "id": "src_main_upload_audio"
-    },
-    {
-      "label": "get_job_status()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L54",
-      "community": 5,
-      "norm_label": "get_job_status()",
-      "id": "src_main_get_job_status"
-    },
-    {
-      "label": "_temporal_rerank()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L65",
-      "community": 3,
-      "norm_label": "_temporal_rerank()",
-      "id": "src_main_temporal_rerank"
-    },
-    {
-      "label": "_build_queries()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L140",
-      "community": 6,
-      "norm_label": "_build_queries()",
-      "id": "src_main_build_queries"
-    },
-    {
-      "label": "search()",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L152",
-      "community": 6,
-      "norm_label": "search()",
-      "id": "src_main_search"
+      "norm_label": "home()",
+      "id": "app_page_home"
     },
     {
       "label": "Poll job indexing status.",
@@ -161,7 +197,7 @@
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L141",
-      "community": 6,
+      "community": 5,
       "norm_label": "return up to n query phrasings for ensemble embedding.",
       "id": "src_main_rationale_141"
     },
@@ -170,7 +206,7 @@
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L153",
-      "community": 6,
+      "community": 3,
       "norm_label": "semantic audio search with query ensemble + temporal reranking.      steps:",
       "id": "src_main_rationale_153"
     },
@@ -431,88 +467,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "layout.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "layout_tsx",
-      "target": "app_layout_geistsans",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "layout.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "layout_tsx",
-      "target": "app_layout_geistmono",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "layout.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "source": "layout_tsx",
-      "target": "app_layout_metadata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "layout.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "source": "layout_tsx",
-      "target": "app_layout_rootlayout",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "page_tsx",
-      "target": "app_page_searchresult",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "page.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "page_tsx",
-      "target": "app_page_home",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/src/main.py",
-      "source_location": "L119",
-      "weight": 1.0,
-      "source": "src_main_temporal_rerank",
-      "target": "app_page_searchresult"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/src/main.py",
-      "source_location": "L159",
-      "weight": 1.0,
-      "source": "src_main_search",
-      "target": "app_page_searchresult"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "main.py",
       "source_location": "L25",
       "weight": 1.0,
@@ -573,6 +527,16 @@
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "src_main_rationale_54",
+      "target": "src_main_get_job_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
       "source_file": "backend/src/main.py",
       "source_location": "L55",
       "weight": 1.0,
@@ -590,6 +554,27 @@
       "confidence_score": 1.0,
       "source": "src_main_search",
       "target": "src_main_temporal_rerank"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "src_main_rationale_65",
+      "target": "src_main_temporal_rerank",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/src/main.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "src_main_temporal_rerank",
+      "target": "app_page_searchresult"
     },
     {
       "relation": "rationale_for",
@@ -616,11 +601,42 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "main.py",
+      "source_location": "L135",
+      "weight": 1.0,
+      "source": "src_main_rationale_135",
+      "target": "src_main_build_queries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
       "source_location": "L141",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_main_rationale_141",
       "target": "src_main_build_queries"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L147",
+      "weight": 1.0,
+      "source": "src_main_rationale_147",
+      "target": "src_main_search",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/src/main.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "src_main_search",
+      "target": "app_page_searchresult"
     },
     {
       "relation": "rationale_for",
@@ -642,6 +658,66 @@
       "weight": 1.0,
       "source": "src_main_search",
       "target": "core_embedder_clapembedder"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_geistsans"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_geistmono"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_metadata"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "layout.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "layout_tsx",
+      "target": "app_layout_rootlayout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "page.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "page_tsx",
+      "target": "app_page_searchresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "page.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "page_tsx",
+      "target": "app_page_home"
     },
     {
       "relation": "contains",
@@ -963,5 +1039,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fe05c1dee46cdd902c595281dd261a12fbcd72c9"
+  "built_at_commit": "cf3affd1bb2bb73c934f6774be25cc66cd63cf66"
 }

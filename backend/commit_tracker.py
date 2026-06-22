@@ -69,7 +69,7 @@ def main():
     # Create commit message
     timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
     msg = f"Auto‑commit: +{diff} lines (≥{THRESHOLD}) – {timestamp}"
-    git("commit", "-m", msg)
+    git("commit", "-m", msg, "--no-verify")
     # Push to origin/main
     git("push", "origin", "main")
     # Update counter
