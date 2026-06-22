@@ -1,16 +1,16 @@
 # Graph Report - EchoFind  (2026-06-22)
 
 ## Corpus Check
-- 21 files · ~5,801 words
+- 21 files · ~5,802 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 51 nodes · 56 edges · 7 communities (6 shown, 1 thin omitted)
-- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.8)
+- 57 nodes · 65 edges · 10 communities (6 shown, 4 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cf3affd1`
+- Built from commit: `0c6c7620`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -21,19 +21,22 @@
 - [[_COMMUNITY_Community 3|Community 3]]
 - [[_COMMUNITY_Community 4|Community 4]]
 - [[_COMMUNITY_Community 5|Community 5]]
+- [[_COMMUNITY_Community 6|Community 6]]
 - [[_COMMUNITY_Community 7|Community 7]]
+- [[_COMMUNITY_Community 8|Community 8]]
+- [[_COMMUNITY_Community 9|Community 9]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `ClapEmbedder` - 8 edges
 2. `search()` - 7 edges
 3. `AudioFragmenter` - 7 edges
-4. `_temporal_rerank()` - 5 edges
-5. `_build_queries()` - 4 edges
-6. `EchoFind` - 4 edges
-7. `get_job_status()` - 3 edges
-8. `SearchResult` - 3 edges
-9. `process_upload()` - 3 edges
-10. `Poll job indexing status.` - 1 edges
+4. `main()` - 5 edges
+5. `_temporal_rerank()` - 5 edges
+6. `_build_queries()` - 4 edges
+7. `EchoFind` - 4 edges
+8. `get_job_status()` - 3 edges
+9. `SearchResult` - 3 edges
+10. `process_upload()` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `search()` --calls--> `ClapEmbedder`  [EXTRACTED]
@@ -47,11 +50,7 @@
 - `search()` --calls--> `SearchResult`  [INFERRED]
   main.py → page.tsx
 
-## Communities (7 total, 1 thin omitted)
-
-### Community 1 - "Community 1"
-Cohesion: 0.28
-Nodes (5): AudioFragmenter, Load an audio file, resample to target sample_rate, mono, float32., Return start/end sample index dicts for the given window and step., Generate multi-resolution chunks for *file_path*.          Each chunk dict:, Process raw audio files into multi-resolution overlapping chunks.      Resolutio
+## Communities (10 total, 4 thin omitted)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.29
@@ -69,6 +68,10 @@ Nodes (4): EchoFind, How to Build It: A Sequential Strategy, Key Technical Infra
 Cohesion: 0.22
 Nodes (6): _build_queries(), get_job_status(), Return up to n query phrasings for ensemble embedding., Return up to n query phrasings for ensemble embedding., Poll job indexing status., Poll job indexing status.
 
+### Community 6 - "Community 6"
+Cohesion: 0.60
+Nodes (5): count_repo_lines(), git(), load_previous_count(), main(), save_current_count()
+
 ### Community 7 - "Community 7"
 Cohesion: 0.40
 Nodes (3): geistMono, geistSans, metadata
@@ -76,16 +79,16 @@ Nodes (3): geistMono, geistSans, metadata
 ## Knowledge Gaps
 - **6 isolated node(s):** `geistSans`, `geistMono`, `metadata`, `Key Technical Infrastructure (v3.0)`, `Performance Expectations` (+1 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `ClapEmbedder` connect `Community 2` to `Community 0`, `Community 3`?**
-  _High betweenness centrality (0.427) - this node is a cross-community bridge._
+  _High betweenness centrality (0.339) - this node is a cross-community bridge._
 - **Why does `search()` connect `Community 3` to `Community 2`, `Community 5`?**
-  _High betweenness centrality (0.363) - this node is a cross-community bridge._
-- **Why does `process_upload()` connect `Community 0` to `Community 1`, `Community 2`?**
-  _High betweenness centrality (0.253) - this node is a cross-community bridge._
+  _High betweenness centrality (0.289) - this node is a cross-community bridge._
+- **Why does `process_upload()` connect `Community 0` to `Community 8`, `Community 2`?**
+  _High betweenness centrality (0.201) - this node is a cross-community bridge._
 - **What connects `Poll job indexing status.`, `Merge overlapping/adjacent chunks into contiguous acoustic events and     boost`, `Return up to n query phrasings for ensemble embedding.` to the rest of the system?**
   _21 weakly-connected nodes found - possible documentation gaps or missing edges._

@@ -16,7 +16,11 @@ os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 class ClapEmbedder:
     """Singleton wrapper around the LAION-CLAP model.
 
-    - Loads the model on CPU (or Apple M-series ``mps`` if available).
+    Uses the larger ``laion/larger_clap_music_and_speech`` variant which
+    produces significantly better embeddings for general audio events
+    (environmental sounds, speech, music) compared to ``clap-htsat-fused``.
+
+    - Loads the model on CPU (MPS has known memory allocation bugs with CLAP).
     - Provides ``embed_audio_batch`` for a list of ``np.ndarray`` chunks.
     - Provides ``embed_text_query`` for a natural-language query string.
     """
@@ -32,7 +36,7 @@ class ClapEmbedder:
     def _initialize(self):
         # Force CPU; MPS has known memory allocation bugs with CLAP
         self.device = torch.device("cpu")
-        model_name = "laion/clap-htsat-fused"
+        model_name = "laion/larger_clap_music_and_speech"
         self.model = ClapModel.from_pretrained(model_name).to(self.device)
         self.processor = AutoProcessor.from_pretrained(model_name)
         self.model.eval()
@@ -40,12 +44,10 @@ class ClapEmbedder:
     def embed_audio_batch(self, chunk_arrays: List[np.ndarray]) -> np.ndarray:
         """Encode a list of audio numpy arrays into a (N, 512) ndarray.
 
-        NOTE: The transformers ClapProcessor API changed `audios=` → `audio=`.
-        We pass raw waveforms as a list; the processor handles padding.
+        The processor handles padding/truncation internally.  We pass raw
+        waveforms as a list of 1-D float32 arrays.
         """
-        # Processor expects a list of 1-D float32 arrays
         arrays = [arr.astype(np.float32) for arr in chunk_arrays]
-        # Use `audio=` (not `audios=`) — renamed in transformers >= 4.40
         inputs = self.processor(
             audio=arrays,
             sampling_rate=48000,
@@ -56,8 +58,8 @@ class ClapEmbedder:
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
         with torch.no_grad():
             out = self.model.get_audio_features(**inputs)
-        # get_audio_features returns BaseModelOutputWithPooling in newer transformers;
-        # pooler_output is the correct (N, 512) projected embedding.
+        # get_audio_features may return a BaseModelOutputWithPooling or a
+        # plain tensor depending on the transformers version.
         embeddings = out.pooler_output if hasattr(out, 'pooler_output') else out
         # L2-normalise to unit sphere (standard for cosine similarity)
         embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)

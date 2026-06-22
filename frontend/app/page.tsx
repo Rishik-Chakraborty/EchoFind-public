@@ -254,6 +254,7 @@ export default function Home() {
 
                       let colorClass = "bg-zinc-400/20 hover:bg-zinc-400/35 border-zinc-400";
                       if (res.resolution_type === "250ms") colorClass = "bg-rose-500/20 hover:bg-rose-500/35 border-rose-500";
+                      else if (res.resolution_type === "1s") colorClass = "bg-sky-500/20 hover:bg-sky-500/35 border-sky-500";
                       else if (res.resolution_type === "2s") colorClass = "bg-amber-500/20 hover:bg-amber-500/35 border-amber-500";
                       else if (res.resolution_type === "5s") colorClass = "bg-emerald-500/20 hover:bg-emerald-500/35 border-emerald-500";
 
@@ -291,6 +292,10 @@ export default function Home() {
                       <span className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-sm bg-rose-500/25 border-l border-rose-500" />
                         <span>250ms (Transients)</span>
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-sm bg-sky-500/25 border-l border-sky-500" />
+                        <span>1s (Short Events)</span>
                       </span>
                       <span className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-sm bg-amber-500/25 border-l border-amber-500" />
@@ -362,6 +367,7 @@ export default function Home() {
                     {results.map((res, idx) => {
                       let resolutionBadge = "border-zinc-800 bg-zinc-900/40 text-zinc-400";
                       if (res.resolution_type === "250ms") resolutionBadge = "border-rose-500/20 bg-rose-500/5 text-rose-400";
+                      else if (res.resolution_type === "1s") resolutionBadge = "border-sky-500/20 bg-sky-500/5 text-sky-400";
                       else if (res.resolution_type === "2s") resolutionBadge = "border-amber-500/20 bg-amber-500/5 text-amber-400";
                       else if (res.resolution_type === "5s") resolutionBadge = "border-emerald-500/20 bg-emerald-500/5 text-emerald-400";
 
