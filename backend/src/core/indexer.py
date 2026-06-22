@@ -46,7 +46,11 @@ def process_upload(job_id: int, file_path: str):
         t_embed = time.time()
         embedder = ClapEmbedder()
 
-        batch_size = 32
+        batch_size = 128
+        insert_sql = text("""
+            INSERT INTO audio_chunks (file_id, start_time, end_time, resolution_type, embedding)
+            VALUES (:file_id, :start_time, :end_time, :resolution_type, CAST(:embedding AS vector))
+        """)
         for i in range(0, len(all_chunks), batch_size):
             batch = all_chunks[i : i + batch_size]
             arrays = [c["array"] for c in batch]
@@ -54,24 +58,19 @@ def process_upload(job_id: int, file_path: str):
             # Embed the batch
             embeddings = embedder.embed_audio_batch(arrays)
 
-            # Insert each chunk with its embedding
+            # Bulk insert all chunks in this batch with executemany
+            rows = []
             for idx, chunk in enumerate(batch):
                 embedding_list = embeddings[idx].tolist()
-                # pgvector expects a string like '[0.1,0.2,...]'
                 embedding_str = "[" + ",".join(str(x) for x in embedding_list) + "]"
-                db.execute(
-                    text("""
-                        INSERT INTO audio_chunks (file_id, start_time, end_time, resolution_type, embedding)
-                        VALUES (:file_id, :start_time, :end_time, :resolution_type, CAST(:embedding AS vector))
-                    """),
-                    {
-                        "file_id": file_id,
-                        "start_time": chunk["start_time"],
-                        "end_time": chunk["end_time"],
-                        "resolution_type": chunk["resolution_type"],
-                        "embedding": embedding_str,
-                    },
-                )
+                rows.append({
+                    "file_id": file_id,
+                    "start_time": chunk["start_time"],
+                    "end_time": chunk["end_time"],
+                    "resolution_type": chunk["resolution_type"],
+                    "embedding": embedding_str,
+                })
+            db.execute(insert_sql, rows)
             db.commit()  # commit each batch so we don't lose work on failure
             
         print(f"Embedding and DB insertion finished in {time.time() - t_embed:.2f} seconds.")

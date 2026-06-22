@@ -5,22 +5,18 @@ from typing import List, Dict
 class AudioFragmenter:
     """Process raw audio files into multi-resolution overlapping chunks.
 
-    Resolution tiers and their overlap ratios:
-    - 250ms  (transients):        75% overlap → 62.5ms step  — very dense, catches short squeaks/clicks
-    - 1s     (short events):      50% overlap → 500ms step   — door slams, barks, coughs, single words
-    - 2s     (localized speech):  50% overlap → 1s step      — balanced coverage
-    - 5s     (contextual):        50% overlap → 2.5s step    — contextual soundscapes
+    Resolution tiers (no overlap — onset detection handles transients):
+    - 1s     (short events):      0% overlap → 1s step   — door slams, barks, coughs, single words
+    - 2s     (localized speech):  0% overlap → 2s step   — balanced coverage
 
-    Using per-resolution overlap lets us be maximally precise at the transient
-    tier (where you might miss a 50ms squeak with only 25% overlap) while
-    keeping the larger tiers reasonably sized.
+    The 250ms dense grid was removed because the onset detector catches
+    transients more precisely with far fewer chunks. The 5s tier was removed
+    because it was always filtered out during temporal reranking.
     """
 
     RESOLUTIONS = {
-        "250ms": {"duration": 0.250, "overlap": 0.25},
         "1s":    {"duration": 1.0,   "overlap": 0.00},
         "2s":    {"duration": 2.0,   "overlap": 0.00},
-        "5s":    {"duration": 5.0,   "overlap": 0.00},
     }
 
     # Chunks with RMS energy below this dB threshold are considered silence
@@ -42,7 +38,7 @@ class AudioFragmenter:
         Applies peak-normalization to [-1, 1] so embeddings are consistent
         across files recorded at different volumes.
         """
-        y, _ = librosa.load(file_path, sr=self.sample_rate, mono=True, dtype=np.float32)
+        y, _ = librosa.load(file_path, sr=self.sample_rate, mono=True, dtype=np.float32, res_type='kaiser_fast')
         # Peak-normalise to [-1, 1]
         peak = np.max(np.abs(y))
         if peak > 0:
@@ -73,7 +69,7 @@ class AudioFragmenter:
         Each chunk dict:
           - start_time       (seconds, float)
           - end_time         (seconds, float)
-          - resolution_type  ("250ms" | "1s" | "2s" | "5s")
+          - resolution_type  ("1s" | "2s" | "onset")
           - array            (np.ndarray view, float32, shape=(n_samples,))
 
         Silent chunks (below SILENCE_THRESHOLD_DB) are automatically excluded.
@@ -99,12 +95,17 @@ class AudioFragmenter:
                     "array": chunk_array,
                 })
 
-        # --- Dynamic Onset Segmentation ---
+        # --- Dynamic Onset Segmentation (capped at 50 to avoid chunk explosion) ---
         try:
             # Detect transient events
             onset_frames = librosa.onset.onset_detect(y=audio, sr=self.sample_rate)
             onset_times = librosa.frames_to_time(onset_frames, sr=self.sample_rate)
-            
+
+            # Cap at 50 onsets — subsample evenly if there are more
+            if len(onset_times) > 50:
+                step = len(onset_times) / 50
+                onset_times = [onset_times[int(i * step)] for i in range(50)]
+
             # For each onset, create a precise 500ms chunk (-100ms to +400ms)
             for t in onset_times:
                 s_time = max(0.0, t - 0.1)

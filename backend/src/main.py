@@ -75,11 +75,8 @@ def get_job_status(job_id: int, db: Session = Depends(get_db)):
 # so we give them a slight advantage during scoring.
 # ---------------------------------------------------------------------------
 _RESOLUTION_WEIGHTS = {
-    "250ms": 1.0,
     "1s":    0.97,
     "2s":    0.95,
-    "5s":    0.93,
-    "10s":   0.90,
 }
 
 
@@ -91,11 +88,8 @@ _RESOLUTION_WEIGHTS = {
 # the chunk is rejected as a false positive (it doesn't actually match the query).
 _ABSOLUTE_THRESHOLDS = {
     "onset": 0.65,
-    "250ms": 0.70,
     "1s":    0.68,
     "2s":    0.66,
-    "5s":    0.64,
-    "10s":   0.62,
 }
 
 
@@ -107,7 +101,7 @@ def _temporal_rerank(raw: list) -> List[SearchResult]:
         return []
 
     # 1. Filter out 5s and 10s chunks. The user only wants precise highlights.
-    short_chunks = [c for c in raw if c.resolution_type in ["250ms", "1s", "2s", "onset"]]
+    short_chunks = [c for c in raw if c.resolution_type in ["1s", "2s", "onset"]]
 
     # 2. Sort by score (lowest distance is best)
     sorted_chunks = sorted(short_chunks, key=lambda r: r.score)
