@@ -17,11 +17,10 @@ class AudioFragmenter:
     """
 
     RESOLUTIONS = {
-        "250ms": {"duration": 0.250, "overlap": 0.75},
-        "1s":    {"duration": 1.0,   "overlap": 0.50},
-        "2s":    {"duration": 2.0,   "overlap": 0.50},
-        "5s":    {"duration": 5.0,   "overlap": 0.50},
-        "10s":   {"duration": 10.0,  "overlap": 0.50},
+        "250ms": {"duration": 0.250, "overlap": 0.25},
+        "1s":    {"duration": 1.0,   "overlap": 0.00},
+        "2s":    {"duration": 2.0,   "overlap": 0.00},
+        "5s":    {"duration": 5.0,   "overlap": 0.00},
     }
 
     # Chunks with RMS energy below this dB threshold are considered silence

@@ -37,8 +37,12 @@ class ClapEmbedder:
             return cls._instance
 
     def _initialize(self):
-        # Force CPU; MPS has known memory allocation bugs with CLAP
-        self.device = torch.device("cpu")
+        if torch.backends.mps.is_available():
+            self.device = torch.device("mps")
+            print("ClapEmbedder initialized with MPS GPU acceleration.")
+        else:
+            self.device = torch.device("cpu")
+            print("ClapEmbedder initialized with CPU fallback.")
         model_name = "laion/clap-htsat-fused"
         self.model = ClapModel.from_pretrained(model_name).to(self.device)
         self.processor = AutoProcessor.from_pretrained(model_name)

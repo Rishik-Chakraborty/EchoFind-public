@@ -90,11 +90,12 @@ _RESOLUTION_WEIGHTS = {
 # Absolute thresholds per resolution. If the distance is higher than this,
 # the chunk is rejected as a false positive (it doesn't actually match the query).
 _ABSOLUTE_THRESHOLDS = {
-    "250ms": 0.75,
-    "1s":    0.73,
-    "2s":    0.71,
-    "5s":    0.69,
-    "10s":   0.67,
+    "onset": 0.65,
+    "250ms": 0.70,
+    "1s":    0.68,
+    "2s":    0.66,
+    "5s":    0.64,
+    "10s":   0.62,
 }
 
 
@@ -106,7 +107,7 @@ def _temporal_rerank(raw: list) -> List[SearchResult]:
         return []
 
     # 1. Filter out 5s and 10s chunks. The user only wants precise highlights.
-    short_chunks = [c for c in raw if c.resolution_type in ["250ms", "1s", "2s"]]
+    short_chunks = [c for c in raw if c.resolution_type in ["250ms", "1s", "2s", "onset"]]
 
     # 2. Sort by score (lowest distance is best)
     sorted_chunks = sorted(short_chunks, key=lambda r: r.score)
@@ -214,5 +215,63 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
             ))
 
     # --- Step 5–6: Temporal rerank and return top-20 ---
+    events = _temporal_rerank(candidates)
+    return events[:20]
+
+@app.post("/api/v1/search/audio")
+async def search_audio(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    """Semantic audio-to-audio search (KNN) with dynamic onboarding."""
+    import librosa
+    import tempfile
+    import os
+    import numpy as np
+
+    # 1. Load audio file via librosa
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
+        content = await file.read()
+        tmp.write(content)
+        tmp_path = tmp.name
+        
+    try:
+        y, _ = librosa.load(tmp_path, sr=48000, mono=True, dtype=np.float32)
+        peak = np.max(np.abs(y))
+        if peak > 0:
+            y = y / peak
+    finally:
+        os.remove(tmp_path)
+
+    # 2. Embed audio directly
+    embedder = ClapEmbedder()
+    embeddings = embedder.embed_audio_batch([y])
+    query_vec = embeddings[0]
+    
+    # 3. Retrieve candidates
+    sql = text("""
+        SELECT file_id, start_time, end_time, resolution_type,
+               (embedding <=> CAST(:query_vec AS vector)) AS score
+        FROM audio_chunks
+        ORDER BY score ASC
+        LIMIT 1000;
+    """)
+    rows = db.execute(sql, {"query_vec": str(query_vec.tolist())}).fetchall()
+
+    if not rows:
+        return []
+
+    # 4. Absolute thresholds
+    candidates = []
+    for row in rows:
+        res_type = row[3]
+        score = row[4]
+        if score < _ABSOLUTE_THRESHOLDS.get(res_type, 0.75):
+            candidates.append(SearchResult(
+                file_id=row[0],
+                start_time=row[1],
+                end_time=row[2],
+                resolution_type=res_type,
+                score=score,
+            ))
+
+    # 5. Temporal rerank and return
     events = _temporal_rerank(candidates)
     return events[:20]

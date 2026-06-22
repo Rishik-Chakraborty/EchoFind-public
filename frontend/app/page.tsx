@@ -15,7 +15,10 @@ export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [jobId, setJobId] = useState<number | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string>("");
+  const [uploadStartTime, setUploadStartTime] = useState<number | null>(null);
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [query, setQuery] = useState<string>("");
+  const [searchFile, setSearchFile] = useState<File | null>(null);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [duration, setDuration] = useState<number>(0);
@@ -23,6 +26,17 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  // Timer effect for ingestion
+  useEffect(() => {
+    let timerInterval: NodeJS.Timeout;
+    if ((uploadStatus === "uploading" || uploadStatus === "processing") && uploadStartTime) {
+      timerInterval = setInterval(() => {
+        setElapsedTime(Math.floor((Date.now() - uploadStartTime) / 1000));
+      }, 1000);
+    }
+    return () => clearInterval(timerInterval);
+  }, [uploadStatus, uploadStartTime]);
 
   // Poll job status until completed or failed
   useEffect(() => {
@@ -59,9 +73,18 @@ export default function Home() {
     }
   };
 
+  const handleSearchFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSearchFile(e.target.files[0]);
+      setQuery(""); // clear text if audio is chosen
+    }
+  };
+
   const handleUpload = async () => {
     if (!file) return;
     setUploadStatus("uploading");
+    setUploadStartTime(Date.now());
+    setElapsedTime(0);
     const formData = new FormData();
     formData.append("file", file);
 
@@ -81,14 +104,24 @@ export default function Home() {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!query) return;
+    if (!query && !searchFile) return;
     setIsSearching(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/v1/search", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: query }),
-      });
+      let res;
+      if (searchFile) {
+        const formData = new FormData();
+        formData.append("file", searchFile);
+        res = await fetch("http://127.0.0.1:8000/api/v1/search/audio", {
+          method: "POST",
+          body: formData,
+        });
+      } else {
+        res = await fetch("http://127.0.0.1:8000/api/v1/search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: query }),
+        });
+      }
       const data = await res.json();
       setResults(data);
     } catch (err) {
@@ -201,17 +234,24 @@ export default function Home() {
           </div>
 
           {uploadStatus && (
-            <div className="flex items-center gap-2 text-xs font-mono">
-              <span className="text-zinc-500">Pipeline Status:</span>
-              <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border uppercase tracking-wider ${
-                uploadStatus === "completed" 
-                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                  : uploadStatus === "failed"
-                  ? "bg-rose-500/10 text-rose-400 border-rose-500/20"
-                  : "bg-amber-500/10 text-amber-400 border-amber-500/20 animate-pulse"
-              }`}>
-                {uploadStatus}
-              </span>
+            <div className="flex items-center justify-between text-xs font-mono">
+              <div className="flex items-center gap-2">
+                <span className="text-zinc-500">Pipeline Status:</span>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border uppercase tracking-wider ${
+                  uploadStatus === "completed" 
+                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                    : uploadStatus === "failed"
+                    ? "bg-rose-500/10 text-rose-400 border-rose-500/20"
+                    : "bg-amber-500/10 text-amber-400 border-amber-500/20 animate-pulse"
+                }`}>
+                  {uploadStatus}
+                </span>
+              </div>
+              {elapsedTime > 0 && (
+                <div className="text-zinc-500">
+                  Elapsed: <span className="text-zinc-300">{elapsedTime}s</span>
+                </div>
+              )}
             </div>
           )}
         </section>
@@ -273,7 +313,8 @@ export default function Home() {
                       const widthPercent = Math.max(endPercent - startPercent, 1.0);
 
                       let colorClass = "bg-zinc-400/20 hover:bg-zinc-400/35 border-zinc-400";
-                      if (res.resolution_type === "250ms") colorClass = "bg-rose-500/20 hover:bg-rose-500/35 border-rose-500";
+                      if (res.resolution_type === "onset") colorClass = "bg-purple-500/20 hover:bg-purple-500/35 border-purple-500";
+                      else if (res.resolution_type === "250ms") colorClass = "bg-rose-500/20 hover:bg-rose-500/35 border-rose-500";
                       else if (res.resolution_type === "1s") colorClass = "bg-sky-500/20 hover:bg-sky-500/35 border-sky-500";
                       else if (res.resolution_type === "2s") colorClass = "bg-amber-500/20 hover:bg-amber-500/35 border-amber-500";
                       else if (res.resolution_type === "5s") colorClass = "bg-emerald-500/20 hover:bg-emerald-500/35 border-emerald-500";
@@ -311,6 +352,10 @@ export default function Home() {
                     <span>0.0s</span>
                     <div className="flex gap-4">
                       <span className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-sm bg-purple-500/25 border-l border-purple-500" />
+                        <span>Onset (Dynamic)</span>
+                      </span>
+                      <span className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-sm bg-rose-500/25 border-l border-rose-500" />
                         <span>250ms (Transients)</span>
                       </span>
@@ -346,28 +391,50 @@ export default function Home() {
             <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Search Spatial Soundscape</h2>
           </div>
 
-          <form onSubmit={handleSearch} className="flex gap-3">
-            <div className="relative flex-1">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-3.5 w-3.5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          <form onSubmit={handleSearch} className="flex flex-col gap-3">
+            <div className="flex gap-3">
+              <div className="relative flex-1">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="h-3.5 w-3.5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setSearchFile(null);
+                  }}
+                  placeholder="Search query (e.g. 'squeaks', 'siren', 'glass shattering')..."
+                  className="w-full pl-9 pr-4 py-2 bg-zinc-950 border border-zinc-900 focus:border-zinc-800 rounded text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-850 transition font-mono"
+                />
+              </div>
+              <label className="cursor-pointer bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 px-4 py-2 rounded text-xs transition flex items-center gap-2 min-w-max">
+                <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                 </svg>
-              </span>
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search query (e.g. 'squeaks', 'siren', 'glass shattering')..."
-                className="w-full pl-9 pr-4 py-2 bg-zinc-950 border border-zinc-900 focus:border-zinc-800 rounded text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-850 transition font-mono"
-              />
+                <span className="truncate max-w-[120px]">{searchFile ? searchFile.name : "Upload Audio"}</span>
+                <input
+                  type="file"
+                  accept="audio/*"
+                  onChange={handleSearchFileChange}
+                  className="hidden"
+                />
+              </label>
+              <button
+                type="submit"
+                disabled={isSearching}
+                className="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-semibold rounded text-xs transition disabled:opacity-50 cursor-pointer min-w-max"
+              >
+                {isSearching ? "Searching..." : "Search"}
+              </button>
             </div>
-            <button
-              type="submit"
-              disabled={isSearching}
-              className="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-semibold rounded text-xs transition disabled:opacity-50 cursor-pointer"
-            >
-              {isSearching ? "Searching..." : "Search"}
-            </button>
+            {searchFile && (
+              <div className="text-[10px] text-zinc-500 font-mono">
+                Audio Search Mode Active: Searching for sounds similar to <span className="text-zinc-300">"{searchFile.name}"</span>. Type text to cancel audio search.
+              </div>
+            )}
           </form>
 
           {/* Matches List Grid/Table */}
@@ -391,7 +458,8 @@ export default function Home() {
                   <tbody className="divide-y divide-zinc-900/60 font-mono text-xs">
                     {results.map((res, idx) => {
                       let resolutionBadge = "border-zinc-800 bg-zinc-900/40 text-zinc-400";
-                      if (res.resolution_type === "250ms") resolutionBadge = "border-rose-500/20 bg-rose-500/5 text-rose-400";
+                      if (res.resolution_type === "onset") resolutionBadge = "border-purple-500/20 bg-purple-500/5 text-purple-400";
+                      else if (res.resolution_type === "250ms") resolutionBadge = "border-rose-500/20 bg-rose-500/5 text-rose-400";
                       else if (res.resolution_type === "1s") resolutionBadge = "border-sky-500/20 bg-sky-500/5 text-sky-400";
                       else if (res.resolution_type === "2s") resolutionBadge = "border-amber-500/20 bg-amber-500/5 text-amber-400";
                       else if (res.resolution_type === "5s") resolutionBadge = "border-emerald-500/20 bg-emerald-500/5 text-emerald-400";

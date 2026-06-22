@@ -1,4 +1,5 @@
 import os
+import time
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from .audio_dsp import AudioFragmenter
@@ -15,37 +16,17 @@ def process_upload(job_id: int, file_path: str):
         )
         db.commit()
 
-        # Step 1: Run Demucs Source Separation
-        import subprocess
-        upload_dir = os.path.dirname(file_path)
-        separated_dir = os.path.join(upload_dir, "separated")
-        os.makedirs(separated_dir, exist_ok=True)
+        # Step 1: Fragment audio file
+        t_start = time.time()
         
-        try:
-            # Run demucs (outputs to separated/htdemucs/filename/*.wav)
-            print(f"Running Demucs on {file_path}...")
-            subprocess.run(["demucs", "-n", "htdemucs", "--out", separated_dir, file_path], check=True)
-        except Exception as e:
-            print(f"Warning: Demucs failed: {e}. Proceeding with original audio only.")
-
-        # Gather files to fragment: original + stems
-        files_to_fragment = [file_path]
-        base_name = os.path.splitext(os.path.basename(file_path))[0]
-        stems_dir = os.path.join(separated_dir, "htdemucs", base_name)
-        if os.path.exists(stems_dir):
-            for stem in ["vocals.wav", "drums.wav", "bass.wav", "other.wav"]:
-                stem_path = os.path.join(stems_dir, stem)
-                if os.path.exists(stem_path):
-                    files_to_fragment.append(stem_path)
-
-        # Step 2: Fragment all gathered audio files
         fragmenter = AudioFragmenter()
         all_chunks = []
-        for f in files_to_fragment:
-            try:
-                all_chunks.extend(fragmenter.fragment(f))
-            except Exception as e:
-                print(f"Warning: Failed to fragment {f}: {e}")
+        try:
+            all_chunks.extend(fragmenter.fragment(file_path))
+        except Exception as e:
+            print(f"Warning: Failed to fragment {file_path}: {e}")
+            
+        print(f"Audio fragmentation finished in {time.time() - t_start:.2f} seconds.")
 
         # Step 3: Register file in audio_files
         filename = os.path.basename(file_path)
@@ -61,7 +42,8 @@ def process_upload(job_id: int, file_path: str):
         file_id = res.fetchone()[0]
         db.commit()
 
-        # Step 3: Embed chunks and save vectors
+        # Step 4: Embed chunks and save vectors
+        t_embed = time.time()
         embedder = ClapEmbedder()
 
         batch_size = 32
@@ -91,6 +73,9 @@ def process_upload(job_id: int, file_path: str):
                     },
                 )
             db.commit()  # commit each batch so we don't lose work on failure
+            
+        print(f"Embedding and DB insertion finished in {time.time() - t_embed:.2f} seconds.")
+        print(f"Total processing time: {time.time() - t_start:.2f} seconds.")
 
         db.execute(
             text("UPDATE audio_jobs SET status = 'completed', updated_at = now() WHERE id = :job_id"),
