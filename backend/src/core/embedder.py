@@ -1,5 +1,6 @@
 import os
 import logging
+import threading
 from typing import List
 import numpy as np
 import torch
@@ -26,12 +27,15 @@ class ClapEmbedder:
     """
 
     _instance = None
+    _lock = threading.Lock()
 
     def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance._initialize()
-        return cls._instance
+        with cls._lock:
+            if cls._instance is None:
+                instance = super().__new__(cls)
+                instance._initialize()
+                cls._instance = instance
+            return cls._instance
 
     def _initialize(self):
         # Force CPU; MPS has known memory allocation bugs with CLAP

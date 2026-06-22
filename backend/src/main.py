@@ -14,6 +14,13 @@ from .core.embedder import ClapEmbedder
 
 app = FastAPI()
 
+@app.on_event("startup")
+def startup_event():
+    import logging
+    logging.info("Initializing CLAP embedder model...")
+    ClapEmbedder()
+    logging.info("CLAP embedder initialized.")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
