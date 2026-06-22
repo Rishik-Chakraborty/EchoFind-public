@@ -85,9 +85,7 @@ def cross_resolution_fusion(candidates, window_s=2.0):
     if not candidates:
         return {}
 
-        #return norhing 
 
-    # Build chunk lookup by start_time
     chunks_at = defaultdict(list)
     for c in candidates:
         chunks_at[c.start_time].append(c)
