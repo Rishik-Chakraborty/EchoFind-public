@@ -1,5 +1,4 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
@@ -17,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EchoFind | Neural Audio Search",
+  title: "EchoFind | Audio Search Dashboard",
   description:
-    "Search through audio with natural language. Upload, index, and find any sound in seconds using AI-powered vector embeddings.",
+    "A sophisticated neural audio retrieval system. Search through sound using natural language.",
 };
 
 export default function RootLayout({
@@ -32,8 +31,8 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <ClerkProvider appearance={{ baseTheme: dark }}>
+      <body className="min-h-full flex flex-col bg-background text-foreground">
+        <ClerkProvider>
           {children}
         </ClerkProvider>
       </body>

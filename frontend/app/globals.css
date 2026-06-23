@@ -1,390 +1,280 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #050510;
-  --color-foreground: #f0eef6;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
 }
 
-/* ─── Design Tokens ─── */
 @layer base {
   :root {
-    /* Backgrounds */
-    --bg-deep: #050510;
-    --bg-surface: rgba(15, 15, 35, 0.6);
-    --bg-surface-hover: rgba(20, 20, 50, 0.7);
-    --bg-card: rgba(15, 15, 40, 0.45);
-    --bg-card-hover: rgba(20, 20, 50, 0.55);
-    --bg-input: rgba(10, 10, 30, 0.8);
+    --background: #fdfdfd;
+    --foreground: #09090b;
 
-    /* Accent Palette – Purple/Violet */
-    --accent-400: #c084fc;
-    --accent-500: #a855f7;
-    --accent-600: #9333ea;
-    --accent-700: #7c3aed;
+    --card: #ffffff;
+    --card-foreground: #09090b;
 
-    /* Gradient */
-    --gradient-accent: linear-gradient(135deg, var(--accent-700), var(--accent-500), var(--accent-400));
-    --gradient-accent-hover: linear-gradient(135deg, var(--accent-600), var(--accent-400), #e9d5ff);
+    --popover: #ffffff;
+    --popover-foreground: #09090b;
 
-    /* Glass */
-    --glass-border: rgba(255, 255, 255, 0.06);
-    --glass-border-hover: rgba(255, 255, 255, 0.10);
-    --glass-blur: 20px;
+    --primary: #18181b;
+    --primary-foreground: #fafafa;
 
-    /* Text */
-    --text-primary: #f0eef6;
-    --text-secondary: #a8a3b8;
-    --text-muted: #6b6580;
-    --text-accent: var(--accent-400);
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
 
-    /* Glow */
-    --glow-accent: 0 0 30px rgba(168, 85, 247, 0.25), 0 0 60px rgba(168, 85, 247, 0.10);
-    --glow-accent-strong: 0 0 20px rgba(168, 85, 247, 0.4), 0 0 50px rgba(168, 85, 247, 0.2);
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
 
-    /* Transitions */
-    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --accent: #f4f4f5;
+    --accent-foreground: #18181b;
+
+    --destructive: #ef4444;
+    --destructive-foreground: #fafafa;
+    
+    --success: #10b981;
+    --success-foreground: #fafafa;
+
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --ring: #18181b;
+
+    --radius: 0.5rem;
   }
 
   * {
     box-sizing: border-box;
-  }
-
-  html {
-    background: var(--bg-deep);
-    color: var(--text-primary);
-    scroll-behavior: smooth;
+    border-color: var(--border);
   }
 
   body {
-    background: var(--bg-deep);
-    color: var(--text-primary);
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
-  }
-
-  ::selection {
-    background: rgba(168, 85, 247, 0.3);
-    color: #fff;
-  }
-
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(168, 85, 247, 0.2);
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(168, 85, 247, 0.35);
   }
 }
 
-/* ─── Components ─── */
 @layer components {
-  /* Gradient Orbs */
-  .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(100px);
-    pointer-events: none;
-    z-index: 0;
-    will-change: transform;
-    animation: float 20s var(--ease-smooth) infinite;
+  /* ─── Shadcn-style Card ─── */
+  .card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   }
 
-  .orb-1 {
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(124, 58, 237, 0.18) 0%, transparent 70%);
-    top: -10%;
-    left: -5%;
-    animation-delay: 0s;
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    space-y: 1.5;
+    padding: 1.5rem;
   }
 
-  .orb-2 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.14) 0%, transparent 70%);
-    top: 40%;
-    right: -10%;
-    animation-delay: -7s;
-    animation-duration: 25s;
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.025em;
   }
 
-  .orb-3 {
-    width: 450px;
-    height: 450px;
-    background: radial-gradient(circle, rgba(192, 132, 252, 0.10) 0%, transparent 70%);
-    bottom: -5%;
-    left: 30%;
-    animation-delay: -14s;
-    animation-duration: 22s;
+  .card-description {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin-top: 0.25rem;
   }
 
-  /* Glassmorphism Card */
-  .glass-card {
-    background: var(--bg-card);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    transition: border-color 0.3s var(--ease-smooth),
-                background 0.3s var(--ease-smooth),
-                box-shadow 0.3s var(--ease-smooth);
+  .card-content {
+    padding: 1.5rem;
+    padding-top: 0;
   }
 
-  .glass-card:hover {
-    border-color: var(--glass-border-hover);
-    background: var(--bg-card-hover);
-  }
-
-  /* Primary Button */
-  .btn-primary {
+  /* ─── Shadcn-style Buttons ─── */
+  .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 10px 24px;
-    background: var(--gradient-accent);
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.8125rem;
-    border-radius: 12px;
-    border: none;
+    white-space: nowrap;
+    border-radius: calc(var(--radius) - 2px);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: colors 0.2s;
+    height: 2.25rem;
+    padding: 0 1rem;
+    outline: none;
     cursor: pointer;
-    transition: all 0.3s var(--ease-smooth);
-    box-shadow: var(--glow-accent);
-    position: relative;
-    overflow: hidden;
+  }
+
+  .btn:focus-visible {
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+  }
+
+  .btn:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .btn-primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border: none;
   }
 
   .btn-primary:hover {
-    background: var(--gradient-accent-hover);
-    box-shadow: var(--glow-accent-strong);
-    transform: translateY(-1px);
+    background-color: rgba(24, 24, 27, 0.9);
   }
 
-  .btn-primary:active {
-    transform: translateY(0);
+  .btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--border);
+    color: var(--foreground);
   }
 
-  .btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
+  .btn-outline:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
   }
 
-  /* Ghost Button */
   .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background: transparent;
-    color: var(--text-secondary);
-    font-weight: 500;
-    font-size: 0.8125rem;
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    cursor: pointer;
-    transition: all 0.3s var(--ease-smooth);
+    background-color: transparent;
+    border: none;
+    color: var(--foreground);
   }
 
   .btn-ghost:hover {
-    border-color: rgba(168, 85, 247, 0.3);
-    color: var(--text-primary);
-    background: rgba(168, 85, 247, 0.06);
+    background-color: var(--accent);
+    color: var(--accent-foreground);
   }
 
-  /* Outline Accent Button */
-  .btn-outline-accent {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background: transparent;
-    color: var(--accent-400);
-    font-weight: 600;
-    font-size: 0.8125rem;
-    border-radius: 12px;
-    border: 1px solid rgba(168, 85, 247, 0.3);
-    cursor: pointer;
-    transition: all 0.3s var(--ease-smooth);
-  }
-
-  .btn-outline-accent:hover {
-    background: rgba(168, 85, 247, 0.08);
-    border-color: rgba(168, 85, 247, 0.5);
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);
-  }
-
-  /* Glass Input */
-  .input-glass {
+  /* ─── Shadcn-style Input ─── */
+  .input {
+    display: flex;
+    height: 2.25rem;
     width: 100%;
-    padding: 12px 16px;
-    background: var(--bg-input);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    color: var(--text-primary);
+    border-radius: calc(var(--radius) - 2px);
+    border: 1px solid var(--border);
+    background-color: var(--background);
+    padding: 0 0.75rem;
     font-size: 0.875rem;
-    font-family: var(--font-mono);
-    transition: all 0.3s var(--ease-smooth);
+    transition: colors 0.2s;
     outline: none;
   }
 
-  .input-glass::placeholder {
-    color: var(--text-muted);
+  .input::placeholder {
+    color: var(--muted-foreground);
   }
 
-  .input-glass:focus {
-    border-color: rgba(168, 85, 247, 0.4);
-    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.08), 0 0 20px rgba(168, 85, 247, 0.06);
+  .input:focus-visible {
+    border-color: var(--ring);
+    box-shadow: 0 0 0 1px var(--ring);
   }
 
-  /* Section Badge */
-  .section-badge {
+  /* ─── Status Badges ─── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: colors 0.2s;
+  }
+
+  .badge-outline {
+    color: var(--foreground);
+    border-color: var(--border);
+  }
+
+  .badge-success {
+    background-color: var(--success);
+    color: var(--success-foreground);
+  }
+
+  .badge-destructive {
+    background-color: var(--destructive);
+    color: var(--destructive-foreground);
+  }
+
+  .badge-secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+  }
+
+  /* ─── Data Table ─── */
+  .table-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    transition: background-color 0.2s;
+    font-size: 0.875rem;
+  }
+
+  .table-row:hover {
+    background-color: var(--muted);
+  }
+
+  .table-header {
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.025em;
+  }
+
+  /* ─── Sound Wave Visualizer ─── */
+  .sound-wave-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 48px;
+  }
+
+  .wave-bar {
+    width: 6px;
+    background-color: var(--primary);
+    border-radius: 9999px;
+    animation: eq-bounce 1s ease-in-out infinite alternate;
+  }
+
+  .wave-bar.idle {
+    animation: none;
+    height: 8px !important;
+    opacity: 0.3;
+  }
+
+  /* ─── Hero Sound Waves (Landing Page) ─── */
+  .hero-wave-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    background: rgba(168, 85, 247, 0.1);
-    border: 1px solid rgba(168, 85, 247, 0.2);
-    color: var(--accent-400);
-    font-size: 0.6875rem;
-    font-weight: 700;
-    font-family: var(--font-mono);
-    flex-shrink: 0;
+    gap: 8px;
+    height: 160px;
+    margin-top: 2rem;
   }
 
-  /* Status Badges */
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .status-badge::before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .status-processing {
-    background: rgba(245, 158, 11, 0.1);
-    color: #fbbf24;
-    border: 1px solid rgba(245, 158, 11, 0.2);
-  }
-  .status-processing::before {
-    background: #fbbf24;
-    animation: pulse-glow 1.5s ease-in-out infinite;
-  }
-
-  .status-completed {
-    background: rgba(16, 185, 129, 0.1);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.2);
-  }
-  .status-completed::before {
-    background: #34d399;
-  }
-
-  .status-failed {
-    background: rgba(239, 68, 68, 0.1);
-    color: #f87171;
-    border: 1px solid rgba(239, 68, 68, 0.2);
-  }
-  .status-failed::before {
-    background: #f87171;
-  }
-
-  /* Grid Overlay */
-  .grid-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 100%);
-  }
-
-  /* Fade In Animation */
-  .animate-fade-in {
-    animation: fadeInUp 0.6s var(--ease-smooth) both;
-  }
-
-  .animate-delay-1 { animation-delay: 0.1s; }
-  .animate-delay-2 { animation-delay: 0.2s; }
-  .animate-delay-3 { animation-delay: 0.3s; }
-  .animate-delay-4 { animation-delay: 0.4s; }
-}
-
-/* ─── Keyframes (outside layers so they're always available) ─── */
-@keyframes float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(30px, -20px) scale(1.05); }
-  50% { transform: translate(-20px, 15px) scale(0.95); }
-  75% { transform: translate(15px, 25px) scale(1.02); }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .hero-wave-bar {
+    width: 12px;
+    background-color: var(--primary);
+    border-radius: 9999px;
+    animation: eq-bounce 1s ease-in-out infinite alternate;
+    opacity: 0.8;
   }
 }
 
-@keyframes pulse-glow {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
-  50% { opacity: 0.6; box-shadow: 0 0 0 4px rgba(251, 191, 36, 0); }
+@keyframes eq-bounce {
+  0% { height: 8px; }
+  100% { height: 100%; }
 }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
-  .orb {
+  .wave-bar {
     animation: none !important;
-  }
-  .animate-fade-in {
-    animation: none !important;
-    opacity: 1;
-    transform: none;
-  }
-  .status-processing::before {
-    animation: none !important;
+    height: 8px !important;
   }
 }
