@@ -66,7 +66,6 @@ export default function Home() {
       const selected = e.target.files[0];
       setFile(selected);
       setAudioUrl(URL.createObjectURL(selected));
-      // Reset temporal stats
       setDuration(0);
       setCurrentTime(0);
       setResults([]);
@@ -76,7 +75,7 @@ export default function Home() {
   const handleSearchFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSearchFile(e.target.files[0]);
-      setQuery(""); // clear text if audio is chosen
+      setQuery("");
     }
   };
 
@@ -144,42 +143,150 @@ export default function Home() {
     const clickX = e.clientX - rect.left;
     const clickPercent = clickX / rect.width;
     const targetTime = clickPercent * duration;
-    
     audioRef.current.currentTime = targetTime;
     setCurrentTime(targetTime);
   };
 
+  const getStatusClass = (status: string) => {
+    if (status === "completed") return "status-completed";
+    if (status === "failed") return "status-failed";
+    return "status-processing";
+  };
+
+  const resolutionColor = (type: string) => {
+    switch (type) {
+      case "onset": return { bg: "rgba(168, 85, 247, 0.15)", border: "#a855f7", text: "#c084fc" };
+      case "250ms": return { bg: "rgba(244, 63, 94, 0.15)", border: "#f43f5e", text: "#fb7185" };
+      case "1s": return { bg: "rgba(14, 165, 233, 0.15)", border: "#0ea5e9", text: "#38bdf8" };
+      case "2s": return { bg: "rgba(245, 158, 11, 0.15)", border: "#f59e0b", text: "#fbbf24" };
+      case "5s": return { bg: "rgba(16, 185, 129, 0.15)", border: "#10b981", text: "#34d399" };
+      case "10s": return { bg: "rgba(99, 102, 241, 0.15)", border: "#6366f1", text: "#818cf8" };
+      default: return { bg: "rgba(100, 100, 130, 0.15)", border: "#64648280", text: "#a8a3b8" };
+    }
+  };
+
+  const timelineRangeColor = (type: string) => {
+    switch (type) {
+      case "onset": return "rgba(168, 85, 247, 0.25)";
+      case "250ms": return "rgba(244, 63, 94, 0.25)";
+      case "1s": return "rgba(14, 165, 233, 0.25)";
+      case "2s": return "rgba(245, 158, 11, 0.25)";
+      case "5s": return "rgba(16, 185, 129, 0.25)";
+      case "10s": return "rgba(99, 102, 241, 0.25)";
+      default: return "rgba(100, 100, 130, 0.2)";
+    }
+  };
+
+  const timelineBorderColor = (type: string) => {
+    switch (type) {
+      case "onset": return "#a855f7";
+      case "250ms": return "#f43f5e";
+      case "1s": return "#0ea5e9";
+      case "2s": return "#f59e0b";
+      case "5s": return "#10b981";
+      case "10s": return "#6366f1";
+      default: return "#646482";
+    }
+  };
+
+  const legendItems = [
+    { type: "onset", label: "Onset", color: "#a855f7" },
+    { type: "1s", label: "1s", color: "#0ea5e9" },
+    { type: "2s", label: "2s", color: "#f59e0b" },
+  ];
+
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50 font-sans antialiased">
-      {/* Header Navbar */}
-      <header className="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-7 h-7 rounded bg-zinc-100 text-zinc-950 font-black text-xs tracking-tighter">
+    <div style={{ minHeight: "100vh", position: "relative" }}>
+      {/* Background Orbs */}
+      <div className="orb orb-1" />
+      <div className="orb orb-2" />
+      <div className="orb orb-3" />
+      <div className="grid-overlay" />
+
+      {/* ─── Header ─── */}
+      <header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+          borderBottom: "1px solid var(--glass-border)",
+          background: "rgba(5, 5, 16, 0.75)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1100,
+            margin: "0 auto",
+            padding: "0 28px",
+            height: 64,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          {/* Logo */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: 10,
+                background: "var(--gradient-accent)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 900,
+                fontSize: 12,
+                color: "#fff",
+                letterSpacing: "-0.03em",
+                boxShadow: "var(--glow-accent)",
+              }}
+            >
               EF
             </div>
-            <span className="font-semibold tracking-tight text-zinc-100 text-sm">EchoFind</span>
-            <span className="text-[10px] font-mono text-zinc-500 bg-zinc-900/50 border border-zinc-800 px-1.5 py-0.5 rounded">
+            <span
+              style={{
+                fontWeight: 700,
+                fontSize: 17,
+                letterSpacing: "-0.02em",
+                background: "linear-gradient(135deg, #f0eef6, var(--accent-400))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              EchoFind
+            </span>
+            <span
+              style={{
+                fontSize: 10,
+                fontFamily: "var(--font-mono)",
+                color: "var(--accent-400)",
+                background: "rgba(168, 85, 247, 0.08)",
+                border: "1px solid rgba(168, 85, 247, 0.2)",
+                padding: "2px 8px",
+                borderRadius: 20,
+                fontWeight: 600,
+              }}
+            >
               v3.1
             </span>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-xs text-zinc-400 font-medium hidden sm:block">
-              Neural Temporal-Spatial Audio Retrieval
-            </div>
+
+          {/* Auth */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <Show when="signed-out">
-              <div className="flex items-center gap-2">
-                <SignInButton mode="modal">
-                  <button className="text-xs font-medium text-zinc-300 hover:text-zinc-50 transition border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 px-3 py-1.5 rounded-md cursor-pointer">
-                    Sign In
-                  </button>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                  <button className="text-xs font-medium text-zinc-950 transition border border-zinc-100 bg-zinc-100 hover:bg-zinc-200 px-3 py-1.5 rounded-md cursor-pointer">
-                    Sign Up
-                  </button>
-                </SignUpButton>
-              </div>
+              <SignInButton mode="modal">
+                <button className="btn-ghost" style={{ padding: "8px 16px", fontSize: 12 }}>
+                  Sign In
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <button className="btn-primary" style={{ padding: "8px 16px", fontSize: 12 }}>
+                  Sign Up
+                </button>
+              </SignUpButton>
             </Show>
             <Show when="signed-in">
               <UserButton />
@@ -188,215 +295,358 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Main Console */}
-      <main className="max-w-5xl mx-auto px-6 py-10 space-y-8">
-        {/* Section 1: Ingest Audio Source */}
-        <section className="bg-zinc-900/30 border border-zinc-900 rounded-lg p-6 space-y-4">
-          <div className="flex items-center gap-2">
-            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-mono text-zinc-400">1</span>
-            <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Ingest Audio Source</h2>
-          </div>
-          
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-md border border-dashed border-zinc-800 bg-zinc-950/20 hover:border-zinc-800 transition duration-150">
-            <div className="flex items-center gap-3">
-              <label className="cursor-pointer bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 hover:border-zinc-700 text-zinc-300 font-medium px-4 py-2 rounded text-xs transition flex items-center gap-2">
-                <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
-                Choose File
-                <input
-                  type="file"
-                  accept="audio/*"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </label>
-              <span className="text-xs text-zinc-400 font-mono truncate max-w-xs md:max-w-md">
-                {file ? `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)` : "No file selected"}
-              </span>
-            </div>
-            
-            {file && (
-              <button
-                onClick={handleUpload}
-                disabled={uploadStatus === "uploading" || uploadStatus === "processing"}
-                className="w-full md:w-auto px-4 py-2 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-xs font-semibold rounded transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
-              >
-                {(uploadStatus === "uploading" || uploadStatus === "processing") && (
-                  <svg className="animate-spin h-3.5 w-3.5 text-zinc-950" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                )}
-                Ingest Audio
-              </button>
-            )}
+      {/* ─── Hero Section ─── */}
+      <section
+        className="animate-fade-in"
+        style={{
+          position: "relative",
+          zIndex: 1,
+          maxWidth: 1100,
+          margin: "0 auto",
+          padding: "80px 28px 40px",
+          textAlign: "center",
+        }}
+      >
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            padding: "6px 16px",
+            borderRadius: 20,
+            background: "rgba(168, 85, 247, 0.06)",
+            border: "1px solid rgba(168, 85, 247, 0.15)",
+            marginBottom: 24,
+            fontSize: 12,
+            fontWeight: 500,
+            color: "var(--accent-400)",
+          }}
+        >
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent-500)", display: "inline-block" }} />
+          Powered by LAION-CLAP Neural Embeddings
+        </div>
+
+        <h1
+          style={{
+            fontSize: "clamp(36px, 5vw, 56px)",
+            fontWeight: 800,
+            lineHeight: 1.1,
+            letterSpacing: "-0.03em",
+            marginBottom: 20,
+            background: "linear-gradient(135deg, #fff 0%, var(--accent-400) 50%, var(--accent-500) 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          Neural Audio Search
+        </h1>
+
+        <p
+          style={{
+            fontSize: "clamp(15px, 2vw, 18px)",
+            color: "var(--text-secondary)",
+            maxWidth: 560,
+            margin: "0 auto 48px",
+            lineHeight: 1.6,
+          }}
+        >
+          Upload any audio file, index it with AI, and search through sound using natural language — in seconds.
+        </p>
+      </section>
+
+      {/* ─── Main Content ─── */}
+      <main
+        style={{
+          position: "relative",
+          zIndex: 1,
+          maxWidth: 1100,
+          margin: "0 auto",
+          padding: "0 28px 80px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 28,
+        }}
+      >
+        {/* ─── Section 1: Ingest ─── */}
+        <section className="glass-card animate-fade-in animate-delay-1" style={{ padding: 32 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+            <div className="section-badge">1</div>
+            <h2 style={{ fontSize: 14, fontWeight: 600, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              Ingest Audio Source
+            </h2>
           </div>
 
+          <div
+            style={{
+              padding: 28,
+              borderRadius: 16,
+              border: "2px dashed rgba(168, 85, 247, 0.15)",
+              background: "rgba(168, 85, 247, 0.02)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 16,
+              transition: "border-color 0.3s, background 0.3s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "rgba(168, 85, 247, 0.3)";
+              e.currentTarget.style.background = "rgba(168, 85, 247, 0.04)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "rgba(168, 85, 247, 0.15)";
+              e.currentTarget.style.background = "rgba(168, 85, 247, 0.02)";
+            }}
+          >
+            {/* Upload Icon */}
+            <div
+              style={{
+                width: 52,
+                height: 52,
+                borderRadius: 14,
+                background: "rgba(168, 85, 247, 0.08)",
+                border: "1px solid rgba(168, 85, 247, 0.15)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-400)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+            </div>
+
+            <div style={{ textAlign: "center" }}>
+              <p style={{ fontSize: 14, color: "var(--text-primary)", marginBottom: 4, fontWeight: 500 }}>
+                {file ? file.name : "Drop your audio file here"}
+              </p>
+              <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                {file
+                  ? `${(file.size / 1024 / 1024).toFixed(2)} MB`
+                  : "Supports MP3, WAV, FLAC, OGG, and more"}
+              </p>
+            </div>
+
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+              <label className="btn-ghost" style={{ cursor: "pointer" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 4v16m8-8H4" />
+                </svg>
+                Choose File
+                <input type="file" accept="audio/*" onChange={handleFileChange} style={{ display: "none" }} />
+              </label>
+
+              {file && (
+                <button
+                  onClick={handleUpload}
+                  disabled={uploadStatus === "uploading" || uploadStatus === "processing"}
+                  className="btn-primary"
+                >
+                  {(uploadStatus === "uploading" || uploadStatus === "processing") && (
+                    <svg style={{ animation: "spin 1s linear infinite", width: 14, height: 14 }} fill="none" viewBox="0 0 24 24">
+                      <circle style={{ opacity: 0.25 }} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path style={{ opacity: 0.75 }} fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                  )}
+                  Ingest Audio
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Status Bar */}
           {uploadStatus && (
-            <div className="flex items-center justify-between text-xs font-mono">
-              <div className="flex items-center gap-2">
-                <span className="text-zinc-500">Pipeline Status:</span>
-                <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border uppercase tracking-wider ${
-                  uploadStatus === "completed" 
-                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                    : uploadStatus === "failed"
-                    ? "bg-rose-500/10 text-rose-400 border-rose-500/20"
-                    : "bg-amber-500/10 text-amber-400 border-amber-500/20 animate-pulse"
-                }`}>
-                  {uploadStatus}
-                </span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 20, padding: "0 4px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ fontSize: 12, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Pipeline</span>
+                <span className={`status-badge ${getStatusClass(uploadStatus)}`}>{uploadStatus}</span>
               </div>
               {elapsedTime > 0 && (
-                <div className="text-zinc-500">
-                  Elapsed: <span className="text-zinc-300">{elapsedTime}s</span>
-                </div>
+                <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
+                  <span style={{ color: "var(--text-secondary)" }}>{elapsedTime}s</span> elapsed
+                </span>
               )}
             </div>
           )}
         </section>
 
-        {/* Section 2: Audio Player & Interactive Timeline */}
+        {/* ─── Section 2: Timeline ─── */}
         {audioUrl && (
-          <section className="bg-zinc-900/30 border border-zinc-900 rounded-lg p-6 space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="flex items-center justify-center w-5 h-5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-mono text-zinc-400">2</span>
-                <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Temporal Indexer Mapping</h2>
+          <section className="glass-card animate-fade-in animate-delay-2" style={{ padding: 32 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div className="section-badge">2</div>
+                <h2 style={{ fontSize: 14, fontWeight: 600, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                  Temporal Indexer
+                </h2>
               </div>
               {duration > 0 && (
-                <span className="text-xs font-mono text-zinc-400">
-                  Duration: {Math.floor(duration / 60)}:{(duration % 60).toFixed(1).padStart(4, "0")}
+                <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
+                  {Math.floor(duration / 60)}:{(duration % 60).toFixed(1).padStart(4, "0")}
                 </span>
               )}
             </div>
 
-            <div className="flex flex-col gap-4">
-              {/* Audio player element */}
-              <div className="bg-zinc-950/40 p-3 rounded border border-zinc-900/80 flex items-center justify-center">
-                <audio
-                  ref={audioRef}
-                  src={audioUrl}
-                  controls
-                  onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)}
-                  onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime || 0)}
-                  onDurationChange={() => setDuration(audioRef.current?.duration || 0)}
-                  className="w-full brightness-90 contrast-125 saturate-50 accent-zinc-200"
-                />
-              </div>
+            {/* Audio Player */}
+            <div
+              style={{
+                background: "rgba(5, 5, 16, 0.5)",
+                padding: 14,
+                borderRadius: 14,
+                border: "1px solid var(--glass-border)",
+                marginBottom: 20,
+              }}
+            >
+              <audio
+                ref={audioRef}
+                src={audioUrl}
+                controls
+                onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)}
+                onTimeUpdate={() => setCurrentTime(audioRef.current?.currentTime || 0)}
+                onDurationChange={() => setDuration(audioRef.current?.duration || 0)}
+                style={{
+                  width: "100%",
+                  height: 40,
+                  filter: "brightness(0.9) contrast(1.1)",
+                }}
+              />
+            </div>
 
-              {duration > 0 && (
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center text-xs text-zinc-400">
-                    <span>Interactive Timeline (click track to seek)</span>
-                    <span className="font-mono text-zinc-300">
-                      Playhead: {currentTime.toFixed(2)}s / {duration.toFixed(2)}s
-                    </span>
+            {/* Interactive Timeline */}
+            {duration > 0 && (
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                  <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
+                    Interactive Timeline
+                  </span>
+                  <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>
+                    {currentTime.toFixed(2)}s / {duration.toFixed(2)}s
+                  </span>
+                </div>
+
+                {/* Track */}
+                <div
+                  onClick={handleTimelineTrackClick}
+                  style={{
+                    position: "relative",
+                    height: 40,
+                    width: "100%",
+                    background: "rgba(5, 5, 16, 0.6)",
+                    border: "1px solid var(--glass-border)",
+                    borderRadius: 10,
+                    overflow: "hidden",
+                    cursor: "pointer",
+                    marginBottom: 12,
+                  }}
+                >
+                  {/* Grid lines */}
+                  <div style={{ position: "absolute", inset: 0, display: "flex", justifyContent: "space-between", pointerEvents: "none", opacity: 0.06 }}>
+                    {Array.from({ length: 12 }).map((_, i) => (
+                      <div key={i} style={{ width: 1, height: "100%", background: "#fff" }} />
+                    ))}
                   </div>
 
-                  {/* Seeker Track */}
-                  <div 
-                    onClick={handleTimelineTrackClick}
-                    className="relative h-8 w-full bg-zinc-950 border border-zinc-900 rounded-md overflow-hidden cursor-pointer select-none group/timeline"
+                  {/* Result Ranges */}
+                  {results.map((res, index) => {
+                    const startPercent = (res.start_time / duration) * 100;
+                    const endPercent = (res.end_time / duration) * 100;
+                    const widthPercent = Math.max(endPercent - startPercent, 1.0);
+
+                    return (
+                      <button
+                        key={index}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleTimelineClick(res.start_time);
+                        }}
+                        title={`${res.start_time.toFixed(2)}s – ${res.end_time.toFixed(2)}s (score: ${res.score.toFixed(3)})`}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          height: "100%",
+                          left: `${startPercent}%`,
+                          width: `${widthPercent}%`,
+                          background: timelineRangeColor(res.resolution_type),
+                          borderLeft: `2px solid ${timelineBorderColor(res.resolution_type)}`,
+                          cursor: "pointer",
+                          border: "none",
+                          transition: "background 0.2s",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = timelineRangeColor(res.resolution_type).replace("0.25", "0.45");
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = timelineRangeColor(res.resolution_type);
+                        }}
+                      />
+                    );
+                  })}
+
+                  {/* Playhead */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      width: 2,
+                      background: "var(--accent-400)",
+                      left: `${(currentTime / duration) * 100}%`,
+                      zIndex: 20,
+                      pointerEvents: "none",
+                      transition: "left 0.075s linear",
+                      boxShadow: "0 0 8px var(--accent-500)",
+                    }}
                   >
-                    {/* Subtle grid lines */}
-                    <div className="absolute inset-0 flex justify-between pointer-events-none opacity-10">
-                      {Array.from({ length: 10 }).map((_, i) => (
-                        <div key={i} className="h-full w-[1px] bg-zinc-500" />
-                      ))}
-                    </div>
-
-                    {/* Result Ranges */}
-                    {results.map((res, index) => {
-                      const startPercent = (res.start_time / duration) * 100;
-                      const endPercent = (res.end_time / duration) * 100;
-                      const widthPercent = Math.max(endPercent - startPercent, 1.0);
-
-                      let colorClass = "bg-zinc-400/20 hover:bg-zinc-400/35 border-zinc-400";
-                      if (res.resolution_type === "onset") colorClass = "bg-purple-500/20 hover:bg-purple-500/35 border-purple-500";
-                      else if (res.resolution_type === "250ms") colorClass = "bg-rose-500/20 hover:bg-rose-500/35 border-rose-500";
-                      else if (res.resolution_type === "1s") colorClass = "bg-sky-500/20 hover:bg-sky-500/35 border-sky-500";
-                      else if (res.resolution_type === "2s") colorClass = "bg-amber-500/20 hover:bg-amber-500/35 border-amber-500";
-                      else if (res.resolution_type === "5s") colorClass = "bg-emerald-500/20 hover:bg-emerald-500/35 border-emerald-500";
-                      else if (res.resolution_type === "10s") colorClass = "bg-indigo-500/20 hover:bg-indigo-500/35 border-indigo-500";
-
-                      return (
-                        <button
-                          key={index}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleTimelineClick(res.start_time);
-                          }}
-                          className={`absolute top-0 h-full border-l-2 ${colorClass} transition duration-150 cursor-pointer group/match`}
-                          style={{ left: `${startPercent}%`, width: `${widthPercent}%` }}
-                        >
-                          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-zinc-900 border border-zinc-800 text-[10px] text-zinc-300 px-2 py-1 rounded shadow-lg opacity-0 group-hover/match:opacity-100 transition duration-150 whitespace-nowrap pointer-events-none mb-1.5 z-30 font-mono">
-                            {res.start_time.toFixed(2)}s – {res.end_time.toFixed(2)}s (score: {res.score.toFixed(3)})
-                          </span>
-                        </button>
-                      );
-                    })}
-
-                    {/* Dynamic Playhead */}
-                    <div 
-                      className="absolute top-0 bottom-0 w-[2px] bg-zinc-100 z-20 pointer-events-none transition-all duration-75"
-                      style={{ left: `${(currentTime / duration) * 100}%` }}
-                    >
-                      {/* Playhead node */}
-                      <div className="absolute -top-0.5 -left-1 w-2.5 h-2.5 bg-zinc-100 border border-zinc-950 rounded-full shadow" />
-                    </div>
-                  </div>
-
-                  {/* Resolution Types Legend */}
-                  <div className="flex justify-between items-center text-[10px] text-zinc-500 font-mono">
-                    <span>0.0s</span>
-                    <div className="flex gap-4">
-                      <span className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-sm bg-purple-500/25 border-l border-purple-500" />
-                        <span>Onset (Dynamic)</span>
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-sm bg-rose-500/25 border-l border-rose-500" />
-                        <span>250ms (Transients)</span>
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-sm bg-sky-500/25 border-l border-sky-500" />
-                        <span>1s (Short Events)</span>
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-sm bg-amber-500/25 border-l border-amber-500" />
-                        <span>2s (Speech)</span>
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-sm bg-emerald-500/25 border-l border-emerald-500" />
-                        <span>5s (Ambient)</span>
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-sm bg-indigo-500/25 border-l border-indigo-500" />
-                        <span>10s (Native)</span>
-                      </span>
-                    </div>
-                    <span>{duration.toFixed(1)}s</span>
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: -3,
+                        left: -4,
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        background: "var(--accent-400)",
+                        boxShadow: "0 0 10px var(--accent-500)",
+                      }}
+                    />
                   </div>
                 </div>
-              )}
-            </div>
+
+                {/* Legend */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
+                  <span>0.0s</span>
+                  <div style={{ display: "flex", gap: 16 }}>
+                    {legendItems.map((item) => (
+                      <span key={item.type} style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: 2, background: `${item.color}30`, borderLeft: `2px solid ${item.color}`, display: "inline-block" }} />
+                        {item.label}
+                      </span>
+                    ))}
+                  </div>
+                  <span>{duration.toFixed(1)}s</span>
+                </div>
+              </div>
+            )}
           </section>
         )}
 
-        {/* Section 3: Search Dashboard */}
-        <section className="bg-zinc-900/30 border border-zinc-900 rounded-lg p-6 space-y-6">
-          <div className="flex items-center gap-2">
-            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-mono text-zinc-400">3</span>
-            <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Search Spatial Soundscape</h2>
+        {/* ─── Section 3: Search ─── */}
+        <section className="glass-card animate-fade-in animate-delay-3" style={{ padding: 32 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+            <div className="section-badge">3</div>
+            <h2 style={{ fontSize: 14, fontWeight: 600, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              Search Soundscape
+            </h2>
           </div>
 
-          <form onSubmit={handleSearch} className="flex flex-col gap-3">
-            <div className="flex gap-3">
-              <div className="relative flex-1">
-                <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-3.5 w-3.5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          <form onSubmit={handleSearch} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <div style={{ position: "relative", flex: 1, minWidth: 200 }}>
+                <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none", display: "flex" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
                   </svg>
                 </span>
                 <input
@@ -406,109 +656,154 @@ export default function Home() {
                     setQuery(e.target.value);
                     setSearchFile(null);
                   }}
-                  placeholder="Search query (e.g. 'squeaks', 'siren', 'glass shattering')..."
-                  className="w-full pl-9 pr-4 py-2 bg-zinc-950 border border-zinc-900 focus:border-zinc-800 rounded text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-850 transition font-mono"
+                  placeholder="Search sounds... (e.g. 'bird chirping', 'siren', 'glass shattering')"
+                  className="input-glass"
+                  style={{ paddingLeft: 40 }}
                 />
               </div>
-              <label className="cursor-pointer bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 px-4 py-2 rounded text-xs transition flex items-center gap-2 min-w-max">
-                <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+
+              <label className="btn-ghost" style={{ cursor: "pointer", whiteSpace: "nowrap" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                 </svg>
-                <span className="truncate max-w-[120px]">{searchFile ? searchFile.name : "Upload Audio"}</span>
-                <input
-                  type="file"
-                  accept="audio/*"
-                  onChange={handleSearchFileChange}
-                  className="hidden"
-                />
+                <span style={{ maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis" }}>
+                  {searchFile ? searchFile.name : "Audio Query"}
+                </span>
+                <input type="file" accept="audio/*" onChange={handleSearchFileChange} style={{ display: "none" }} />
               </label>
-              <button
-                type="submit"
-                disabled={isSearching}
-                className="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-semibold rounded text-xs transition disabled:opacity-50 cursor-pointer min-w-max"
-              >
-                {isSearching ? "Searching..." : "Search"}
+
+              <button type="submit" disabled={isSearching} className="btn-primary">
+                {isSearching ? (
+                  <>
+                    <svg style={{ animation: "spin 1s linear infinite", width: 14, height: 14 }} fill="none" viewBox="0 0 24 24">
+                      <circle style={{ opacity: 0.25 }} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path style={{ opacity: 0.75 }} fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Searching...
+                  </>
+                ) : (
+                  "Search"
+                )}
               </button>
             </div>
+
             {searchFile && (
-              <div className="text-[10px] text-zinc-500 font-mono">
-                Audio Search Mode Active: Searching for sounds similar to <span className="text-zinc-300">"{searchFile.name}"</span>. Type text to cancel audio search.
-              </div>
+              <p style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
+                Audio mode: matching sounds similar to <span style={{ color: "var(--accent-400)" }}>&quot;{searchFile.name}&quot;</span>
+              </p>
             )}
           </form>
 
-          {/* Matches List Grid/Table */}
+          {/* Results */}
           {results.length > 0 && (
-            <div className="space-y-3 pt-2">
-              <div className="flex items-center justify-between border-b border-zinc-900 pb-2">
-                <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Top Neural Vector Matches</h3>
-                <span className="text-[10px] font-mono text-zinc-500">{results.length} matches</span>
+            <div style={{ marginTop: 28 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid var(--glass-border)" }}>
+                <h3 style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  Neural Matches
+                </h3>
+                <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
+                  {results.length} results
+                </span>
               </div>
 
-              <div className="overflow-x-auto rounded border border-zinc-900 bg-zinc-950/20">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-zinc-900 text-[10px] uppercase font-mono text-zinc-500 tracking-wider bg-zinc-900/10">
-                      <th className="px-4 py-2 font-medium">Resolution</th>
-                      <th className="px-4 py-2 font-medium">Temporal Range</th>
-                      <th className="px-4 py-2 font-medium">Confidence (Distance)</th>
-                      <th className="px-4 py-2 font-medium text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-zinc-900/60 font-mono text-xs">
-                    {results.map((res, idx) => {
-                      let resolutionBadge = "border-zinc-800 bg-zinc-900/40 text-zinc-400";
-                      if (res.resolution_type === "onset") resolutionBadge = "border-purple-500/20 bg-purple-500/5 text-purple-400";
-                      else if (res.resolution_type === "250ms") resolutionBadge = "border-rose-500/20 bg-rose-500/5 text-rose-400";
-                      else if (res.resolution_type === "1s") resolutionBadge = "border-sky-500/20 bg-sky-500/5 text-sky-400";
-                      else if (res.resolution_type === "2s") resolutionBadge = "border-amber-500/20 bg-amber-500/5 text-amber-400";
-                      else if (res.resolution_type === "5s") resolutionBadge = "border-emerald-500/20 bg-emerald-500/5 text-emerald-400";
-                      else if (res.resolution_type === "10s") resolutionBadge = "border-indigo-500/20 bg-indigo-500/5 text-indigo-400";
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {results.map((res, idx) => {
+                  const rc = resolutionColor(res.resolution_type);
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => handleTimelineClick(res.start_time)}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 16,
+                        padding: "14px 20px",
+                        borderRadius: 14,
+                        background: "rgba(5, 5, 16, 0.3)",
+                        border: "1px solid var(--glass-border)",
+                        cursor: "pointer",
+                        transition: "all 0.25s var(--ease-smooth)",
+                        width: "100%",
+                        textAlign: "left",
+                        color: "var(--text-primary)",
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 13,
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = "rgba(168, 85, 247, 0.2)";
+                        e.currentTarget.style.background = "rgba(168, 85, 247, 0.04)";
+                        e.currentTarget.style.boxShadow = "0 0 20px rgba(168, 85, 247, 0.05)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = "var(--glass-border)";
+                        e.currentTarget.style.background = "rgba(5, 5, 16, 0.3)";
+                        e.currentTarget.style.boxShadow = "none";
+                      }}
+                    >
+                      {/* Resolution Badge */}
+                      <span
+                        style={{
+                          padding: "3px 10px",
+                          borderRadius: 6,
+                          background: rc.bg,
+                          border: `1px solid ${rc.border}30`,
+                          color: rc.text,
+                          fontSize: 10,
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.05em",
+                          flexShrink: 0,
+                        }}
+                      >
+                        {res.resolution_type}
+                      </span>
 
-                      return (
-                        <tr 
-                          key={idx}
-                          onClick={() => handleTimelineClick(res.start_time)}
-                          className="hover:bg-zinc-900/20 transition cursor-pointer group"
-                        >
-                          <td className="px-4 py-2.5">
-                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded border text-[9px] font-semibold uppercase tracking-wide ${resolutionBadge}`}>
-                              {res.resolution_type}
-                            </span>
-                          </td>
-                          <td className="px-4 py-2.5 text-zinc-200">
-                            <span className="font-semibold text-zinc-100">{res.start_time.toFixed(2)}s</span>
-                            <span className="text-zinc-500 mx-1.5">to</span>
-                            <span>{res.end_time.toFixed(2)}s</span>
-                          </td>
-                          <td className="px-4 py-2.5">
-                            <div className="flex items-center gap-3">
-                              <span className="text-zinc-300 tabular-nums">
-                                {res.score.toFixed(4)}
-                              </span>
-                              <div className="w-16 h-1 bg-zinc-900 rounded-full overflow-hidden hidden sm:block">
-                                <div 
-                                  className="h-full bg-zinc-500 rounded-full group-hover:bg-zinc-400 transition" 
-                                  style={{ width: `${Math.min(res.score * 100, 100)}%` }}
-                                />
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-4 py-2.5 text-right">
-                            <button className="text-[10px] border border-zinc-800 group-hover:border-zinc-700 bg-zinc-900 text-zinc-400 group-hover:text-zinc-200 px-2 py-0.5 rounded transition cursor-pointer">
-                              Seek
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                      {/* Time Range */}
+                      <span style={{ flex: 1, minWidth: 0 }}>
+                        <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>{res.start_time.toFixed(2)}s</span>
+                        <span style={{ color: "var(--text-muted)", margin: "0 6px" }}>→</span>
+                        <span style={{ color: "var(--text-secondary)" }}>{res.end_time.toFixed(2)}s</span>
+                      </span>
+
+                      {/* Score */}
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+                        <span style={{ color: "var(--text-secondary)", fontVariantNumeric: "tabular-nums" }}>
+                          {res.score.toFixed(4)}
+                        </span>
+                        <div style={{ width: 60, height: 4, borderRadius: 4, background: "rgba(255,255,255,0.06)", overflow: "hidden" }}>
+                          <div
+                            style={{
+                              height: "100%",
+                              borderRadius: 4,
+                              background: `linear-gradient(90deg, ${rc.border}, ${rc.text})`,
+                              width: `${Math.min(res.score * 100, 100)}%`,
+                              transition: "width 0.3s",
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Seek Arrow */}
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
         </section>
       </main>
+
+      {/* Spin keyframes (inline for the spinner SVGs) */}
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
