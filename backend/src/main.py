@@ -269,3 +269,81 @@ async def search_audio(file: UploadFile = File(...), db: Session = Depends(get_d
     # 5. Temporal rerank and return
     events = _temporal_rerank(candidates)
     return events[:20]
+
+@app.get("/api/v1/corpus/map")
+def get_corpus_map(db: Session = Depends(get_db)):
+    """Fetch all embeddings, run PCA down to 3D, and cluster them."""
+    import numpy as np
+    import json
+    
+    # Fast import inside endpoint to keep startup fast
+    from sklearn.decomposition import PCA
+    from sklearn.cluster import KMeans
+
+    # Fetch max 2000 embeddings to prevent browser lag
+    sql = text("""
+        SELECT id, file_id, start_time, end_time, resolution_type, embedding::text
+        FROM audio_chunks
+        LIMIT 2000;
+    """)
+    rows = db.execute(sql).fetchall()
+
+    if not rows:
+        return []
+
+    data = []
+    embeddings = []
+    for row in rows:
+        # row[5] is the vector string like '[0.1, 0.2, ...]'
+        try:
+            vec = json.loads(row[5])
+            embeddings.append(vec)
+            data.append({
+                "id": row[0],
+                "file_id": row[1],
+                "start_time": row[2],
+                "end_time": row[3],
+                "resolution_type": row[4],
+            })
+        except Exception:
+            continue
+
+    if not embeddings:
+        return []
+
+    X = np.array(embeddings)
+    
+    # Only run PCA if we have enough points
+    if len(X) < 3:
+        return []
+        
+    # PCA to 3D
+    pca = PCA(n_components=3)
+    X_3d = pca.fit_transform(X)
+
+    # K-Means clustering
+    n_clusters = min(5, len(X))
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+    labels = kmeans.fit_predict(X_3d)
+
+    # Find outliers (points furthest from their cluster center)
+    centers = kmeans.cluster_centers_
+    distances = [np.linalg.norm(X_3d[i] - centers[labels[i]]) for i in range(len(X_3d))]
+    
+    # 95th percentile distance threshold for outliers
+    threshold = np.percentile(distances, 95) if len(distances) > 0 else float('inf')
+
+    # Construct response
+    results = []
+    for i in range(len(data)):
+        results.append({
+            **data[i],
+            "x": float(X_3d[i][0]),
+            "y": float(X_3d[i][1]),
+            "z": float(X_3d[i][2]),
+            "cluster": int(labels[i]),
+            "is_outlier": bool(distances[i] > threshold)
+        })
+
+    return results
+
