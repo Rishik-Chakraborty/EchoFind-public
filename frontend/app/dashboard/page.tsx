@@ -44,17 +44,13 @@ const NavItem = ({ active, icon, label, onClick }: { active: boolean; icon: Reac
   </div>
 );
 
-const Panel = ({ title, badge, children, className = "" }: { title: string, badge?: string | number, children: React.ReactNode, className?: string }) => (
-  <div className={`border border-white/10 bg-white/[0.02] rounded-2xl flex flex-col shadow-2xl backdrop-blur-xl ${className}`}>
-    <div className="h-14 border-b border-white/5 flex items-center justify-between px-6">
-      <h2 className="text-sm font-semibold text-white tracking-tight">{title}</h2>
-      {badge !== undefined && (
-        <div className="bg-white/10 px-2.5 py-1 text-xs font-medium text-white rounded-full">
-          {badge}
-        </div>
-      )}
+const Panel = ({ title, badge, children, className = "" }: { title: string, badge?: string, children: React.ReactNode, className?: string }) => (
+  <div className={`glass-panel overflow-hidden flex flex-col relative z-10 ${className}`}>
+    <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 shrink-0 bg-white/[0.01]">
+      <h2 className="text-sm font-bold text-white tracking-wide uppercase">{title}</h2>
+      {badge && <span className="bg-white/10 text-white px-2 py-1 rounded text-xs font-semibold">{badge}</span>}
     </div>
-    <div className="flex-1 overflow-hidden relative p-6">
+    <div className="flex-1 overflow-hidden p-6 relative">
       {children}
     </div>
   </div>
@@ -222,7 +218,7 @@ export default function Dashboard() {
     const traces: any[] = [];
     if (corpusData.length > 0) {
       const clusters = Array.from(new Set(corpusData.map(d => d.cluster)));
-      const colorPalette = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6'];
+      const colorPalette = ['#ffffff', '#e4e4e7', '#a1a1aa', '#71717a', '#52525b'];
       
       clusters.forEach((c: number, idx) => {
          const clusterPoints = corpusData.filter(d => d.cluster === c && !d.is_outlier);
@@ -290,8 +286,8 @@ export default function Dashboard() {
           </aside>
 
           {/* ─── MAIN CONTENT ─── */}
-          <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#050505] relative">
-            <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-white opacity-[0.02] blur-[120px] rounded-full pointer-events-none"></div>
+          <div className="flex-1 flex flex-col h-screen overflow-hidden relative">
+            <div className="liquid-bg"></div>
 
             {/* Topbar */}
             <header className="h-16 border-b border-white/5 flex items-center justify-between px-8 shrink-0 relative z-10">
@@ -346,7 +342,7 @@ export default function Dashboard() {
                             <div className="flex flex-col h-full">
                               <div className="flex justify-between items-center mb-6 p-4 rounded-xl bg-white/5 border border-white/10">
                                 <div className="flex items-center gap-4">
-                                  <div className="w-10 h-10 bg-indigo-500/20 rounded-lg flex items-center justify-center border border-indigo-500/30">
+                                  <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center border border-white/20">
                                     <WaveformIcon />
                                   </div>
                                   <div>
@@ -360,7 +356,7 @@ export default function Dashboard() {
                                     {uploadStatus.charAt(0).toUpperCase() + uploadStatus.slice(1)}
                                   </div>
                                 ) : (
-                                  <button onClick={handleUpload} className="text-xs font-semibold px-4 py-2 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white transition-colors">
+                                  <button onClick={handleUpload} className="text-xs font-semibold px-4 py-2 rounded-full bg-white hover:bg-zinc-200 text-black transition-colors">
                                     Index Audio
                                   </button>
                                 )}
@@ -396,9 +392,9 @@ export default function Dashboard() {
                                       left: `${(res.start_time / duration) * 100}%`,
                                       width: `${Math.max(((res.end_time - res.start_time) / duration) * 100, 1)}%`,
                                       height: "100%",
-                                      backgroundColor: "rgba(99, 102, 241, 0.2)",
-                                      borderLeft: "2px solid rgba(99, 102, 241, 0.8)",
-                                      borderRight: "2px solid rgba(99, 102, 241, 0.8)",
+                                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                                      borderLeft: "2px solid rgba(255, 255, 255, 0.6)",
+                                      borderRight: "2px solid rgba(255, 255, 255, 0.6)",
                                       borderRadius: "4px"
                                     }}
                                   />
@@ -468,7 +464,7 @@ export default function Dashboard() {
                              >
                                 <div className="flex justify-between items-center mb-3">
                                   <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs border border-indigo-500/30">
+                                    <div className="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-xs border border-white/20">
                                       {idx + 1}
                                     </div>
                                     <span className="text-sm font-semibold text-white">Segment Match</span>
@@ -504,7 +500,7 @@ export default function Dashboard() {
                          <p className="text-sm text-zinc-400">Interactive 3D projection of {corpusData.length} indexed chunks via PCA and K-Means.</p>
                        </div>
                        <div className="flex gap-4 text-xs font-mono">
-                         <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-indigo-500"></span> Normal Clusters</div>
+                         <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-white"></span> Normal Clusters</div>
                          <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-red-500"></span> Outliers (Anomalies)</div>
                        </div>
                     </div>
@@ -512,7 +508,7 @@ export default function Dashboard() {
                     <div className="flex-1 bg-white/[0.01] border border-white/5 rounded-2xl overflow-hidden relative shadow-inner">
                        {isLoadingCorpus && (
                          <div className="absolute inset-0 flex items-center justify-center z-20">
-                            <span className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></span>
+                            <span className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></span>
                          </div>
                        )}
                        {!isLoadingCorpus && corpusData.length === 0 && (

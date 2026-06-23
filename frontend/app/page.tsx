@@ -41,7 +41,8 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#050505] text-zinc-300 font-sans selection:bg-white selection:text-black">
+    <div className="min-h-screen flex flex-col relative text-zinc-300 font-sans selection:bg-white selection:text-black">
+      <div className="liquid-bg"></div>
       {/* ─── Header Navigation ─── */}
       <header
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
