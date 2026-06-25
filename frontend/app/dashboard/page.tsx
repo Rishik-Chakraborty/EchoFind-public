@@ -82,28 +82,40 @@ export default function Dashboard() {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Corpus Map Fetch
+  const hasFetchedCorpusRef = useRef(false);
+
   useEffect(() => {
     let active = true;
-    if (activeTab === "index" && corpusData.length === 0 && !isLoadingCorpus) {
+    
+    if (activeTab === "index" && !hasFetchedCorpusRef.current) {
       const fetchData = async () => {
         setIsLoadingCorpus(true);
         try {
           const res = await fetch("http://127.0.0.1:8000/api/v1/corpus/map");
+          if (!res.ok) throw new Error("API returned " + res.status);
           const data = await res.json();
+          
           if (active) {
-            setCorpusData(data);
+            // Ensure data is always an array
+            setCorpusData(Array.isArray(data) ? data : []);
+            hasFetchedCorpusRef.current = true;
             setIsLoadingCorpus(false);
           }
         } catch (err) {
-          console.error(err);
-          if (active) setIsLoadingCorpus(false);
+          console.error("Corpus map fetch failed:", err);
+          if (active) {
+             setCorpusData([]);
+             hasFetchedCorpusRef.current = true;
+             setIsLoadingCorpus(false);
+          }
         }
       };
-      // To satisfy react-hooks/set-state-in-effect, we push the state update to the next tick
-      setTimeout(fetchData, 0);
+      
+      fetchData();
     }
+    
     return () => { active = false; };
-  }, [activeTab, corpusData.length, isLoadingCorpus]);
+  }, [activeTab]);
 
   useEffect(() => {
     if (!jobId) return;
@@ -311,9 +323,9 @@ export default function Dashboard() {
             </header>
 
             {/* Main Content Area */}
-            <main className="flex-1 p-8 overflow-y-auto relative z-10">
+            <main className="flex-1 flex flex-col p-8 overflow-hidden relative z-10">
                {activeTab === "search" && (
-                 <div className="flex flex-col gap-8 h-full max-w-[1600px] mx-auto pb-4">
+                 <div className="flex-1 flex flex-col gap-8 w-full max-w-[1600px] mx-auto min-h-0">
                   
                   {/* TOP ROW: AUDIO SOURCE */}
                   <div className="flex-shrink-0 h-[45%]">
@@ -493,7 +505,7 @@ export default function Dashboard() {
             )}
 
                {activeTab === "index" && (
-                 <div className="h-full w-full max-w-[1600px] mx-auto flex flex-col gap-6">
+                 <div className="flex-1 flex flex-col gap-6 w-full max-w-[1600px] mx-auto min-h-0">
                     <div className="flex justify-between items-center bg-white/[0.02] border border-white/10 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
                        <div>
                          <h2 className="text-xl font-bold text-white mb-1">Corpus-Level Clustering Map</h2>
