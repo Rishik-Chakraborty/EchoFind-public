@@ -126,8 +126,8 @@ export default function LandingPage() {
                       key={i} 
                       className="w-1.5 bg-white/60 rounded-full" 
                       style={{ 
-                        height: `${Math.max(10, Math.sin(i * 0.3) * 60 + Math.cos(i * 0.8) * 40 + 60)}px`,
-                        opacity: 0.2 + (Math.sin(i * 0.1) + 1) * 0.4
+                        height: `${Math.max(10, Math.sin(i * 0.3) * 60 + Math.cos(i * 0.8) * 40 + 60).toFixed(2)}px`,
+                        opacity: Number((0.2 + (Math.sin(i * 0.1) + 1) * 0.4).toFixed(3))
                       }}
                     ></div>
                   ))}
@@ -207,11 +207,11 @@ export default function LandingPage() {
                      key={i}
                      className="absolute rounded-full bg-white transition-opacity"
                      style={{
-                       left: `${20 + Math.abs(Math.sin(i * 1.2)) * 60}%`,
-                       top: `${20 + Math.abs(Math.cos(i * 0.8)) * 60}%`,
-                       width: `${Math.abs(Math.sin(i * 3)) * 6 + 2}px`,
-                       height: `${Math.abs(Math.sin(i * 3)) * 6 + 2}px`,
-                       opacity: Math.abs(Math.cos(i * 2)) * 0.8 + 0.2,
+                       left: `${(20 + Math.abs(Math.sin(i * 1.2)) * 60).toFixed(2)}%`,
+                       top: `${(20 + Math.abs(Math.cos(i * 0.8)) * 60).toFixed(2)}%`,
+                       width: `${(Math.abs(Math.sin(i * 3)) * 6 + 2).toFixed(2)}px`,
+                       height: `${(Math.abs(Math.sin(i * 3)) * 6 + 2).toFixed(2)}px`,
+                       opacity: Number((Math.abs(Math.cos(i * 2)) * 0.8 + 0.2).toFixed(3)),
                        boxShadow: '0 0 10px rgba(255,255,255,0.5)'
                      }}
                    />

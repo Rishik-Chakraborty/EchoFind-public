@@ -37,12 +37,9 @@ class ClapEmbedder:
             return cls._instance
 
     def _initialize(self):
-        if torch.backends.mps.is_available():
-            self.device = torch.device("mps")
-            print("ClapEmbedder initialized with MPS GPU acceleration.")
-        else:
-            self.device = torch.device("cpu")
-            print("ClapEmbedder initialized with CPU fallback.")
+        # Force CPU device as MPS has known memory bugs and extreme slowness with CLAP models
+        self.device = torch.device("cpu")
+        print("ClapEmbedder initialized with CPU device.")
         model_name = "laion/clap-htsat-fused"
         self.model = ClapModel.from_pretrained(model_name).to(self.device)
         self.processor = AutoProcessor.from_pretrained(model_name)

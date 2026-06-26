@@ -70,6 +70,29 @@ def get_job_status(job_id: int, db: Session = Depends(get_db)):
     return {"job_id": row[0], "status": row[1]}
 
 
+@app.get("/api/v1/audio/{file_id}")
+def get_audio_file(file_id: int, db: Session = Depends(get_db)):
+    """Serve the raw audio file."""
+    from fastapi.responses import FileResponse
+    row = db.execute(text("""
+        SELECT j.file_url 
+        FROM audio_files f 
+        JOIN audio_jobs j ON f.job_id = j.id 
+        WHERE f.id = :file_id
+    """), {"file_id": file_id}).fetchone()
+    
+    if not row:
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    import os
+    file_url = row[0]
+    if not os.path.exists(file_url):
+        raise HTTPException(status_code=404, detail="File physically missing from disk")
+        
+    return FileResponse(file_url)
+
+
+
 # ---------------------------------------------------------------------------
 # Resolution confidence weights — longer chunks produce more stable embeddings
 # so we give them a slight advantage during scoring.
@@ -183,9 +206,11 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
 
     # --- Step 3: Retrieve candidates ---
     sql = text("""
-        SELECT file_id, start_time, end_time, resolution_type,
-               (embedding <=> CAST(:query_vec AS vector)) AS score
-        FROM audio_chunks
+        SELECT ac.file_id, ac.start_time, ac.end_time, ac.resolution_type,
+               (ac.embedding <=> CAST(:query_vec AS vector)) AS score,
+               af.filename
+        FROM audio_chunks ac
+        JOIN audio_files af ON ac.file_id = af.id
         ORDER BY score ASC
         LIMIT 1000;
     """)
@@ -199,6 +224,7 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
     for row in rows:
         res_type = row[3]
         score = row[4]
+        filename = row[5]
         if score < _ABSOLUTE_THRESHOLDS.get(res_type, 0.75):
             candidates.append(SearchResult(
                 file_id=row[0],
@@ -206,6 +232,7 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
                 end_time=row[2],
                 resolution_type=res_type,
                 score=score,
+                filename=filename,
             ))
 
     # --- Step 5–6: Temporal rerank and return top-20 ---
@@ -241,9 +268,11 @@ async def search_audio(file: UploadFile = File(...), db: Session = Depends(get_d
     
     # 3. Retrieve candidates
     sql = text("""
-        SELECT file_id, start_time, end_time, resolution_type,
-               (embedding <=> CAST(:query_vec AS vector)) AS score
-        FROM audio_chunks
+        SELECT ac.file_id, ac.start_time, ac.end_time, ac.resolution_type,
+               (ac.embedding <=> CAST(:query_vec AS vector)) AS score,
+               af.filename
+        FROM audio_chunks ac
+        JOIN audio_files af ON ac.file_id = af.id
         ORDER BY score ASC
         LIMIT 1000;
     """)
@@ -257,6 +286,7 @@ async def search_audio(file: UploadFile = File(...), db: Session = Depends(get_d
     for row in rows:
         res_type = row[3]
         score = row[4]
+        filename = row[5]
         if score < _ABSOLUTE_THRESHOLDS.get(res_type, 0.75):
             candidates.append(SearchResult(
                 file_id=row[0],
@@ -264,6 +294,7 @@ async def search_audio(file: UploadFile = File(...), db: Session = Depends(get_d
                 end_time=row[2],
                 resolution_type=res_type,
                 score=score,
+                filename=filename,
             ))
 
     # 5. Temporal rerank and return

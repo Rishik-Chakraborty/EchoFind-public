@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS audio_chunks (
     file_id INTEGER REFERENCES audio_files(id) ON DELETE CASCADE,
     start_time FLOAT NOT NULL,
     end_time FLOAT NOT NULL,
-    resolution_type TEXT NOT NULL CHECK (resolution_type IN ('250ms','2s','5s')),
+    resolution_type TEXT NOT NULL CHECK (resolution_type IN ('1s','2s','onset')),
     embedding VECTOR(512) NOT NULL
 );
 

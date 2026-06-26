@@ -10,6 +10,7 @@ class SearchRequest(BaseModel):
 
 class SearchResult(BaseModel):
     file_id: int
+    filename: str
     start_time: float
     end_time: float
     resolution_type: str
