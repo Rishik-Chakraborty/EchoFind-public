@@ -1,10 +1,1 @@
-{
-  "0": "Community 0",
-  "2": "Community 2",
-  "3": "Community 3",
-  "4": "Community 4",
-  "5": "Community 5",
-  "6": "Community 6",
-  "7": "Community 7",
-  "8": "Community 8"
-}
+{"0": "Backend API Routing", "1": "DSP Chunking Pipeline", "2": "TypeScript Config", "3": "Frontend NPM Scripts", "4": "Hybrid Search Logic", "5": "CLAP Embedder Engine", "6": "Backend Testing Suite", "7": "Dashboard UI Components", "8": "Frontend Dependencies", "9": "Nextjs App Layout", "10": "Commit Tracker Script", "11": "Landing Page Animations", "12": "ESLint Config", "13": "Nextjs Config", "14": "PostCSS Config", "15": "Proxy Configuration", "16": "Index Creation Script", "17": "Database Purge Script", "18": "Nextjs Env Types", "19": "Default Proxy Route", "20": "Generic Page TSX", "21": "File Icon SVG", "22": "Globe Icon SVG", "23": "Next Logo SVG", "24": "Vercel Logo SVG", "25": "Window Icon SVG"}

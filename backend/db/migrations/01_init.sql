@@ -33,3 +33,16 @@ CREATE TABLE IF NOT EXISTS audio_chunks (
 
 -- HNSW index for fast cosine similarity search
 CREATE INDEX IF NOT EXISTS idx_audio_chunks_embedding ON audio_chunks USING hnsw (embedding vector_cosine_ops);
+
+-- Table for speech transcripts (from Whisper ASR)
+CREATE TABLE IF NOT EXISTS audio_transcripts (
+    id SERIAL PRIMARY KEY,
+    file_id INTEGER REFERENCES audio_files(id) ON DELETE CASCADE,
+    start_time FLOAT NOT NULL,
+    end_time FLOAT NOT NULL,
+    text TEXT NOT NULL
+);
+
+-- Index for fast file-specific transcript lookups
+CREATE INDEX IF NOT EXISTS idx_audio_transcripts_file_id ON audio_transcripts(file_id);
+

@@ -2,55 +2,39 @@
 
 The **EchoFind** project is a high-frequency neural audio retrieval system and temporal spatial search indexer. Its core objective is to solve the limitation of traditional text-based search engines, which rely on speech-to-text transcriptions and discard acoustic context.
 
-Unlike Whisper-based systems that sanitize the acoustic landscape of a file, EchoFind maps native waveforms—tracking pitch, timbre, rhythm, and structural sound distributions—directly into a spatial geometric coordinate system ($D = 512$) using Multi-Modal Contrastive Learning (specifically the LAION-CLAP transformer model). This allows users to perform semantic "Control + F" operations across unstructured audio to find not just spoken words, but raw sonic signatures (e.g., glass shattering, background sirens, mechanical grinding, or emotional shifts).
+Unlike traditional systems that sanitize the acoustic landscape of a file, EchoFind maps native waveforms—tracking pitch, timbre, rhythm, and structural sound distributions—directly into a spatial geometric coordinate system ($D = 512$) using Multi-Modal Contrastive Learning (specifically the LAION-CLAP transformer model). This allows users to perform semantic "Control + F" operations across unstructured audio to find not just spoken words, but raw sonic signatures (e.g., glass shattering, background sirens, mechanical grinding, or emotional shifts).
 
-### Key Technical Infrastructure (v3.0)
+## System Architecture & Technical Design
 
-EchoFind utilizes a streamlined AWS-native architecture designed for high availability and fault tolerance.
+EchoFind operates a multi-modal, hybrid-search backend architecture combining traditional Full-Text Search (FTS) with Vector-based Acoustic Nearest Neighbor Search. The backend is built on **FastAPI**, backed by **PostgreSQL** (with `pgvector` and `pg_trgm` extensions).
 
-* **Ingestion & DSP Layer:** Raw files are uploaded to Amazon S3, triggering an AWS SQS queue to decouple heavy processing tasks. An ECS Fargate worker (CPU) intercepts the audio and executes a **Multi-Resolution Chunking Engine**, which extracts overlapping matrices at three distinct temporal resolutions: 250ms (transients), 2s (localized speech), and 5s (contextual soundscapes).
+### 1. Ingestion & DSP Pipeline
+Raw files are ingested via FastAPI and processed asynchronously in the background. The **Digital Signal Processing (DSP) Layer** uses `librosa` to execute a **Multi-Resolution Chunking Engine**.
+- **Dynamic Onset Segmentation:** Instead of an exhaustive dense temporal grid, the system uses Librosa's onset detection to identify transient acoustic events. It extracts precise 500ms chunks (-100ms to +400ms around the onset, capped at 50 onsets per file) to capture sharp sounds.
+- **Localized Speech (2s Tiers):** For continuous sounds and speech, the audio is segmented into 2-second chunks with 0% overlap.
+- **Silence Pruning & Normalization:** Chunks with RMS energy below -60.0 dB are aggressively pruned to prevent vector space pollution. Peak-normalization to [-1, 1] ensures embeddings remain consistent across varying recording volumes.
 
-* **Neural Processing:** These preprocessed matrices are batched and sent to a Dedicated GPU Inference Container on AWS EC2, where the LAION-CLAP foundation model extracts structural textures and exports 512-dimensional vector arrays.
+### 2. Multi-Modal Indexing
+The system processes audio through a dual-pipeline approach to index both its acoustic and semantic properties:
+- **Acoustic Neural Processing:** Valid audio chunks are batched and processed by the **LAION-CLAP foundation model**, which extracts structural textures and outputs 512-dimensional vector arrays. These embeddings are stored in PostgreSQL using the `pgvector` extension.
+- **Transcriptive Processing:** In parallel, the audio is transcribed using **Faster-Whisper (INT8 quantized base model)** to extract word-level timestamps. These transcripts are inserted into the `audio_transcripts` table and indexed using PostgreSQL `gin (to_tsvector)` for exact keyword matching and `gin_trgm_ops` for fuzzy trigram similarity.
 
-* **Vector Database:** Embeddings are written to AWS RDS PostgreSQL with the `pgvector` extension, utilizing an HNSW (Hierarchical Navigable Small World) index for low-latency cosine distance calculations.
+### 3. Query Optimization & Retrieval
+EchoFind employs an advanced retrieval pipeline to handle complex natural language and audio-to-audio queries.
+- **Query Ensemble & Expansion:** For text queries, the system generates an ensemble of up to 7 phrasings (e.g., "The sound of {query}", "A recording of {query}"). These are embedded via CLAP, with the original text weighted 2x, and averaged to form a highly robust, discriminative query vector.
+- **Hybrid Search Execution:** 
+  1. The query text is scrubbed for speech prefixes (e.g., "sound of a person saying") and first run against the PostgreSQL full-text search index (with a `pg_trgm` fallback) to catch exact spoken words, ranking these at the top of the search results.
+  2. Simultaneously, a cosine distance calculation (`<=>`) via `pgvector` retrieves the top 1000 acoustic candidates that match the ensemble query vector.
+- **Temporal Attention Reranking & NMS:** Acoustic candidates are strictly filtered via absolute distance thresholds specific to their resolution tier (e.g., 0.72 for onsets, 0.75 for 2s chunks). Finally, **Non-Maximum Suppression (NMS)** is applied to prevent overlapping highlight events, returning precise, isolated temporal hits (Top-20).
 
-* **Query Optimization:** To optimize retrieval, a Redis cache stores pre-computed 512D vectors for frequently searched terms, bypassing the 80ms CLAP text-encoder inference cost. Furthermore, retrieval is enhanced via **Temporal Attention Reranking**, which ensures that continuous events (e.g., an 8-second siren) are ranked higher than short anomalous spikes.
+### 4. Corpus Mapping (Dimensionality Reduction)
+To visualize the unstructured audio landscape, the backend implements a `/api/v1/corpus/map` endpoint. It fetches embeddings from the vector database, applies **Principal Component Analysis (PCA)** via `scikit-learn` to reduce the 512D space down to 3D, and runs **K-Means clustering** ($k=5$). It also calculates 95th-percentile distances from cluster centers to flag acoustic outliers for the user interface.
 
-* **Real-Time Streaming:** The system supports a parallel streaming pipeline (WebSockets) where a user can leave a microphone running and query an actively updating acoustic index without blocking the main web server.
+## How to Build & Run
 
-### How It Works: The Simplified Workflow
-
-At its core, EchoFind operates via a simple three-step process:
-
-1. **Acoustic Indexing (Audio-to-Vector):** 
-   When an audio clip is uploaded, it is sliced into multiple temporal resolutions (e.g., 250ms, 2s, and 5s). The **CLAP Audio Encoder** converts each slice into a **512-dimensional vector embedding** (a mathematical signature of the sound) and stores it in the database.
-
-2. **Query Processing (Text/Audio-to-Vector):** 
-   When a search is requested:
-   * A **Text Query** (e.g., *"dog barking"*) is converted into a 512-dimensional vector using the **CLAP Text Encoder**.
-   * An **Audio Query** (e.g., uploading a sound file of a siren) is converted using the **CLAP Audio Encoder**.
-
-3. **Vector Comparison (Nearest Neighbor Search):** 
-   The system calculates the closeness of the query vector to the indexed audio vectors using **cosine similarity** (cosine distance comparison via `pgvector`). The audio chunks with the highest similarity scores are returned to the user and highlighted on the playback timeline.
-
-### Performance Expectations
-
-* **Indexing (Raw Upload):** Processing a 2-hour file on consumer hardware takes roughly 10 to 25 minutes, depending on CPU/GPU availability.
-
-* **Search Latency:** While the database nearest-neighbor retrieval executes in $<15\text{ ms}$, the true end-to-end semantic search latency averages ~100ms to 150ms.
-
-### How to Build It: A Sequential Strategy
-
-To ensure success, treat this as a multi-phase engineering project.
-
-1. **Infrastructure & Database Initialization:** Use `docker-compose` to boot a FastAPI service and PostgreSQL with `pgvector`. Define your schemas for `audio_catalogs` and `audio_vectors`.
-
-2. **DSP Pipeline:** Implement the audio processing logic using `Librosa` and `pydub`/`FFmpeg` to handle the multi-resolution chunking (250ms/2s/5s).
-
-3. **Neural Inference:** Integrate the LAION-CLAP model using `PyTorch` and `Hugging Face Transformers` to generate embeddings.
-
-4. **Backend Integration:** Connect your API to the database for storage and retrieval operations using Cosine Distance (`<=>`).
-
-5. **Frontend Visualization:** Build a Next.js (TypeScript/Tailwind) dashboard with an HTML5 audio player and a visual timeline bar that maps search results as colored highlight markers, enabling instant seek functionality.
-
-6. **Benchmarking:** Include an automated test suite comparing EchoFind’s retrieval recall and latency against standard transcription-based pipelines to demonstrate architectural superiority.
+1. **Infrastructure & Database Initialization:** 
+   Use `docker-compose` to boot a PostgreSQL instance equipped with the `pgvector` extension. Ensure database schemas and extensions (`pg_trgm`) are initialized upon startup.
+2. **Backend Services:**
+   Install backend requirements (e.g., `faster-whisper`, `librosa`, `torch`, `fastapi`, `SQLAlchemy`, `scikit-learn`). Start the FastAPI server using `uvicorn src.main:app --reload`. 
+3. **Frontend Visualization:** 
+   Connect a React/Next.js or Vanilla UI dashboard to the API to submit jobs, poll indexing progress, query search results, and map highlights onto an HTML5 audio playback timeline.

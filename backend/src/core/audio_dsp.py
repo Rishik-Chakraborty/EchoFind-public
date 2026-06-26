@@ -15,7 +15,6 @@ class AudioFragmenter:
     """
 
     RESOLUTIONS = {
-        "1s":    {"duration": 1.0,   "overlap": 0.00},
         "2s":    {"duration": 2.0,   "overlap": 0.00},
     }
 

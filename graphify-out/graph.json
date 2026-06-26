@@ -1,374 +1,135 @@
 {
   "directed": false,
   "multigraph": false,
-  "graph": {},
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "audio_ingestion_pipeline",
+        "label": "Audio Ingestion Pipeline",
+        "nodes": [
+          "src_main_upload_audio",
+          "core_indexer_process_upload",
+          "core_audio_dsp_fragment",
+          "core_indexer__run_embedding",
+          "core_indexer__run_transcription"
+        ],
+        "relation": "form",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "backend/src/core/indexer.py"
+      },
+      {
+        "id": "hybrid_search_pipeline",
+        "label": "Hybrid Search Pipeline",
+        "nodes": [
+          "src_main_search",
+          "core_embedder_embed_text_query",
+          "src_main__temporal_rerank"
+        ],
+        "relation": "form",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "backend/src/main.py"
+      }
+    ]
+  },
   "nodes": [
-    {
-      "label": "main.py",
-      "file_type": "code",
-      "source_file": "main.py",
-      "source_location": "L1",
-      "id": "main_py",
-      "community": 5,
-      "norm_label": "main.py"
-    },
     {
       "label": "health()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L24",
-      "id": "src_main_health",
-      "community": 5,
-      "norm_label": "health()"
+      "community": 0,
+      "norm_label": "health()",
+      "id": "src_main_health"
     },
     {
       "label": "upload_audio()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L28",
-      "id": "src_main_upload_audio",
-      "community": 5,
-      "norm_label": "upload_audio()"
+      "community": 0,
+      "norm_label": "upload_audio()",
+      "id": "src_main_upload_audio"
     },
     {
       "label": "get_job_status()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L53",
-      "id": "src_main_get_job_status",
-      "community": 5,
-      "norm_label": "get_job_status()"
+      "community": 0,
+      "norm_label": "get_job_status()",
+      "id": "src_main_get_job_status"
     },
     {
       "label": "cross_resolution_fusion()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L76",
-      "id": "src_main_cross_resolution_fusion",
-      "community": 5,
-      "norm_label": "cross_resolution_fusion()"
+      "community": 0,
+      "norm_label": "cross_resolution_fusion()",
+      "id": "src_main_cross_resolution_fusion"
     },
     {
       "label": "_temporal_rerank()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L173",
-      "id": "src_main_temporal_rerank",
-      "community": 3,
-      "norm_label": "_temporal_rerank()"
+      "community": 0,
+      "norm_label": "_temporal_rerank()",
+      "id": "src_main_temporal_rerank"
     },
     {
       "label": "_build_queries()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L296",
-      "id": "src_main_build_queries",
-      "community": 5,
-      "norm_label": "_build_queries()"
+      "community": 4,
+      "norm_label": "_build_queries()",
+      "id": "src_main_build_queries"
     },
     {
       "label": "search()",
       "file_type": "code",
       "source_file": "main.py",
       "source_location": "L309",
-      "id": "src_main_search",
-      "community": 3,
-      "norm_label": "search()"
+      "community": 4,
+      "norm_label": "search()",
+      "id": "src_main_search"
     },
     {
       "label": "Poll job indexing status.",
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L54",
-      "id": "src_main_rationale_54",
-      "community": 5,
-      "norm_label": "poll job indexing status."
+      "community": 0,
+      "norm_label": "poll job indexing status.",
+      "id": "src_main_rationale_54"
     },
     {
       "label": "Fusion model: match multi-resolution chunks from different windows     and weigh",
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L77",
-      "id": "src_main_rationale_77",
-      "community": 5,
-      "norm_label": "fusion model: match multi-resolution chunks from different windows     and weigh"
+      "community": 0,
+      "norm_label": "fusion model: match multi-resolution chunks from different windows     and weigh",
+      "id": "src_main_rationale_77"
     },
     {
       "label": "Merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro",
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L174",
-      "id": "src_main_rationale_174",
-      "community": 3,
-      "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro"
-    },
-    {
-      "label": "Return up to n query phrasings for ensemble embedding.",
-      "file_type": "rationale",
-      "source_file": "main.py",
-      "source_location": "L297",
-      "id": "src_main_rationale_297",
-      "community": 5,
-      "norm_label": "return up to n query phrasings for ensemble embedding."
-    },
-    {
-      "label": "Semantic audio search with query ensemble + adaptive thresholds +     cross-reso",
-      "file_type": "rationale",
-      "source_file": "main.py",
-      "source_location": "L310",
-      "id": "src_main_rationale_310",
-      "community": 3,
-      "norm_label": "semantic audio search with query ensemble + adaptive thresholds +     cross-reso"
-    },
-    {
-      "label": "Merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro",
-      "file_type": "rationale",
-      "source_file": "main.py",
-      "source_location": "L172",
-      "community": 3,
-      "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro",
-      "id": "src_main_rationale_172"
-    },
-    {
-      "label": "Return up to n query phrasings for ensemble embedding.",
-      "file_type": "rationale",
-      "source_file": "main.py",
-      "source_location": "L295",
-      "community": 5,
-      "norm_label": "return up to n query phrasings for ensemble embedding.",
-      "id": "src_main_rationale_295"
-    },
-    {
-      "label": "Semantic audio search with query ensemble + adaptive thresholds +     cross-reso",
-      "file_type": "rationale",
-      "source_file": "main.py",
-      "source_location": "L308",
-      "community": 3,
-      "norm_label": "semantic audio search with query ensemble + adaptive thresholds +     cross-reso",
-      "id": "src_main_rationale_308"
-    },
-    {
-      "label": "audio_dsp.py",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L1",
-      "community": 8,
-      "norm_label": "audio_dsp.py",
-      "id": "backend_src_core_audio_dsp_py"
-    },
-    {
-      "label": "AudioFragmenter",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L5",
-      "community": 8,
-      "norm_label": "audiofragmenter",
-      "id": "core_audio_dsp_audiofragmenter"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L30",
-      "community": 8,
-      "norm_label": ".__init__()",
-      "id": "core_audio_dsp_audiofragmenter_init"
-    },
-    {
-      "label": ".load_audio()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L39",
-      "community": 8,
-      "norm_label": ".load_audio()",
-      "id": "core_audio_dsp_audiofragmenter_load_audio"
-    },
-    {
-      "label": "_rms_db()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L53",
-      "community": 8,
-      "norm_label": "_rms_db()",
-      "id": "core_audio_dsp_rms_db"
-    },
-    {
-      "label": "._chunk_indices()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L58",
-      "community": 8,
-      "norm_label": "._chunk_indices()",
-      "id": "core_audio_dsp_audiofragmenter_chunk_indices"
-    },
-    {
-      "label": ".fragment()",
-      "file_type": "code",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L70",
-      "community": 8,
-      "norm_label": ".fragment()",
-      "id": "core_audio_dsp_audiofragmenter_fragment"
-    },
-    {
-      "label": "Process raw audio files into multi-resolution overlapping chunks.      Resolutio",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L6",
-      "community": 8,
-      "norm_label": "process raw audio files into multi-resolution overlapping chunks.      resolutio",
-      "id": "core_audio_dsp_rationale_6"
-    },
-    {
-      "label": "Load an audio file, resample to target sample_rate, mono, float32.          Appl",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L40",
-      "community": 8,
-      "norm_label": "load an audio file, resample to target sample_rate, mono, float32.          appl",
-      "id": "core_audio_dsp_rationale_40"
-    },
-    {
-      "label": "Compute the RMS energy of an audio array in decibels.",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L54",
       "community": 0,
-      "norm_label": "compute the rms energy of an audio array in decibels.",
-      "id": "core_audio_dsp_rationale_54"
-    },
-    {
-      "label": "Return start/end sample index dicts for the given window and step.",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L59",
-      "community": 8,
-      "norm_label": "return start/end sample index dicts for the given window and step.",
-      "id": "core_audio_dsp_rationale_59"
-    },
-    {
-      "label": "Generate multi-resolution chunks for *file_path*.          Each chunk dict:",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L71",
-      "community": 8,
-      "norm_label": "generate multi-resolution chunks for *file_path*.          each chunk dict:",
-      "id": "core_audio_dsp_rationale_71"
-    },
-    {
-      "label": "embedder.py",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L1",
-      "community": 2,
-      "norm_label": "embedder.py",
-      "id": "backend_src_core_embedder_py"
-    },
-    {
-      "label": "ClapEmbedder",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L16",
-      "community": 2,
-      "norm_label": "clapembedder",
-      "id": "core_embedder_clapembedder"
-    },
-    {
-      "label": ".__new__()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L30",
-      "community": 2,
-      "norm_label": ".__new__()",
-      "id": "core_embedder_clapembedder_new"
-    },
-    {
-      "label": "._initialize()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L36",
-      "community": 2,
-      "norm_label": "._initialize()",
-      "id": "core_embedder_clapembedder_initialize"
-    },
-    {
-      "label": ".embed_audio_batch()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L44",
-      "community": 2,
-      "norm_label": ".embed_audio_batch()",
-      "id": "core_embedder_clapembedder_embed_audio_batch"
-    },
-    {
-      "label": ".embed_text_query()",
-      "file_type": "code",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L68",
-      "community": 2,
-      "norm_label": ".embed_text_query()",
-      "id": "core_embedder_clapembedder_embed_text_query"
-    },
-    {
-      "label": "Singleton wrapper around the LAION-CLAP model.      Uses the larger ``laion/larg",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L17",
-      "community": 2,
-      "norm_label": "singleton wrapper around the laion-clap model.      uses the larger ``laion/larg",
-      "id": "core_embedder_rationale_17"
-    },
-    {
-      "label": "Encode a list of audio numpy arrays into a (N, 512) ndarray.          The proces",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L45",
-      "community": 2,
-      "norm_label": "encode a list of audio numpy arrays into a (n, 512) ndarray.          the proces",
-      "id": "core_embedder_rationale_45"
-    },
-    {
-      "label": "Encode a text query into a (512,) ndarray.",
-      "file_type": "rationale",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L69",
-      "community": 2,
-      "norm_label": "encode a text query into a (512,) ndarray.",
-      "id": "core_embedder_rationale_69"
-    },
-    {
-      "label": "page.tsx",
-      "file_type": "code",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L1",
-      "community": 3,
-      "norm_label": "page.tsx",
-      "id": "frontend_app_page_tsx"
-    },
-    {
-      "label": "SearchResult",
-      "file_type": "code",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L5",
-      "community": 3,
-      "norm_label": "searchresult",
-      "id": "app_page_searchresult"
-    },
-    {
-      "label": "Home()",
-      "file_type": "code",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L13",
-      "community": 3,
-      "norm_label": "home()",
-      "id": "app_page_home"
+      "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events,     apply cro",
+      "id": "src_main_rationale_174"
     },
     {
       "label": "commit_tracker.py",
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L1",
-      "community": 6,
+      "community": 10,
       "norm_label": "commit_tracker.py",
       "id": "commit_tracker_py"
     },
@@ -377,7 +138,7 @@
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L27",
-      "community": 6,
+      "community": 10,
       "norm_label": "load_previous_count()",
       "id": "backend_commit_tracker_load_previous_count"
     },
@@ -386,7 +147,7 @@
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L33",
-      "community": 6,
+      "community": 10,
       "norm_label": "save_current_count()",
       "id": "backend_commit_tracker_save_current_count"
     },
@@ -395,7 +156,7 @@
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L36",
-      "community": 6,
+      "community": 10,
       "norm_label": "count_repo_lines()",
       "id": "backend_commit_tracker_count_repo_lines"
     },
@@ -404,7 +165,7 @@
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L47",
-      "community": 6,
+      "community": 10,
       "norm_label": "git()",
       "id": "backend_commit_tracker_git"
     },
@@ -413,7 +174,7 @@
       "file_type": "code",
       "source_file": "commit_tracker.py",
       "source_location": "L57",
-      "community": 6,
+      "community": 10,
       "norm_label": "main()",
       "id": "backend_commit_tracker_main"
     },
@@ -422,43 +183,25 @@
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L65",
-      "community": 3,
+      "community": 0,
       "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events and     boost",
       "id": "src_main_rationale_65"
-    },
-    {
-      "label": "Return up to n query phrasings for ensemble embedding.",
-      "file_type": "rationale",
-      "source_file": "main.py",
-      "source_location": "L135",
-      "community": 5,
-      "norm_label": "return up to n query phrasings for ensemble embedding.",
-      "id": "src_main_rationale_135"
     },
     {
       "label": "Semantic audio search with query ensemble + temporal reranking.      Steps:",
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L147",
-      "community": 3,
+      "community": 4,
       "norm_label": "semantic audio search with query ensemble + temporal reranking.      steps:",
       "id": "src_main_rationale_147"
-    },
-    {
-      "label": "layout.tsx",
-      "file_type": "code",
-      "source_file": "layout.tsx",
-      "source_location": "L1",
-      "community": 7,
-      "norm_label": "layout.tsx",
-      "id": "layout_tsx"
     },
     {
       "label": "geistSans",
       "file_type": "code",
       "source_file": "layout.tsx",
       "source_location": "L5",
-      "community": 7,
+      "community": 9,
       "norm_label": "geistsans",
       "id": "app_layout_geistsans"
     },
@@ -467,7 +210,7 @@
       "file_type": "code",
       "source_file": "layout.tsx",
       "source_location": "L10",
-      "community": 7,
+      "community": 9,
       "norm_label": "geistmono",
       "id": "app_layout_geistmono"
     },
@@ -476,7 +219,7 @@
       "file_type": "code",
       "source_file": "layout.tsx",
       "source_location": "L15",
-      "community": 7,
+      "community": 9,
       "norm_label": "metadata",
       "id": "app_layout_metadata"
     },
@@ -485,7 +228,7 @@
       "file_type": "code",
       "source_file": "layout.tsx",
       "source_location": "L20",
-      "community": 7,
+      "community": 9,
       "norm_label": "rootlayout()",
       "id": "app_layout_rootlayout"
     },
@@ -494,198 +237,1754 @@
       "file_type": "code",
       "source_file": "page.tsx",
       "source_location": "L1",
-      "community": 3,
+      "community": 20,
       "norm_label": "page.tsx",
       "id": "page_tsx"
     },
     {
-      "label": "Poll job indexing status.",
-      "file_type": "rationale",
-      "source_file": "main.py",
-      "source_location": "L55",
-      "community": 5,
-      "norm_label": "poll job indexing status.",
-      "id": "src_main_rationale_55"
+      "label": "create_index.py",
+      "file_type": "code",
+      "source_file": "backend/scripts/create_index.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_create_index",
+      "community": 16,
+      "norm_label": "create_index.py"
     },
     {
-      "label": "Merge overlapping/adjacent chunks into contiguous acoustic events and     boost",
+      "label": "create_index()",
+      "file_type": "code",
+      "source_file": "backend/scripts/create_index.py",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "scripts_create_index_create_index",
+      "community": 16,
+      "norm_label": "create_index()"
+    },
+    {
+      "label": "purge_db.py",
+      "file_type": "code",
+      "source_file": "backend/scripts/purge_db.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_purge_db",
+      "community": 17,
+      "norm_label": "purge_db.py"
+    },
+    {
+      "label": "purge()",
+      "file_type": "code",
+      "source_file": "backend/scripts/purge_db.py",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "scripts_purge_db_purge",
+      "community": 17,
+      "norm_label": "purge()"
+    },
+    {
+      "label": "audio_dsp.py",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "core_audio_dsp",
+      "community": 1,
+      "norm_label": "audio_dsp.py"
+    },
+    {
+      "label": "AudioFragmenter",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "core_audio_dsp_audiofragmenter",
+      "community": 1,
+      "norm_label": "audiofragmenter"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "core_audio_dsp_audiofragmenter_init",
+      "community": 1,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".load_audio()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "core_audio_dsp_audiofragmenter_load_audio",
+      "community": 1,
+      "norm_label": ".load_audio()"
+    },
+    {
+      "label": "ndarray",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "backend_src_core_audio_dsp_py_ndarray",
+      "community": 1,
+      "norm_label": "ndarray"
+    },
+    {
+      "label": "._rms_db()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "core_audio_dsp_audiofragmenter_rms_db",
+      "community": 1,
+      "norm_label": "._rms_db()"
+    },
+    {
+      "label": "._chunk_indices()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "core_audio_dsp_audiofragmenter_chunk_indices",
+      "community": 1,
+      "norm_label": "._chunk_indices()"
+    },
+    {
+      "label": ".fragment()",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "core_audio_dsp_audiofragmenter_fragment",
+      "community": 1,
+      "norm_label": ".fragment()"
+    },
+    {
+      "label": "Process raw audio files into multi-resolution overlapping chunks.      Resolutio",
       "file_type": "rationale",
-      "source_file": "main.py",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "core_audio_dsp_rationale_6",
+      "community": 1,
+      "norm_label": "process raw audio files into multi-resolution overlapping chunks.      resolutio"
+    },
+    {
+      "label": "Load an audio file, resample to target sample_rate, mono, float32.          Appl",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "core_audio_dsp_rationale_35",
+      "community": 1,
+      "norm_label": "load an audio file, resample to target sample_rate, mono, float32.          appl"
+    },
+    {
+      "label": "Compute the RMS energy of an audio array in decibels.",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L49",
+      "_origin": "ast",
+      "id": "core_audio_dsp_rationale_49",
+      "community": 1,
+      "norm_label": "compute the rms energy of an audio array in decibels."
+    },
+    {
+      "label": "Return start/end sample index dicts for the given window and step.",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L54",
+      "_origin": "ast",
+      "id": "core_audio_dsp_rationale_54",
+      "community": 1,
+      "norm_label": "return start/end sample index dicts for the given window and step."
+    },
+    {
+      "label": "Generate multi-resolution chunks for *file_path*.          Each chunk dict:",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/audio_dsp.py",
       "source_location": "L66",
-      "community": 3,
-      "norm_label": "merge overlapping/adjacent chunks into contiguous acoustic events and     boost",
-      "id": "src_main_rationale_66"
+      "_origin": "ast",
+      "id": "core_audio_dsp_rationale_66",
+      "community": 1,
+      "norm_label": "generate multi-resolution chunks for *file_path*.          each chunk dict:"
     },
     {
-      "label": "Return up to n query phrasings for ensemble embedding.",
-      "file_type": "rationale",
-      "source_file": "main.py",
-      "source_location": "L141",
+      "label": "embedder.py",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "core_embedder",
       "community": 5,
-      "norm_label": "return up to n query phrasings for ensemble embedding.",
-      "id": "src_main_rationale_141"
+      "norm_label": "embedder.py"
     },
     {
-      "label": "Semantic audio search with query ensemble + temporal reranking.      Steps:",
+      "label": "ClapEmbedder",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "core_embedder_clapembedder",
+      "community": 5,
+      "norm_label": "clapembedder"
+    },
+    {
+      "label": ".__new__()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "core_embedder_clapembedder_new",
+      "community": 5,
+      "norm_label": ".__new__()"
+    },
+    {
+      "label": "._initialize()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "core_embedder_clapembedder_initialize",
+      "community": 5,
+      "norm_label": "._initialize()"
+    },
+    {
+      "label": ".embed_audio_batch()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "core_embedder_clapembedder_embed_audio_batch",
+      "community": 5,
+      "norm_label": ".embed_audio_batch()"
+    },
+    {
+      "label": "ndarray",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "backend_src_core_embedder_py_ndarray",
+      "community": 5,
+      "norm_label": "ndarray"
+    },
+    {
+      "label": ".embed_text_query()",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "core_embedder_clapembedder_embed_text_query",
+      "community": 5,
+      "norm_label": ".embed_text_query()"
+    },
+    {
+      "label": "Singleton wrapper around the LAION-CLAP model.      Uses the ``laion/clap-htsat-",
       "file_type": "rationale",
-      "source_file": "main.py",
-      "source_location": "L153",
-      "community": 3,
-      "norm_label": "semantic audio search with query ensemble + temporal reranking.      steps:",
-      "id": "src_main_rationale_153"
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "core_embedder_rationale_20",
+      "community": 5,
+      "norm_label": "singleton wrapper around the laion-clap model.      uses the ``laion/clap-htsat-"
     },
     {
-      "label": "README.md",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "community": 4,
-      "norm_label": "readme.md",
-      "id": "readme_md"
+      "label": "Encode a list of audio numpy arrays into a (N, 512) ndarray.          The proces",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L51",
+      "_origin": "ast",
+      "id": "core_embedder_rationale_51",
+      "community": 5,
+      "norm_label": "encode a list of audio numpy arrays into a (n, 512) ndarray.          the proces"
     },
     {
-      "label": "EchoFind",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "community": 4,
-      "norm_label": "echofind",
-      "id": "echofind_readme_echofind"
-    },
-    {
-      "label": "Key Technical Infrastructure (v3.0)",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L7",
-      "community": 4,
-      "norm_label": "key technical infrastructure (v3.0)",
-      "id": "echofind_readme_key_technical_infrastructure_v3_0"
-    },
-    {
-      "label": "Performance Expectations",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L21",
-      "community": 4,
-      "norm_label": "performance expectations",
-      "id": "echofind_readme_performance_expectations"
-    },
-    {
-      "label": "How to Build It: A Sequential Strategy",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L27",
-      "community": 4,
-      "norm_label": "how to build it: a sequential strategy",
-      "id": "echofind_readme_how_to_build_it_a_sequential_strategy"
+      "label": "Encode a text query into a (512,) ndarray.",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "core_embedder_rationale_75",
+      "community": 5,
+      "norm_label": "encode a text query into a (512,) ndarray."
     },
     {
       "label": "indexer.py",
       "file_type": "code",
       "source_file": "backend/src/core/indexer.py",
       "source_location": "L1",
-      "community": 2,
-      "norm_label": "indexer.py",
-      "id": "backend_src_core_indexer_py"
+      "_origin": "ast",
+      "id": "core_indexer",
+      "community": 1,
+      "norm_label": "indexer.py"
+    },
+    {
+      "label": "get_whisper_model()",
+      "file_type": "code",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "core_indexer_get_whisper_model",
+      "community": 1,
+      "norm_label": "get_whisper_model()"
+    },
+    {
+      "label": "_update_progress()",
+      "file_type": "code",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "core_indexer_update_progress",
+      "community": 1,
+      "norm_label": "_update_progress()"
+    },
+    {
+      "label": "Session",
+      "file_type": "code",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "backend_src_core_indexer_py_session",
+      "community": 1,
+      "norm_label": "session"
+    },
+    {
+      "label": "_run_embedding()",
+      "file_type": "code",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "core_indexer_run_embedding",
+      "community": 1,
+      "norm_label": "_run_embedding()"
+    },
+    {
+      "label": "_run_transcription()",
+      "file_type": "code",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "id": "core_indexer_run_transcription",
+      "community": 1,
+      "norm_label": "_run_transcription()"
     },
     {
       "label": "process_upload()",
       "file_type": "code",
       "source_file": "backend/src/core/indexer.py",
-      "source_location": "L8",
-      "community": 2,
-      "norm_label": "process_upload()",
-      "id": "core_indexer_process_upload"
+      "source_location": "L117",
+      "_origin": "ast",
+      "id": "core_indexer_process_upload",
+      "community": 1,
+      "norm_label": "process_upload()"
+    },
+    {
+      "label": "Update progress on the audio_jobs table.",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "core_indexer_rationale_21",
+      "community": 1,
+      "norm_label": "update progress on the audio_jobs table."
+    },
+    {
+      "label": "Run CLAP batch embedding and insert vectors into DB.",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "core_indexer_rationale_30",
+      "community": 1,
+      "norm_label": "run clap batch embedding and insert vectors into db."
+    },
+    {
+      "label": "Run Whisper transcription with word-level timestamps and incremental progress up",
+      "file_type": "rationale",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L69",
+      "_origin": "ast",
+      "id": "core_indexer_rationale_69",
+      "community": 1,
+      "norm_label": "run whisper transcription with word-level timestamps and incremental progress up"
     },
     {
       "label": "db.py",
       "file_type": "code",
       "source_file": "backend/src/db.py",
       "source_location": "L1",
-      "community": 2,
-      "norm_label": "db.py",
-      "id": "backend_src_db_py"
+      "_origin": "ast",
+      "id": "src_db",
+      "community": 0,
+      "norm_label": "db.py"
     },
     {
       "label": "get_db()",
       "file_type": "code",
       "source_file": "backend/src/db.py",
       "source_location": "L23",
+      "_origin": "ast",
+      "id": "src_db_get_db",
+      "community": 0,
+      "norm_label": "get_db()"
+    },
+    {
+      "label": "main.py",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_main",
+      "community": 0,
+      "norm_label": "main.py"
+    },
+    {
+      "label": "startup_event()",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "src_main_startup_event",
+      "community": 5,
+      "norm_label": "startup_event()"
+    },
+    {
+      "label": "UploadFile",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "uploadfile",
+      "community": 0,
+      "norm_label": "uploadfile"
+    },
+    {
+      "label": "BackgroundTasks",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "backgroundtasks",
+      "community": 0,
+      "norm_label": "backgroundtasks"
+    },
+    {
+      "label": "Session",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "backend_src_main_py_session",
+      "community": 0,
+      "norm_label": "session"
+    },
+    {
+      "label": "get_audio_file()",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L112",
+      "_origin": "ast",
+      "id": "src_main_get_audio_file",
+      "community": 0,
+      "norm_label": "get_audio_file()"
+    },
+    {
+      "label": "SearchResult",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L157",
+      "_origin": "ast",
+      "id": "searchresult",
+      "community": 0,
+      "norm_label": "searchresult"
+    },
+    {
+      "label": "_extract_speech_target()",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L212",
+      "_origin": "ast",
+      "id": "src_main_extract_speech_target",
+      "community": 4,
+      "norm_label": "_extract_speech_target()"
+    },
+    {
+      "label": "SearchRequest",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L242",
+      "_origin": "ast",
+      "id": "searchrequest",
+      "community": 0,
+      "norm_label": "searchrequest"
+    },
+    {
+      "label": "search_audio()",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L372",
+      "_origin": "ast",
+      "id": "src_main_search_audio",
+      "community": 0,
+      "norm_label": "search_audio()"
+    },
+    {
+      "label": "get_corpus_map()",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": "L434",
+      "_origin": "ast",
+      "id": "src_main_get_corpus_map",
+      "community": 0,
+      "norm_label": "get_corpus_map()"
+    },
+    {
+      "label": "Poll job indexing status with progress percentage.",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L91",
+      "_origin": "ast",
+      "id": "src_main_rationale_91",
+      "community": 0,
+      "norm_label": "poll job indexing status with progress percentage."
+    },
+    {
+      "label": "Serve the raw audio file.",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L113",
+      "_origin": "ast",
+      "id": "src_main_rationale_113",
+      "community": 0,
+      "norm_label": "serve the raw audio file."
+    },
+    {
+      "label": "Filter out long contextual chunks to enforce pinpoint highlights,     and apply",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L158",
+      "_origin": "ast",
+      "id": "src_main_rationale_158",
+      "community": 0,
+      "norm_label": "filter out long contextual chunks to enforce pinpoint highlights,     and apply"
+    },
+    {
+      "label": "Return up to n query phrasings for ensemble embedding.",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L202",
+      "_origin": "ast",
+      "id": "src_main_rationale_202",
+      "community": 4,
+      "norm_label": "return up to n query phrasings for ensemble embedding."
+    },
+    {
+      "label": "Clean common voice search prefixes to extract the target spoken words.",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L213",
+      "_origin": "ast",
+      "id": "src_main_rationale_213",
+      "community": 4,
+      "norm_label": "clean common voice search prefixes to extract the target spoken words."
+    },
+    {
+      "label": "Semantic audio search with query ensemble + adaptive thresholds +     cross-reso",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L243",
+      "_origin": "ast",
+      "id": "src_main_rationale_243",
+      "community": 4,
+      "norm_label": "semantic audio search with query ensemble + adaptive thresholds +     cross-reso"
+    },
+    {
+      "label": "Semantic audio-to-audio search (KNN) with dynamic onboarding.",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L373",
+      "_origin": "ast",
+      "id": "src_main_rationale_373",
+      "community": 0,
+      "norm_label": "semantic audio-to-audio search (knn) with dynamic onboarding."
+    },
+    {
+      "label": "Fetch all embeddings, run PCA down to 3D, and cluster them.",
+      "file_type": "rationale",
+      "source_file": "backend/src/main.py",
+      "source_location": "L435",
+      "_origin": "ast",
+      "id": "src_main_rationale_435",
+      "community": 0,
+      "norm_label": "fetch all embeddings, run pca down to 3d, and cluster them."
+    },
+    {
+      "label": "schemas.py",
+      "file_type": "code",
+      "source_file": "backend/src/schemas.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_schemas",
+      "community": 0,
+      "norm_label": "schemas.py"
+    },
+    {
+      "label": "UploadResponse",
+      "file_type": "code",
+      "source_file": "backend/src/schemas.py",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_schemas_uploadresponse",
+      "community": 0,
+      "norm_label": "uploadresponse"
+    },
+    {
+      "label": "BaseModel",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "basemodel",
+      "community": 0,
+      "norm_label": "basemodel"
+    },
+    {
+      "label": "SearchRequest",
+      "file_type": "code",
+      "source_file": "backend/src/schemas.py",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "src_schemas_searchrequest",
+      "community": 0,
+      "norm_label": "searchrequest"
+    },
+    {
+      "label": "SearchResult",
+      "file_type": "code",
+      "source_file": "backend/src/schemas.py",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "src_schemas_searchresult",
+      "community": 0,
+      "norm_label": "searchresult"
+    },
+    {
+      "label": "test_auto.py",
+      "file_type": "code",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "backend_test_auto",
+      "community": 6,
+      "norm_label": "test_auto.py"
+    },
+    {
+      "label": "TestEchoFind",
+      "file_type": "code",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "backend_test_auto_testechofind",
+      "community": 6,
+      "norm_label": "testechofind"
+    },
+    {
+      "label": ".test_health()",
+      "file_type": "code",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "backend_test_auto_testechofind_test_health",
+      "community": 6,
+      "norm_label": ".test_health()"
+    },
+    {
+      "label": ".test_corpus_map()",
+      "file_type": "code",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "backend_test_auto_testechofind_test_corpus_map",
+      "community": 6,
+      "norm_label": ".test_corpus_map()"
+    },
+    {
+      "label": ".test_search_endpoint()",
+      "file_type": "code",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "backend_test_auto_testechofind_test_search_endpoint",
+      "community": 6,
+      "norm_label": ".test_search_endpoint()"
+    },
+    {
+      "label": "Test health check endpoint.",
+      "file_type": "rationale",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "backend_test_auto_rationale_9",
+      "community": 6,
+      "norm_label": "test health check endpoint."
+    },
+    {
+      "label": "Test the PCA/KMeans corpus clustering endpoint.",
+      "file_type": "rationale",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "backend_test_auto_rationale_18",
+      "community": 6,
+      "norm_label": "test the pca/kmeans corpus clustering endpoint."
+    },
+    {
+      "label": "Test search endpoint with a standard query.",
+      "file_type": "rationale",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "backend_test_auto_rationale_36",
+      "community": 6,
+      "norm_label": "test search endpoint with a standard query."
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "dashboard_page",
+      "community": 7,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "SearchResult",
+      "file_type": "code",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "dashboard_page_searchresult",
+      "community": 7,
+      "norm_label": "searchresult"
+    },
+    {
+      "label": "SearchIcon()",
+      "file_type": "code",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "dashboard_page_searchicon",
+      "community": 7,
+      "norm_label": "searchicon()"
+    },
+    {
+      "label": "WaveformIcon()",
+      "file_type": "code",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "dashboard_page_waveformicon",
+      "community": 7,
+      "norm_label": "waveformicon()"
+    },
+    {
+      "label": "UploadCloudIcon()",
+      "file_type": "code",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "dashboard_page_uploadcloudicon",
+      "community": 7,
+      "norm_label": "uploadcloudicon()"
+    },
+    {
+      "label": "Panel()",
+      "file_type": "code",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "dashboard_page_panel",
+      "community": 7,
+      "norm_label": "panel()"
+    },
+    {
+      "label": "Dashboard()",
+      "file_type": "code",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "dashboard_page_dashboard",
+      "community": 7,
+      "norm_label": "dashboard()"
+    },
+    {
+      "label": "DashboardContent()",
+      "file_type": "code",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "dashboard_page_dashboardcontent",
+      "community": 7,
+      "norm_label": "dashboardcontent()"
+    },
+    {
+      "label": "layout.tsx",
+      "file_type": "code",
+      "source_file": "frontend/app/layout.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_layout",
+      "community": 9,
+      "norm_label": "layout.tsx"
+    },
+    {
+      "label": "inter",
+      "file_type": "code",
+      "source_file": "frontend/app/layout.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "app_layout_inter",
+      "community": 9,
+      "norm_label": "inter"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "frontend/app/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_page",
+      "community": 11,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "LandingPage()",
+      "file_type": "code",
+      "source_file": "frontend/app/page.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "app_page_landingpage",
+      "community": 11,
+      "norm_label": "landingpage()"
+    },
+    {
+      "label": "eslint.config.mjs",
+      "file_type": "code",
+      "source_file": "frontend/eslint.config.mjs",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_eslint_config",
+      "community": 12,
+      "norm_label": "eslint.config.mjs"
+    },
+    {
+      "label": "eslintConfig",
+      "file_type": "code",
+      "source_file": "frontend/eslint.config.mjs",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "frontend_eslint_config_eslintconfig",
+      "community": 12,
+      "norm_label": "eslintconfig"
+    },
+    {
+      "label": "next-env.d.ts",
+      "file_type": "code",
+      "source_file": "frontend/next-env.d.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_next_env_d",
+      "community": 18,
+      "norm_label": "next-env.d.ts"
+    },
+    {
+      "label": "next.config.ts",
+      "file_type": "code",
+      "source_file": "frontend/next.config.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_next_config",
+      "community": 13,
+      "norm_label": "next.config.ts"
+    },
+    {
+      "label": "nextConfig",
+      "file_type": "code",
+      "source_file": "frontend/next.config.ts",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "frontend_next_config_nextconfig",
+      "community": 13,
+      "norm_label": "nextconfig"
+    },
+    {
+      "label": "package.json",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_package",
+      "community": 3,
+      "norm_label": "package.json"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "frontend_package_name",
+      "community": 3,
+      "norm_label": "name"
+    },
+    {
+      "label": "version",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "frontend_package_version",
+      "community": 3,
+      "norm_label": "version"
+    },
+    {
+      "label": "private",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "frontend_package_private",
+      "community": 3,
+      "norm_label": "private"
+    },
+    {
+      "label": "scripts",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "frontend_package_scripts",
+      "community": 3,
+      "norm_label": "scripts"
+    },
+    {
+      "label": "dev",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "frontend_package_scripts_dev",
+      "community": 3,
+      "norm_label": "dev"
+    },
+    {
+      "label": "build",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "frontend_package_scripts_build",
+      "community": 3,
+      "norm_label": "build"
+    },
+    {
+      "label": "start",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "frontend_package_scripts_start",
+      "community": 3,
+      "norm_label": "start"
+    },
+    {
+      "label": "lint",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "frontend_package_scripts_lint",
+      "community": 3,
+      "norm_label": "lint"
+    },
+    {
+      "label": "dependencies",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "frontend_package_dependencies",
+      "community": 8,
+      "norm_label": "dependencies"
+    },
+    {
+      "label": "@clerk/nextjs",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "frontend_package_dependencies_clerk_nextjs",
+      "community": 8,
+      "norm_label": "@clerk/nextjs"
+    },
+    {
+      "label": "@clerk/themes",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "frontend_package_dependencies_clerk_themes",
+      "community": 8,
+      "norm_label": "@clerk/themes"
+    },
+    {
+      "label": "next",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "frontend_package_dependencies_next",
+      "community": 8,
+      "norm_label": "next"
+    },
+    {
+      "label": "plotly.js",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "frontend_package_dependencies_plotly_js",
+      "community": 8,
+      "norm_label": "plotly.js"
+    },
+    {
+      "label": "react",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "frontend_package_dependencies_react",
+      "community": 8,
+      "norm_label": "react"
+    },
+    {
+      "label": "react-dom",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "frontend_package_dependencies_react_dom",
+      "community": 8,
+      "norm_label": "react-dom"
+    },
+    {
+      "label": "react-plotly.js",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "frontend_package_dependencies_react_plotly_js",
+      "community": 8,
+      "norm_label": "react-plotly.js"
+    },
+    {
+      "label": "devDependencies",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "frontend_package_devdependencies",
+      "community": 3,
+      "norm_label": "devdependencies"
+    },
+    {
+      "label": "@tailwindcss/postcss",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "frontend_package_devdependencies_tailwindcss_postcss",
+      "community": 3,
+      "norm_label": "@tailwindcss/postcss"
+    },
+    {
+      "label": "@types/node",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "frontend_package_devdependencies_types_node",
+      "community": 3,
+      "norm_label": "@types/node"
+    },
+    {
+      "label": "@types/react",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "frontend_package_devdependencies_types_react",
+      "community": 3,
+      "norm_label": "@types/react"
+    },
+    {
+      "label": "@types/react-dom",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "frontend_package_devdependencies_types_react_dom",
+      "community": 3,
+      "norm_label": "@types/react-dom"
+    },
+    {
+      "label": "eslint",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "frontend_package_devdependencies_eslint",
+      "community": 3,
+      "norm_label": "eslint"
+    },
+    {
+      "label": "eslint-config-next",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "frontend_package_devdependencies_eslint_config_next",
+      "community": 3,
+      "norm_label": "eslint-config-next"
+    },
+    {
+      "label": "tailwindcss",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "frontend_package_devdependencies_tailwindcss",
+      "community": 3,
+      "norm_label": "tailwindcss"
+    },
+    {
+      "label": "typescript",
+      "file_type": "code",
+      "source_file": "frontend/package.json",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "frontend_package_devdependencies_typescript",
+      "community": 3,
+      "norm_label": "typescript"
+    },
+    {
+      "label": "postcss.config.mjs",
+      "file_type": "code",
+      "source_file": "frontend/postcss.config.mjs",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_postcss_config",
+      "community": 14,
+      "norm_label": "postcss.config.mjs"
+    },
+    {
+      "label": "config",
+      "file_type": "code",
+      "source_file": "frontend/postcss.config.mjs",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_postcss_config_config",
+      "community": 14,
+      "norm_label": "config"
+    },
+    {
+      "label": "proxy.ts",
+      "file_type": "code",
+      "source_file": "frontend/proxy.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_proxy",
+      "community": 15,
+      "norm_label": "proxy.ts"
+    },
+    {
+      "label": "config",
+      "file_type": "code",
+      "source_file": "frontend/proxy.ts",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "frontend_proxy_config",
+      "community": 15,
+      "norm_label": "config"
+    },
+    {
+      "label": "tsconfig.json",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_tsconfig",
       "community": 2,
-      "norm_label": "get_db()",
-      "id": "src_db_get_db"
+      "norm_label": "tsconfig.json"
+    },
+    {
+      "label": "compilerOptions",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions",
+      "community": 2,
+      "norm_label": "compileroptions"
+    },
+    {
+      "label": "target",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_target",
+      "community": 2,
+      "norm_label": "target"
+    },
+    {
+      "label": "lib",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_lib",
+      "community": 2,
+      "norm_label": "lib"
+    },
+    {
+      "label": "allowJs",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_allowjs",
+      "community": 2,
+      "norm_label": "allowjs"
+    },
+    {
+      "label": "skipLibCheck",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_skiplibcheck",
+      "community": 2,
+      "norm_label": "skiplibcheck"
+    },
+    {
+      "label": "strict",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_strict",
+      "community": 2,
+      "norm_label": "strict"
+    },
+    {
+      "label": "noEmit",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_noemit",
+      "community": 2,
+      "norm_label": "noemit"
+    },
+    {
+      "label": "esModuleInterop",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_esmoduleinterop",
+      "community": 2,
+      "norm_label": "esmoduleinterop"
+    },
+    {
+      "label": "module",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_module",
+      "community": 2,
+      "norm_label": "module"
+    },
+    {
+      "label": "moduleResolution",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_moduleresolution",
+      "community": 2,
+      "norm_label": "moduleresolution"
+    },
+    {
+      "label": "resolveJsonModule",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_resolvejsonmodule",
+      "community": 2,
+      "norm_label": "resolvejsonmodule"
+    },
+    {
+      "label": "isolatedModules",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_isolatedmodules",
+      "community": 2,
+      "norm_label": "isolatedmodules"
+    },
+    {
+      "label": "jsx",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_jsx",
+      "community": 2,
+      "norm_label": "jsx"
+    },
+    {
+      "label": "incremental",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_incremental",
+      "community": 2,
+      "norm_label": "incremental"
+    },
+    {
+      "label": "plugins",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_plugins",
+      "community": 2,
+      "norm_label": "plugins"
+    },
+    {
+      "label": "paths",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_compileroptions_paths",
+      "community": 2,
+      "norm_label": "paths"
+    },
+    {
+      "label": "@/*",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_paths",
+      "community": 2,
+      "norm_label": "@/*"
+    },
+    {
+      "label": "include",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_include",
+      "community": 2,
+      "norm_label": "include"
+    },
+    {
+      "label": "exclude",
+      "file_type": "code",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "frontend_tsconfig_exclude",
+      "community": 2,
+      "norm_label": "exclude"
+    },
+    {
+      "label": "File Icon",
+      "file_type": "image",
+      "source_file": "frontend/public/file.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "public_file_icon",
+      "community": 21,
+      "norm_label": "file icon"
+    },
+    {
+      "label": "Globe Icon",
+      "file_type": "image",
+      "source_file": "frontend/public/globe.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "public_globe_icon",
+      "community": 22,
+      "norm_label": "globe icon"
+    },
+    {
+      "label": "Next.js Logo",
+      "file_type": "image",
+      "source_file": "frontend/public/next.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "public_next_logo",
+      "community": 23,
+      "norm_label": "next.js logo"
+    },
+    {
+      "label": "Vercel Logo",
+      "file_type": "image",
+      "source_file": "frontend/public/vercel.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "public_vercel_logo",
+      "community": 24,
+      "norm_label": "vercel logo"
+    },
+    {
+      "label": "Window Icon",
+      "file_type": "image",
+      "source_file": "frontend/public/window.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "public_window_icon",
+      "community": 25,
+      "norm_label": "window icon"
+    },
+    {
+      "label": "Dynamic Onset Segmentation",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "rationale": "Instead of an exhaustive dense temporal grid, the system uses Librosa's onset detection to identify transient acoustic events. It extracts precise 500ms chunks to capture sharp sounds.",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_dynamic_onset_segmentation",
+      "community": 1,
+      "norm_label": "dynamic onset segmentation"
+    },
+    {
+      "label": "Query Ensemble & Expansion",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "rationale": "For text queries, the system generates an ensemble of up to 7 phrasings. These are embedded via CLAP, with the original text weighted 2x, and averaged to form a highly robust, discriminative query vector.",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_query_ensemble",
+      "community": 4,
+      "norm_label": "query ensemble & expansion"
+    },
+    {
+      "label": "Hybrid Search Execution",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "rationale": "Combines PostgreSQL full-text search index (with a pg_trgm fallback) to catch exact spoken words, ranking these at the top. Simultaneously, a cosine distance calculation via pgvector retrieves the top acoustic candidates.",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_hybrid_search_execution",
+      "community": 4,
+      "norm_label": "hybrid search execution"
+    },
+    {
+      "label": "Temporal Attention Reranking",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "rationale": "Acoustic candidates are strictly filtered via absolute distance thresholds specific to their resolution tier. Non-Maximum Suppression (NMS) is applied to prevent overlapping highlight events, returning precise, isolated temporal hits.",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_temporal_attention_reranking",
+      "community": 4,
+      "norm_label": "temporal attention reranking"
+    },
+    {
+      "label": "Corpus Mapping",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "rationale": "Visualizes unstructured audio by fetching embeddings, applying PCA to reduce 512D down to 3D, and running K-Means clustering. Calculates 95th-percentile distances from cluster centers to flag acoustic outliers.",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_corpus_mapping",
+      "community": 0,
+      "norm_label": "corpus mapping"
+    },
+    {
+      "label": "AudioFragmenter.fragment",
+      "file_type": "code",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "core_audio_dsp_fragment",
+      "community": 1,
+      "norm_label": "audiofragmenter.fragment"
+    },
+    {
+      "label": "ClapEmbedder.embed_audio_batch",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "core_embedder_embed_audio_batch",
+      "community": 4,
+      "norm_label": "clapembedder.embed_audio_batch"
+    },
+    {
+      "label": "ClapEmbedder.embed_text_query",
+      "file_type": "code",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "core_embedder_embed_text_query",
+      "community": 4,
+      "norm_label": "clapembedder.embed_text_query"
+    },
+    {
+      "label": "_run_embedding",
+      "file_type": "code",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "core_indexer__run_embedding",
+      "community": 4,
+      "norm_label": "_run_embedding"
+    },
+    {
+      "label": "_run_transcription",
+      "file_type": "code",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "core_indexer__run_transcription",
+      "community": 4,
+      "norm_label": "_run_transcription"
+    },
+    {
+      "label": "_temporal_rerank",
+      "file_type": "code",
+      "source_file": "backend/src/main.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "src_main__temporal_rerank",
+      "community": 4,
+      "norm_label": "_temporal_rerank"
+    },
+    {
+      "label": "test_search_endpoint",
+      "file_type": "code",
+      "source_file": "backend/test_auto.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "backend_test_auto_test_search_endpoint",
+      "community": 4,
+      "norm_label": "test_search_endpoint"
+    },
+    {
+      "label": "test_corpus_map",
+      "file_type": "code",
+      "source_file": "backend/test_auto.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "backend_test_auto_test_corpus_map",
+      "community": 0,
+      "norm_label": "test_corpus_map"
+    },
+    {
+      "label": "clerkMiddleware Default",
+      "file_type": "code",
+      "source_file": "frontend/proxy.ts",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "frontend_proxy_default",
+      "community": 19,
+      "norm_label": "clerkmiddleware default"
+    },
+    {
+      "label": "Scroll-Driven Animations",
+      "file_type": "rationale",
+      "source_file": "frontend/scroll-entry.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Fallback strategy for unsupported browsers using IntersectionObserver.",
+      "id": "frontend_scroll_entry_scroll_driven_animations",
+      "community": 11,
+      "norm_label": "scroll-driven animations"
+    },
+    {
+      "label": "View Timeline",
+      "file_type": "concept",
+      "source_file": "frontend/scroll-entry.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "frontend_scroll_entry_view_timeline",
+      "community": 11,
+      "norm_label": "view timeline"
     }
   ],
   "links": [
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L25",
+      "source_file": "backend/src/main.py",
+      "source_location": "L61",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "main_py",
+      "source": "src_main",
       "target": "src_main_health"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_upload_audio"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L54",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_get_job_status"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L76",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_cross_resolution_fusion"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
+      "source_file": "backend/src/main.py",
       "source_location": "L65",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_temporal_rerank"
+      "source": "src_main",
+      "target": "src_main_upload_audio"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "src_main_upload_audio",
+      "target": "backend_src_main_py_session",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "src_main_upload_audio",
+      "target": "backgroundtasks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/src/main.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "src_main_upload_audio",
+      "target": "core_indexer_process_upload"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "src_main_upload_audio",
+      "target": "uploadfile",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L140",
+      "source_file": "backend/src/main.py",
+      "source_location": "L90",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_build_queries"
+      "source": "src_main",
+      "target": "src_main_get_job_status"
     },
     {
-      "relation": "contains",
+      "relation": "references",
+      "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L152",
+      "source_file": "backend/src/main.py",
+      "source_location": "L90",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "main_py",
-      "target": "src_main_search"
+      "source": "src_main_get_job_status",
+      "target": "backend_src_main_py_session",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
@@ -701,11 +2000,21 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/main.py",
-      "source_location": "L55",
+      "source_location": "L91",
+      "weight": 1.0,
+      "source": "src_main_rationale_91",
+      "target": "src_main_get_job_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.py",
+      "source_location": "L76",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "src_main_rationale_55",
-      "target": "src_main_get_job_status"
+      "source": "src_main",
+      "target": "src_main_cross_resolution_fusion"
     },
     {
       "relation": "rationale_for",
@@ -718,23 +2027,22 @@
       "target": "src_main_cross_resolution_fusion"
     },
     {
-      "relation": "calls",
-      "context": "call",
+      "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/main.py",
-      "source_location": "L171",
+      "source_location": "L157",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "src_main_search",
+      "source": "src_main",
       "target": "src_main_temporal_rerank"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L174",
+      "source_file": "backend/src/main.py",
+      "source_location": "L158",
       "weight": 1.0,
-      "source": "src_main_rationale_174",
+      "source": "src_main_rationale_158",
       "target": "src_main_temporal_rerank",
       "confidence_score": 1.0
     },
@@ -745,19 +2053,8 @@
       "source_location": "L172",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "src_main_rationale_172",
+      "source": "src_main_rationale_174",
       "target": "src_main_temporal_rerank"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/src/main.py",
-      "source_location": "L119",
-      "weight": 1.0,
-      "source": "src_main_temporal_rerank",
-      "target": "app_page_searchresult"
     },
     {
       "relation": "rationale_for",
@@ -770,54 +2067,46 @@
       "target": "src_main_temporal_rerank"
     },
     {
-      "relation": "rationale_for",
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/main.py",
-      "source_location": "L66",
+      "source_location": "L368",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_66",
-      "target": "src_main_temporal_rerank"
+      "source": "src_main_search",
+      "target": "src_main_temporal_rerank",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L170",
+      "source_file": "backend/src/main.py",
+      "source_location": "L430",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_search",
-      "target": "src_main_build_queries"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L297",
-      "weight": 1.0,
-      "source": "src_main_rationale_297",
-      "target": "src_main_build_queries",
+      "source": "src_main_search_audio",
+      "target": "src_main_temporal_rerank",
       "confidence_score": 1.0
     },
     {
-      "relation": "rationale_for",
+      "relation": "references",
+      "context": "generic_arg",
       "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L295",
+      "source_file": "backend/src/main.py",
+      "source_location": "L157",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_main_rationale_295",
-      "target": "src_main_build_queries"
+      "source": "src_main_temporal_rerank",
+      "target": "searchresult",
+      "confidence_score": 1.0
     },
     {
-      "relation": "rationale_for",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L135",
+      "source_file": "backend/src/main.py",
+      "source_location": "L201",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "src_main_rationale_135",
+      "source": "src_main",
       "target": "src_main_build_queries"
     },
     {
@@ -827,59 +2116,58 @@
       "source_location": "L141",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "src_main_rationale_141",
+      "source": "src_main_rationale_202",
       "target": "src_main_build_queries"
     },
     {
-      "relation": "rationale_for",
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L310",
-      "weight": 1.0,
-      "source": "src_main_rationale_310",
-      "target": "src_main_search",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L308",
+      "source_file": "backend/src/main.py",
+      "source_location": "L318",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "src_main_rationale_308",
+      "source": "src_main_search",
+      "target": "src_main_build_queries"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "backend/test_auto.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "backend_test_auto_test_search_endpoint",
       "target": "src_main_search"
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/src/main.py",
-      "source_location": "L143",
-      "weight": 1.0,
-      "source": "src_main_search",
-      "target": "core_embedder_clapembedder"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
+      "relation": "shares_data_with",
       "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/src/main.py",
-      "source_location": "L159",
+      "confidence_score": 0.85,
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": null,
       "weight": 1.0,
-      "source": "src_main_search",
-      "target": "app_page_searchresult"
+      "source": "core_indexer__run_embedding",
+      "target": "src_main_search"
     },
     {
-      "relation": "rationale_for",
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "core_indexer__run_transcription",
+      "target": "src_main_search"
+    },
+    {
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "main.py",
-      "source_location": "L147",
+      "source_file": "backend/src/main.py",
+      "source_location": "L242",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "src_main_rationale_147",
+      "source": "src_main",
       "target": "src_main_search"
     },
     {
@@ -889,336 +2177,123 @@
       "source_location": "L153",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "src_main_rationale_153",
+      "source": "src_main_rationale_147",
       "target": "src_main_search"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_src_core_audio_dsp_py",
-      "target": "core_audio_dsp_audiofragmenter"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L53",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_src_core_audio_dsp_py",
-      "target": "core_audio_dsp_rms_db"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/indexer.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_src_core_indexer_py",
-      "target": "backend_src_core_audio_dsp_py"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_audiofragmenter",
-      "target": "core_audio_dsp_audiofragmenter_init"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L33",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_audiofragmenter",
-      "target": "core_audio_dsp_audiofragmenter_load_audio"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L38",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_audiofragmenter",
-      "target": "core_audio_dsp_audiofragmenter_chunk_indices"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L50",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_audiofragmenter",
-      "target": "core_audio_dsp_audiofragmenter_fragment"
-    },
-    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L6",
+      "source_file": "main.py",
+      "source_location": "L308",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "core_audio_dsp_rationale_6",
-      "target": "core_audio_dsp_audiofragmenter"
+      "source": "src_main_rationale_243",
+      "target": "src_main_search"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L242",
+      "weight": 1.0,
+      "source": "src_main_search",
+      "target": "backend_src_main_py_session",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "backend/src/core/indexer.py",
-      "source_location": "L19",
+      "source_file": "backend/src/main.py",
+      "source_location": "L315",
       "weight": 1.0,
-      "source": "core_indexer_process_upload",
-      "target": "core_audio_dsp_audiofragmenter"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L59",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_audiofragmenter_fragment",
-      "target": "core_audio_dsp_audiofragmenter_load_audio"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L40",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_rationale_40",
-      "target": "core_audio_dsp_audiofragmenter_load_audio"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L92",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_audiofragmenter_fragment",
-      "target": "core_audio_dsp_rms_db"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_audiofragmenter_fragment",
-      "target": "core_audio_dsp_audiofragmenter_chunk_indices"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L59",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_rationale_59",
-      "target": "core_audio_dsp_audiofragmenter_chunk_indices"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/audio_dsp.py",
-      "source_location": "L71",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audio_dsp_rationale_71",
-      "target": "core_audio_dsp_audiofragmenter_fragment"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_src_core_embedder_py",
-      "target": "core_embedder_clapembedder"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/indexer.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_src_core_indexer_py",
-      "target": "backend_src_core_embedder_py"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_embedder_clapembedder",
-      "target": "core_embedder_clapembedder_new"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L32",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_embedder_clapembedder",
-      "target": "core_embedder_clapembedder_initialize"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L40",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_embedder_clapembedder",
-      "target": "core_embedder_clapembedder_embed_audio_batch"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L66",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_embedder_clapembedder",
-      "target": "core_embedder_clapembedder_embed_text_query"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_embedder_rationale_17",
+      "source": "src_main_search",
       "target": "core_embedder_clapembedder"
     },
     {
       "relation": "calls",
-      "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "backend/src/core/indexer.py",
-      "source_location": "L37",
+      "source_file": "backend/src/main.py",
+      "source_location": null,
       "weight": 1.0,
-      "source": "core_indexer_process_upload",
-      "target": "core_embedder_clapembedder"
+      "source": "src_main_search",
+      "target": "core_embedder_embed_text_query"
+    },
+    {
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "backend/src/main.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "src_main_search",
+      "target": "readme_hybrid_search_execution"
+    },
+    {
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "backend/src/main.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "src_main_search",
+      "target": "readme_query_ensemble"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L242",
+      "weight": 1.0,
+      "source": "src_main_search",
+      "target": "searchrequest",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L29",
+      "source_file": "backend/src/main.py",
+      "source_location": "L306",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_embedder_clapembedder_new",
-      "target": "core_embedder_clapembedder_initialize"
+      "source": "src_main_search",
+      "target": "searchresult",
+      "confidence_score": 1.0
     },
     {
-      "relation": "rationale_for",
+      "relation": "calls",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L45",
-      "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "core_embedder_rationale_45",
-      "target": "core_embedder_clapembedder_embed_audio_batch"
+      "source_file": "backend/src/main.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "src_main_search",
+      "target": "src_main__temporal_rerank"
     },
     {
-      "relation": "rationale_for",
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/core/embedder.py",
-      "source_location": "L69",
+      "source_file": "backend/src/main.py",
+      "source_location": "L260",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_embedder_rationale_69",
-      "target": "core_embedder_clapembedder_embed_text_query"
+      "source": "src_main_search",
+      "target": "src_main_extract_speech_target",
+      "confidence_score": 1.0
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L5",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "backend/src/main.py",
+      "source_location": null,
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_app_page_tsx",
-      "target": "app_page_searchresult"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/app/page.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_app_page_tsx",
-      "target": "app_page_home"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "page_tsx",
-      "target": "app_page_searchresult"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "page.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "page_tsx",
-      "target": "app_page_home"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "commit_tracker.py",
-      "source_location": "L27",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "commit_tracker_py",
-      "target": "backend_commit_tracker_load_previous_count"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "commit_tracker.py",
-      "source_location": "L33",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "commit_tracker_py",
-      "target": "backend_commit_tracker_save_current_count"
+      "source": "src_main_search",
+      "target": "src_main_search_audio"
     },
     {
       "relation": "contains",
@@ -1244,11 +2319,31 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "commit_tracker.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commit_tracker_py",
+      "target": "backend_commit_tracker_load_previous_count"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commit_tracker.py",
       "source_location": "L57",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "commit_tracker_py",
       "target": "backend_commit_tracker_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "commit_tracker.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commit_tracker_py",
+      "target": "backend_commit_tracker_save_current_count"
     },
     {
       "relation": "calls",
@@ -1301,7 +2396,7 @@
       "source_location": "L5",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "layout_tsx",
+      "source": "app_layout",
       "target": "app_layout_geistsans"
     },
     {
@@ -1311,7 +2406,7 @@
       "source_location": "L10",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "layout_tsx",
+      "source": "app_layout",
       "target": "app_layout_geistmono"
     },
     {
@@ -1321,7 +2416,7 @@
       "source_location": "L15",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "layout_tsx",
+      "source": "app_layout",
       "target": "app_layout_metadata"
     },
     {
@@ -1331,48 +2426,38 @@
       "source_location": "L20",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "layout_tsx",
+      "source": "app_layout",
       "target": "app_layout_rootlayout"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L1",
+      "source_file": "backend/scripts/create_index.py",
+      "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_md",
-      "target": "echofind_readme_echofind"
+      "source": "scripts_create_index",
+      "target": "scripts_create_index_create_index",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L7",
+      "source_file": "backend/scripts/purge_db.py",
+      "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "echofind_readme_echofind",
-      "target": "echofind_readme_key_technical_infrastructure_v3_0"
+      "source": "scripts_purge_db",
+      "target": "scripts_purge_db_purge",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L21",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "echofind_readme_echofind",
-      "target": "echofind_readme_performance_expectations"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L27",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "echofind_readme_echofind",
-      "target": "echofind_readme_how_to_build_it_a_sequential_strategy"
+      "source": "core_audio_dsp",
+      "target": "core_audio_dsp_audiofragmenter",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -1381,19 +2466,626 @@
       "source_file": "backend/src/core/indexer.py",
       "source_location": "L6",
       "weight": 1.0,
+      "source": "core_indexer",
+      "target": "core_audio_dsp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L6",
+      "weight": 0.8,
+      "source": "backend_src_core_indexer_py_session",
+      "target": "core_audio_dsp_audiofragmenter",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter",
+      "target": "core_audio_dsp_audiofragmenter_chunk_indices",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter",
+      "target": "core_audio_dsp_audiofragmenter_fragment",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter",
+      "target": "core_audio_dsp_audiofragmenter_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter",
+      "target": "core_audio_dsp_audiofragmenter_load_audio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter",
+      "target": "core_audio_dsp_audiofragmenter_rms_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter",
+      "target": "readme_dynamic_onset_segmentation"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "core_audio_dsp_rationale_6",
+      "target": "core_audio_dsp_audiofragmenter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "core_indexer",
+      "target": "core_audio_dsp_audiofragmenter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "core_indexer_process_upload",
+      "target": "core_audio_dsp_audiofragmenter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter_fragment",
+      "target": "core_audio_dsp_audiofragmenter_load_audio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter_load_audio",
+      "target": "backend_src_core_audio_dsp_py_ndarray",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "core_audio_dsp_rationale_35",
+      "target": "core_audio_dsp_audiofragmenter_load_audio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter_rms_db",
+      "target": "backend_src_core_audio_dsp_py_ndarray",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter_fragment",
+      "target": "core_audio_dsp_audiofragmenter_rms_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "core_audio_dsp_rationale_49",
+      "target": "core_audio_dsp_audiofragmenter_rms_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "core_audio_dsp_audiofragmenter_fragment",
+      "target": "core_audio_dsp_audiofragmenter_chunk_indices",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "core_audio_dsp_rationale_54",
+      "target": "core_audio_dsp_audiofragmenter_chunk_indices",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/audio_dsp.py",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "core_audio_dsp_rationale_66",
+      "target": "core_audio_dsp_audiofragmenter_fragment",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "core_embedder",
+      "target": "core_embedder_clapembedder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "core_indexer",
+      "target": "core_embedder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "core_embedder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L7",
+      "weight": 0.8,
+      "source": "backend_src_core_indexer_py_session",
+      "target": "core_embedder_clapembedder",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "core_embedder_clapembedder",
+      "target": "core_embedder_clapembedder_embed_audio_batch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "core_embedder_clapembedder",
+      "target": "core_embedder_clapembedder_embed_text_query",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "core_embedder_clapembedder",
+      "target": "core_embedder_clapembedder_initialize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "core_embedder_clapembedder",
+      "target": "core_embedder_clapembedder_new",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "core_embedder_rationale_20",
+      "target": "core_embedder_clapembedder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "core_indexer",
+      "target": "core_embedder_clapembedder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L156",
+      "weight": 1.0,
+      "source": "core_indexer_process_upload",
+      "target": "core_embedder_clapembedder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "core_embedder_clapembedder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source": "backend_src_core_indexer_py",
-      "target": "backend_src_db_py"
+      "source_file": "backend/src/main.py",
+      "source_location": "L394",
+      "weight": 1.0,
+      "source": "src_main_search_audio",
+      "target": "core_embedder_clapembedder"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/src/main.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "src_main_startup_event",
+      "target": "core_embedder_clapembedder"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "core_embedder_clapembedder_new",
+      "target": "core_embedder_clapembedder_initialize",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "core_embedder_clapembedder_embed_audio_batch",
+      "target": "backend_src_core_embedder_py_ndarray",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "core_embedder_rationale_51",
+      "target": "core_embedder_clapembedder_embed_audio_batch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "core_embedder_clapembedder_embed_text_query",
+      "target": "backend_src_core_embedder_py_ndarray",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/embedder.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "core_embedder_rationale_75",
+      "target": "core_embedder_clapembedder_embed_text_query",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/core/indexer.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "core_indexer",
+      "target": "core_indexer_get_whisper_model",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L117",
+      "weight": 1.0,
+      "source": "core_indexer",
+      "target": "core_indexer_process_upload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "core_indexer",
+      "target": "core_indexer_run_embedding",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "core_indexer",
+      "target": "core_indexer_run_transcription",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "core_indexer",
+      "target": "core_indexer_update_progress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
       "source_location": "L8",
       "weight": 1.0,
+      "source": "core_indexer",
+      "target": "src_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "core_indexer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "core_indexer_run_transcription",
+      "target": "core_indexer_get_whisper_model",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "core_indexer_process_upload",
+      "target": "core_indexer_update_progress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "core_indexer_rationale_21",
+      "target": "core_indexer_update_progress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "core_indexer_run_embedding",
+      "target": "core_indexer_update_progress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "source": "core_indexer_run_transcription",
+      "target": "core_indexer_update_progress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "core_indexer_update_progress",
+      "target": "backend_src_core_indexer_py_session",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "core_indexer_process_upload",
+      "target": "core_indexer_run_embedding",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "core_indexer_rationale_30",
+      "target": "core_indexer_run_embedding",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L166",
+      "weight": 1.0,
+      "source": "core_indexer_process_upload",
+      "target": "core_indexer_run_transcription",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "core_indexer_rationale_69",
+      "target": "core_indexer_run_transcription",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source": "backend_src_core_indexer_py",
-      "target": "core_indexer_process_upload"
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "core_indexer_process_upload",
+      "target": "core_audio_dsp_fragment"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "core_indexer_process_upload",
+      "target": "core_indexer__run_embedding"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "core_indexer_process_upload",
+      "target": "core_indexer__run_transcription"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "core_indexer_process_upload",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -1401,11 +3093,1241 @@
       "source_file": "backend/src/db.py",
       "source_location": "L23",
       "weight": 1.0,
+      "source": "src_db",
+      "target": "src_db_get_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_db_get_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L212",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_main_extract_speech_target",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_main_get_audio_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L434",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_main_get_corpus_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L372",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_main_search_audio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_main_startup_event",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_schemas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_schemas_searchrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_schemas_searchresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "src_schemas_uploadresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L372",
+      "weight": 1.0,
+      "source": "src_main_search_audio",
+      "target": "uploadfile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "uploadfile",
+      "target": "src_schemas_searchrequest",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "uploadfile",
+      "target": "src_schemas_searchresult",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "uploadfile",
+      "target": "src_schemas_uploadresponse",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "backgroundtasks",
+      "target": "src_schemas_searchrequest",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "backgroundtasks",
+      "target": "src_schemas_searchresult",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "backgroundtasks",
+      "target": "src_schemas_uploadresponse",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "backend_src_main_py_session",
+      "target": "src_schemas_searchrequest",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "backend_src_main_py_session",
+      "target": "src_schemas_searchresult",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "backend_src_main_py_session",
+      "target": "src_schemas_uploadresponse",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "src_main_get_audio_file",
+      "target": "backend_src_main_py_session",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L434",
+      "weight": 1.0,
+      "source": "src_main_get_corpus_map",
+      "target": "backend_src_main_py_session",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L372",
+      "weight": 1.0,
+      "source": "src_main_search_audio",
+      "target": "backend_src_main_py_session",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "src_main_rationale_113",
+      "target": "src_main_get_audio_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "searchresult",
+      "target": "src_schemas_searchrequest",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "searchresult",
+      "target": "src_schemas_searchresult",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "searchresult",
+      "target": "src_schemas_uploadresponse",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L420",
+      "weight": 1.0,
+      "source": "src_main_search_audio",
+      "target": "searchresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L213",
+      "weight": 1.0,
+      "source": "src_main_rationale_213",
+      "target": "src_main_extract_speech_target",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "searchrequest",
+      "target": "src_schemas_searchrequest",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "searchrequest",
+      "target": "src_schemas_searchresult",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "source": "searchrequest",
+      "target": "src_schemas_uploadresponse",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L373",
+      "weight": 1.0,
+      "source": "src_main_rationale_373",
+      "target": "src_main_search_audio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source": "backend_src_db_py",
-      "target": "src_db_get_db"
+      "source_file": "backend/src/main.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "src_main_search_audio",
+      "target": "core_embedder_embed_audio_batch"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/src/main.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "src_main_search_audio",
+      "target": "src_main__temporal_rerank"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "backend/test_auto.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "backend_test_auto_test_corpus_map",
+      "target": "src_main_get_corpus_map"
+    },
+    {
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "backend/src/main.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "src_main_get_corpus_map",
+      "target": "readme_corpus_mapping"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/main.py",
+      "source_location": "L435",
+      "weight": 1.0,
+      "source": "src_main_rationale_435",
+      "target": "src_main_get_corpus_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/schemas.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_schemas",
+      "target": "src_schemas_searchrequest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/schemas.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "src_schemas",
+      "target": "src_schemas_searchresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/schemas.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_schemas",
+      "target": "src_schemas_uploadresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/schemas.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_schemas_uploadresponse",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/schemas.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_schemas_searchrequest",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/schemas.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "src_schemas_searchresult",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "backend_test_auto",
+      "target": "backend_test_auto_testechofind",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "backend_test_auto_testechofind",
+      "target": "backend_test_auto_testechofind_test_corpus_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "backend_test_auto_testechofind",
+      "target": "backend_test_auto_testechofind_test_health",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "backend_test_auto_testechofind",
+      "target": "backend_test_auto_testechofind_test_search_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "backend_test_auto_rationale_9",
+      "target": "backend_test_auto_testechofind_test_health",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "backend_test_auto_rationale_18",
+      "target": "backend_test_auto_testechofind_test_corpus_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/test_auto.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "backend_test_auto_rationale_36",
+      "target": "backend_test_auto_testechofind_test_search_endpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "dashboard_page",
+      "target": "dashboard_page_dashboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "dashboard_page",
+      "target": "dashboard_page_dashboardcontent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "dashboard_page",
+      "target": "dashboard_page_panel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "dashboard_page",
+      "target": "dashboard_page_searchicon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "dashboard_page",
+      "target": "dashboard_page_searchresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "dashboard_page",
+      "target": "dashboard_page_uploadcloudicon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "dashboard_page",
+      "target": "dashboard_page_waveformicon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "dashboard_page_dashboardcontent",
+      "target": "dashboard_page_searchresult"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "dashboard_page_dashboardcontent",
+      "target": "dashboard_page_searchicon"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "dashboard_page_dashboardcontent",
+      "target": "dashboard_page_waveformicon"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "dashboard_page_dashboardcontent",
+      "target": "dashboard_page_uploadcloudicon"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "dashboard_page_dashboardcontent",
+      "target": "dashboard_page_panel"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/app/dashboard/page.tsx",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "dashboard_page_dashboard",
+      "target": "dashboard_page_dashboardcontent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/layout.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "app_layout",
+      "target": "app_layout_inter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/app/page.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "app_page",
+      "target": "app_page_landingpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "frontend/app/page.tsx",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "app_page_landingpage",
+      "target": "frontend_scroll_entry_scroll_driven_animations"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/eslint.config.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "frontend_eslint_config",
+      "target": "frontend_eslint_config_eslintconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/next.config.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "frontend_next_config",
+      "target": "frontend_next_config_nextconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_dependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_devdependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_private",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "frontend_package",
+      "target": "frontend_package_version",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "frontend_package_scripts",
+      "target": "frontend_package_scripts_build",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "frontend_package_scripts",
+      "target": "frontend_package_scripts_dev",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "frontend_package_scripts",
+      "target": "frontend_package_scripts_lint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "frontend_package_scripts",
+      "target": "frontend_package_scripts_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "frontend_package_dependencies",
+      "target": "frontend_package_dependencies_clerk_nextjs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "frontend_package_dependencies",
+      "target": "frontend_package_dependencies_clerk_themes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "frontend_package_dependencies",
+      "target": "frontend_package_dependencies_next",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "frontend_package_dependencies",
+      "target": "frontend_package_dependencies_plotly_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "frontend_package_dependencies",
+      "target": "frontend_package_dependencies_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "frontend_package_dependencies",
+      "target": "frontend_package_dependencies_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "frontend_package_dependencies",
+      "target": "frontend_package_dependencies_react_plotly_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "frontend_package_devdependencies",
+      "target": "frontend_package_devdependencies_eslint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "frontend_package_devdependencies",
+      "target": "frontend_package_devdependencies_eslint_config_next",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "frontend_package_devdependencies",
+      "target": "frontend_package_devdependencies_tailwindcss",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "frontend_package_devdependencies",
+      "target": "frontend_package_devdependencies_tailwindcss_postcss",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "frontend_package_devdependencies",
+      "target": "frontend_package_devdependencies_types_node",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "frontend_package_devdependencies",
+      "target": "frontend_package_devdependencies_types_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "frontend_package_devdependencies",
+      "target": "frontend_package_devdependencies_types_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/package.json",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "frontend_package_devdependencies",
+      "target": "frontend_package_devdependencies_typescript",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/postcss.config.mjs",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "frontend_postcss_config",
+      "target": "frontend_postcss_config_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/proxy.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "frontend_proxy",
+      "target": "frontend_proxy_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "frontend_tsconfig",
+      "target": "frontend_tsconfig_compileroptions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "frontend_tsconfig",
+      "target": "frontend_tsconfig_exclude",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "frontend_tsconfig",
+      "target": "frontend_tsconfig_include",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_allowjs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_esmoduleinterop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_incremental",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_isolatedmodules",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_lib",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_module",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_moduleresolution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_noemit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_paths",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_plugins",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_resolvejsonmodule",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_skiplibcheck",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_strict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions",
+      "target": "frontend_tsconfig_compileroptions_target",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/tsconfig.json",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "frontend_tsconfig_compileroptions_paths",
+      "target": "frontend_tsconfig_paths",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "backend/src/main.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "src_main__temporal_rerank",
+      "target": "readme_temporal_attention_reranking"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/src/core/indexer.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "core_indexer__run_embedding",
+      "target": "core_embedder_embed_audio_batch"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/scroll-entry.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "frontend_scroll_entry_view_timeline",
+      "target": "frontend_scroll_entry_scroll_driven_animations"
     }
   ],
-  "hyperedges": [],
-  "built_at_commit": "0826e67f7ab35a57298d7bfbb181efb49b89423f"
+  "hyperedges": [
+    {
+      "id": "audio_ingestion_pipeline",
+      "label": "Audio Ingestion Pipeline",
+      "nodes": [
+        "src_main_upload_audio",
+        "core_indexer_process_upload",
+        "core_audio_dsp_fragment",
+        "core_indexer__run_embedding",
+        "core_indexer__run_transcription"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "backend/src/core/indexer.py"
+    },
+    {
+      "id": "hybrid_search_pipeline",
+      "label": "Hybrid Search Pipeline",
+      "nodes": [
+        "src_main_search",
+        "core_embedder_embed_text_query",
+        "src_main__temporal_rerank"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "backend/src/main.py"
+    }
+  ],
+  "built_at_commit": "18f8f2c6f8e261536010d29b49bae79e1dfdd488"
 }

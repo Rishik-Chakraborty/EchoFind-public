@@ -17,6 +17,34 @@ app = FastAPI()
 @app.on_event("startup")
 def startup_event():
     import logging
+    logging.info("Ensuring database tables exist...")
+    from .db import SessionLocal
+    db = SessionLocal()
+    try:
+        db.execute(text("""
+            CREATE EXTENSION IF NOT EXISTS pg_trgm;
+            CREATE TABLE IF NOT EXISTS audio_transcripts (
+                id SERIAL PRIMARY KEY,
+                file_id INTEGER REFERENCES audio_files(id) ON DELETE CASCADE,
+                start_time FLOAT NOT NULL,
+                end_time FLOAT NOT NULL,
+                text TEXT NOT NULL
+            );
+            CREATE INDEX IF NOT EXISTS idx_audio_transcripts_file_id ON audio_transcripts(file_id);
+            CREATE INDEX IF NOT EXISTS idx_audio_transcripts_text_trgm
+                ON audio_transcripts USING gin (text gin_trgm_ops);
+            CREATE INDEX IF NOT EXISTS idx_audio_transcripts_text_fts
+                ON audio_transcripts USING gin (to_tsvector('english', text));
+            ALTER TABLE audio_jobs ADD COLUMN IF NOT EXISTS progress FLOAT DEFAULT 0.0;
+        """))
+        db.commit()
+        logging.info("Database tables verified.")
+    except Exception as e:
+        db.rollback()
+        logging.error(f"Error ensuring database tables exist: {e}")
+    finally:
+        db.close()
+
     logging.info("Initializing CLAP embedder model...")
     ClapEmbedder()
     logging.info("CLAP embedder initialized.")
@@ -60,14 +88,24 @@ async def upload_audio(
 
 @app.get("/api/v1/jobs/{job_id}")
 def get_job_status(job_id: int, db: Session = Depends(get_db)):
-    """Poll job indexing status."""
+    """Poll job indexing status with progress percentage."""
     row = db.execute(
-        text("SELECT id, status FROM audio_jobs WHERE id = :job_id"),
+        text("SELECT id, status, COALESCE(progress, 0.0) FROM audio_jobs WHERE id = :job_id"),
         {"job_id": job_id},
     ).fetchone()
     if not row:
         raise HTTPException(status_code=404, detail="Job not found")
-    return {"job_id": row[0], "status": row[1]}
+    
+    file_id = None
+    if row[1] == 'completed':
+        file_row = db.execute(
+            text("SELECT id FROM audio_files WHERE job_id = :job_id"),
+            {"job_id": job_id}
+        ).fetchone()
+        if file_row:
+            file_id = file_row[0]
+            
+    return {"job_id": row[0], "status": row[1], "progress": row[2], "file_id": file_id}
 
 
 @app.get("/api/v1/audio/{file_id}")
@@ -110,9 +148,9 @@ _RESOLUTION_WEIGHTS = {
 # Absolute thresholds per resolution. If the distance is higher than this,
 # the chunk is rejected as a false positive (it doesn't actually match the query).
 _ABSOLUTE_THRESHOLDS = {
-    "onset": 0.65,
-    "1s":    0.68,
-    "2s":    0.66,
+    "onset": 0.72,
+    "1s":    0.75,
+    "2s":    0.75,
 }
 
 
@@ -124,7 +162,7 @@ def _temporal_rerank(raw: list) -> List[SearchResult]:
         return []
 
     # 1. Filter out 5s and 10s chunks. The user only wants precise highlights.
-    short_chunks = [c for c in raw if c.resolution_type in ["1s", "2s", "onset"]]
+    short_chunks = [c for c in raw if c.resolution_type in ["1s", "2s", "onset", "speech"]]
 
     # 2. Sort by score (lowest distance is best)
     sorted_chunks = sorted(short_chunks, key=lambda r: r.score)
@@ -171,6 +209,34 @@ def _build_queries(text: str, n: int = 7) -> List[str]:
             break
     return base[:n]
 
+def _extract_speech_target(text: str) -> str:
+    """Clean common voice search prefixes to extract the target spoken words."""
+    cleaned = text.lower().strip()
+    
+    prefixes = [
+        "sound of a person saying ",
+        "sound of someone saying ",
+        "sound of a voice saying ",
+        "person saying ",
+        "someone saying ",
+        "voice saying ",
+        "person says ",
+        "someone says ",
+        "voice says ",
+        "says ",
+        "saying ",
+        "speaking ",
+        "speaks ",
+        "whispering ",
+        "whispers ",
+    ]
+    for p in prefixes:
+        if cleaned.startswith(p):
+            cleaned = cleaned[len(p):].strip()
+            break
+            
+    return cleaned.strip("\"' ")
+
 
 @app.post("/api/v1/search")
 def search(request: SearchRequest, db: Session = Depends(get_db)):
@@ -178,21 +244,77 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
     cross-resolution fusion + temporal reranking.
 
     Steps:
-    1. Generate up to 7 query phrasings from the user's text.
-    2. Embed all phrasings with CLAP, weight the original query 2x, and
+    1. Query the text transcripts for direct spoken matches.
+    2. Generate up to 7 query phrasings from the user's text.
+    3. Embed all phrasings with CLAP, weight the original query 2x, and
        average → robust query vector.
-    3. Retrieve top-200 candidates from pgvector.
-    4. Apply adaptive score thresholds: use the median of the top candidates
-       plus a margin, capped by per-resolution floor thresholds.
-    5. Temporal rerank with cross-resolution fusion: merge adjacent chunks,
-       fuse multi-resolution evidence, apply continuity bonuses.
-    6. Return top-20 events sorted by final score.
+    4. Retrieve top-1000 candidates from pgvector.
+    5. Combine speech transcript matches and acoustic matches.
+    6. Temporal rerank and return top-20.
     """
     import numpy as np
 
+    # --- Step 1: Speech-to-Text transcript matching ---
+    # Use PostgreSQL full-text search for exact word matching, with trigram
+    # similarity fallback for fuzzy/partial matches.
+    speech_target = _extract_speech_target(request.text)
+    speech_results = []
+    
+    if speech_target:
+        # First: full-text search (exact word matching via tsvector/tsquery)
+        sql_fts = """
+            SELECT t.file_id, t.start_time, t.end_time, t.text, f.filename,
+                   ts_rank(to_tsvector('english', t.text), plainto_tsquery('english', :speech_query)) AS rank
+            FROM audio_transcripts t
+            JOIN audio_files f ON t.file_id = f.id
+            WHERE to_tsvector('english', t.text) @@ plainto_tsquery('english', :speech_query)
+        """
+        if request.file_id is not None:
+            sql_fts += " AND t.file_id = :file_id"
+        sql_fts += " ORDER BY rank DESC LIMIT 200"
+            
+        speech_rows = db.execute(
+            text(sql_fts),
+            {
+                "speech_query": speech_target,
+                "file_id": request.file_id
+            }
+        ).fetchall()
+        
+        # Fallback: trigram similarity if full-text search returns nothing
+        if not speech_rows:
+            sql_trgm = """
+                SELECT t.file_id, t.start_time, t.end_time, t.text, f.filename,
+                       similarity(t.text, :speech_query) AS sim
+                FROM audio_transcripts t
+                JOIN audio_files f ON t.file_id = f.id
+                WHERE similarity(t.text, :speech_query) > 0.3
+            """
+            if request.file_id is not None:
+                sql_trgm += " AND t.file_id = :file_id"
+            sql_trgm += " ORDER BY sim DESC LIMIT 200"
+                
+            speech_rows = db.execute(
+                text(sql_trgm),
+                {
+                    "speech_query": speech_target,
+                    "file_id": request.file_id
+                }
+            ).fetchall()
+        
+        for r in speech_rows:
+            speech_results.append(SearchResult(
+                file_id=r[0],
+                start_time=r[1],
+                end_time=r[2],
+                resolution_type="speech",
+                score=0.05,  # Top score to rank above acoustic matches (lower is better)
+                filename=r[4],
+            ))
+
     embedder = ClapEmbedder()
 
-    # --- Step 1–2: Query ensemble with weighted averaging ---
+    # --- Step 2–3: Query ensemble with weighted averaging ---
     phrases = _build_queries(request.text, n=7)
     vecs = []
     for i, p in enumerate(phrases):
@@ -204,23 +326,27 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
     mean_vec = vecs.mean(axis=0)
     mean_vec = mean_vec / (np.linalg.norm(mean_vec) + 1e-9)
 
-    # --- Step 3: Retrieve candidates ---
-    sql = text("""
+    # --- Step 4: Retrieve candidates from pgvector ---
+    sql_str = """
         SELECT ac.file_id, ac.start_time, ac.end_time, ac.resolution_type,
                (ac.embedding <=> CAST(:query_vec AS vector)) AS score,
                af.filename
         FROM audio_chunks ac
         JOIN audio_files af ON ac.file_id = af.id
-        ORDER BY score ASC
-        LIMIT 1000;
-    """)
-    rows = db.execute(sql, {"query_vec": str(mean_vec.tolist())}).fetchall()
+    """
+    if request.file_id is not None:
+        sql_str += " WHERE ac.file_id = :file_id"
+    sql_str += " ORDER BY score ASC LIMIT 1000;"
+    
+    sql = text(sql_str)
+    params = {"query_vec": str(mean_vec.tolist())}
+    if request.file_id is not None:
+        params["file_id"] = request.file_id
+        
+    rows = db.execute(sql, params).fetchall()
 
-    if not rows:
-        return []
-
-    # --- Step 4: Absolute thresholds ---
-    candidates = []
+    # --- Step 5: Merge candidates and apply thresholds ---
+    candidates = list(speech_results)
     for row in rows:
         res_type = row[3]
         score = row[4]
@@ -235,7 +361,10 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
                 filename=filename,
             ))
 
-    # --- Step 5–6: Temporal rerank and return top-20 ---
+    if not candidates:
+        return []
+
+    # --- Step 6: Temporal rerank and return top-20 ---
     events = _temporal_rerank(candidates)
     return events[:20]
 

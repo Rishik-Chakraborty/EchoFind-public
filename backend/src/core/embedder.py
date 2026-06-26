@@ -13,6 +13,8 @@ logging.getLogger("transformers").setLevel(logging.ERROR)
 # inside uvicorn's background thread pool.
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
+torch.set_num_threads(os.cpu_count() or 4)
+
 
 class ClapEmbedder:
     """Singleton wrapper around the LAION-CLAP model.
@@ -37,9 +39,9 @@ class ClapEmbedder:
             return cls._instance
 
     def _initialize(self):
-        # Force CPU device as MPS has known memory bugs and extreme slowness with CLAP models
-        self.device = torch.device("cpu")
-        print("ClapEmbedder initialized with CPU device.")
+        # Use MPS if available on Apple Silicon, otherwise fallback to CPU
+        self.device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+        print(f"ClapEmbedder initialized with {self.device} device.")
         model_name = "laion/clap-htsat-fused"
         self.model = ClapModel.from_pretrained(model_name).to(self.device)
         self.processor = AutoProcessor.from_pretrained(model_name)
@@ -60,7 +62,7 @@ class ClapEmbedder:
         )
         # Move all tensors to device
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
-        with torch.no_grad():
+        with torch.inference_mode():
             out = self.model.get_audio_features(**inputs)
         # get_audio_features may return a BaseModelOutputWithPooling or a
         # plain tensor depending on the transformers version.
@@ -73,7 +75,7 @@ class ClapEmbedder:
         """Encode a text query into a (512,) ndarray."""
         inputs = self.processor(text=[text], return_tensors="pt")
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
-        with torch.no_grad():
+        with torch.inference_mode():
             out = self.model.get_text_features(**inputs)
         embeddings = out.pooler_output if hasattr(out, 'pooler_output') else out
         embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)

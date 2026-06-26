@@ -9,3 +9,4 @@ torch
 transformers
 pydantic
 python-multipart
+faster-whisper

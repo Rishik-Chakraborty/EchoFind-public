@@ -64,6 +64,8 @@ function DashboardContent() {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Poll job status
+  const [indexingProgress, setIndexingProgress] = useState<number>(0);
+
   useEffect(() => {
     if (activeJobs.length === 0 || ingestionStatus !== "processing") return;
     
@@ -72,10 +74,10 @@ function DashboardContent() {
       try {
         const statuses = await Promise.all(
           activeJobs.map(async (id) => {
-            const res = await fetch(`http://127.0.0.1:8000/api/v1/jobs/${id}`);
-            if (!res.ok) return { id, status: "failed" };
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/jobs/${id}`);
+            if (!res.ok) return { id, status: "failed", progress: 0.0, file_id: null };
             const data = await res.json();
-            return { id, status: data.status };
+            return { id, status: data.status, progress: data.progress || 0.0, file_id: data.file_id };
           })
         );
         
@@ -84,14 +86,23 @@ function DashboardContent() {
         const completedCount = statuses.filter(s => s.status === "completed").length;
         const failedCount = statuses.filter(s => s.status === "failed").length;
         
-        setUploadProgress(`Processing files: ${completedCount}/${statuses.length} completed`);
+        // Calculate average progress across all active jobs (scale to percentage 0-100)
+        const avgProgress = statuses.reduce((acc, curr) => acc + curr.progress, 0) / statuses.length;
+        setIndexingProgress(Math.round(avgProgress * 100));
+        
+        setUploadProgress(`Processing files: ${completedCount}/${statuses.length} completed (${Math.round(avgProgress * 100)}%)`);
 
         if (completedCount + failedCount === statuses.length) {
           clearInterval(interval);
           if (failedCount > 0) {
             setIngestionStatus("failed");
           } else {
+            setIndexingProgress(100);
             setIngestionStatus("completed");
+            // If it's a single file upload, set the currentFileId
+            if (ingestionType === "single" && statuses.length === 1) {
+              setCurrentFileId(statuses[0].file_id);
+            }
           }
         }
       } catch (err) {
@@ -103,7 +114,7 @@ function DashboardContent() {
       isMounted = false;
       clearInterval(interval);
     };
-  }, [activeJobs, ingestionStatus]);
+  }, [activeJobs, ingestionStatus, ingestionType]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -130,7 +141,7 @@ function DashboardContent() {
       formData.append("file", selected);
       
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/v1/upload", { method: "POST", body: formData });
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/upload`, { method: "POST", body: formData });
         if (!res.ok) throw new Error("Upload failed");
         const data = await res.json();
         
@@ -166,7 +177,7 @@ function DashboardContent() {
         const formData = new FormData();
         formData.append("file", f);
         try {
-          const res = await fetch("http://127.0.0.1:8000/api/v1/upload", { method: "POST", body: formData });
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/upload`, { method: "POST", body: formData });
           if (!res.ok) throw new Error("Upload failed");
           const data = await res.json();
           jobIds.push(data.job_id);
@@ -195,12 +206,16 @@ function DashboardContent() {
       if (searchFile) {
         const formData = new FormData();
         formData.append("file", searchFile);
-        res = await fetch("http://127.0.0.1:8000/api/v1/search/audio", { method: "POST", body: formData });
+        res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/search/audio`, { method: "POST", body: formData });
       } else {
-        res = await fetch("http://127.0.0.1:8000/api/v1/search", {
+        const body: { text: string; file_id?: number } = { text: query };
+        if (ingestionType === "single" && currentFileId !== null) {
+          body.file_id = currentFileId;
+        }
+        res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/search`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: query }),
+          body: JSON.stringify(body),
         });
       }
       const data = await res.json();
@@ -217,7 +232,7 @@ function DashboardContent() {
     if (currentFileId !== res.file_id) {
        setCurrentFileId(res.file_id);
        setCurrentFileName(res.filename);
-       setAudioUrl(`http://127.0.0.1:8000/api/v1/audio/${res.file_id}`);
+       setAudioUrl(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/audio/${res.file_id}`);
        if (audioRef.current) {
          audioRef.current.dataset.pendingSeek = res.start_time.toString();
        }
@@ -340,11 +355,21 @@ function DashboardContent() {
               <h2 className="text-2xl font-bold text-white mb-3 tracking-tight">
                 {ingestionStatus === 'uploading' ? 'Uploading Audio Target...' : 'Generating Acoustic Vectors...'}
               </h2>
-              <p className="text-zinc-400 text-sm mb-8 max-w-sm leading-relaxed">
+              <p className="text-zinc-400 text-sm mb-6 max-w-sm leading-relaxed">
                 {ingestionStatus === 'uploading' 
                   ? 'Streaming audio fragments to the ingestion engine.'
                   : 'Librosa is extracting waveforms while the LAION-CLAP neural network compiles 512D spatial coordinates.'}
               </p>
+
+              {/* Visual Progress Bar */}
+              {ingestionStatus === 'processing' && (
+                <div className="w-full max-w-md bg-white/5 border border-white/10 h-3.5 rounded-full mb-6 overflow-hidden relative">
+                  <div 
+                    className="bg-white h-full transition-all duration-500 rounded-full shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+                    style={{ width: `${indexingProgress}%` }}
+                  ></div>
+                </div>
+              )}
               
               <div className="bg-white/5 border border-white/5 px-6 py-2.5 rounded-full font-mono text-xs text-zinc-300">
                 {uploadProgress || 'Initializing pipeline...'}
