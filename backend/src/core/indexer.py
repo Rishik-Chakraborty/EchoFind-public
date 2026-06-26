@@ -9,8 +9,8 @@ from ..db import SessionLocal
 
 from faster_whisper import WhisperModel
 
-print("Loading faster-whisper model (base, int8)...")
-_WHISPER_MODEL = WhisperModel("base", device="cpu", compute_type="int8")
+print("Loading faster-whisper model (tiny, int8)...")
+_WHISPER_MODEL = WhisperModel("tiny", device="cpu", compute_type="int8", cpu_threads=os.cpu_count() or 4)
 print("faster-whisper model loaded.")
 
 def get_whisper_model():
@@ -20,7 +20,7 @@ def get_whisper_model():
 def _update_progress(db: Session, job_id: int, progress: float):
     """Update progress on the audio_jobs table."""
     db.execute(
-        text("UPDATE audio_jobs SET progress = :progress, updated_at = now() WHERE id = :job_id"),
+        text("UPDATE audio_jobs SET progress = GREATEST(progress, :progress), updated_at = now() WHERE id = :job_id"),
         {"progress": progress, "job_id": job_id},
     )
     db.commit()
@@ -28,7 +28,7 @@ def _update_progress(db: Session, job_id: int, progress: float):
 
 def _run_embedding(all_chunks, file_id, embedder, db_session, job_id):
     """Run CLAP batch embedding and insert vectors into DB."""
-    batch_size = 64
+    batch_size = 128
     insert_sql = text("""
         INSERT INTO audio_chunks (file_id, start_time, end_time, resolution_type, embedding)
         VALUES (:file_id, :start_time, :end_time, :resolution_type, CAST(:embedding AS vector))
@@ -68,7 +68,7 @@ def _run_embedding(all_chunks, file_id, embedder, db_session, job_id):
 def _run_transcription(file_path, file_id, duration, db_session, job_id):
     """Run Whisper transcription with word-level timestamps and incremental progress updates."""
     model = get_whisper_model()
-    segments, info = model.transcribe(file_path, word_timestamps=True)
+    segments, info = model.transcribe(file_path, word_timestamps=True, vad_filter=True)
     # total progress range from 0.75 to 0.95
     total_range = 0.20
     # Placeholder loop removed – processing handled later
@@ -152,19 +152,33 @@ def process_upload(job_id: int, file_path: str):
         file_id = res.fetchone()[0]
         db.commit()
 
-        # Step 3: Run embedding sequentially with incremental progress
+        # Step 3 & 4: Run embedding and transcription concurrently
         embedder = ClapEmbedder()
-        print("Starting sequential CLAP embedding generation...")
-        t_embed = time.time()
-        _run_embedding(all_chunks, file_id, embedder, db, job_id)
-        print(f"Embedding finished in {time.time() - t_embed:.2f} seconds.")
-        _update_progress(db, job_id, 0.75)
-
-        # Step 4: Run transcription sequentially
-        print("Starting Whisper transcription...")
-        t_transcribe = time.time()
-        _run_transcription(file_path, file_id, duration, db, job_id)
-        print(f"Whisper transcription finished in {time.time() - t_transcribe:.2f} seconds.")
+        print("Starting concurrent CLAP embedding and Whisper transcription...")
+        t_concurrent = time.time()
+        
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            db_embed = SessionLocal()
+            db_transcribe = SessionLocal()
+            
+            try:
+                future_embed = executor.submit(
+                    _run_embedding, all_chunks, file_id, embedder, db_embed, job_id
+                )
+                future_transcribe = executor.submit(
+                    _run_transcription, file_path, file_id, duration, db_transcribe, job_id
+                )
+                
+                # Wait for both to complete and propagate any exceptions
+                future_embed.result()
+                print(f"Embedding finished.")
+                future_transcribe.result()
+                print(f"Whisper transcription finished.")
+            finally:
+                db_embed.close()
+                db_transcribe.close()
+                
+        print(f"Concurrent processing finished in {time.time() - t_concurrent:.2f} seconds.")
         _update_progress(db, job_id, 0.95)
 
         print(f"Total processing time: {time.time() - t_start:.2f} seconds.")
