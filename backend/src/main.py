@@ -136,40 +136,121 @@ def get_audio_file(file_id: int, db: Session = Depends(get_db)):
 # so we give them a slight advantage during scoring.
 # ---------------------------------------------------------------------------
 _RESOLUTION_WEIGHTS = {
+    "onset": 1.0,
     "1s":    0.97,
     "2s":    0.95,
 }
 
-
-
-
-
-
-# Absolute thresholds per resolution. If the distance is higher than this,
-# the chunk is rejected as a false positive (it doesn't actually match the query).
-_ABSOLUTE_THRESHOLDS = {
-    "onset": 0.72,
-    "1s":    0.75,
-    "2s":    0.75,
+# Hard floor thresholds per resolution. Even with adaptive thresholds we
+# never accept candidates worse than these values.
+_FLOOR_THRESHOLDS = {
+    "onset": 0.92,
+    "1s":    0.86,
+    "2s":    0.84,
 }
 
 
-def _temporal_rerank(raw: list) -> List[SearchResult]:
-    """Filter out long contextual chunks to enforce pinpoint highlights,
-    and apply Non-Maximum Suppression (NMS) to return isolated hits.
+def _temporal_rerank(raw: list, gap_s: float = 1.0) -> List[SearchResult]:
+    """Merge overlapping/adjacent chunks into contiguous acoustic events,
+    apply cross-resolution fusion, and boost their score.
     """
     if not raw:
         return []
 
-    # 1. Filter out 5s and 10s chunks. The user only wants precise highlights.
-    short_chunks = [c for c in raw if c.resolution_type in ["1s", "2s", "onset", "speech"]]
+    # Keep speech chunks separate to bypass complex fusion, but merge acoustic ones
+    speech_chunks = [c for c in raw if c.resolution_type == "speech"]
+    acoustic_chunks = [c for c in raw if c.resolution_type != "speech"]
 
-    # 2. Sort by score (lowest distance is best)
-    sorted_chunks = sorted(short_chunks, key=lambda r: r.score)
+    results = list(speech_chunks)
 
+    if not acoustic_chunks:
+        return sorted(results, key=lambda r: r.score)
+
+    scores = [r.score for r in acoustic_chunks]
+    min_score = min(scores)
+    max_score = max(scores)
+    score_range = max_score - min_score if max_score > min_score else 1.0
+
+    sorted_chunks = sorted(acoustic_chunks, key=lambda r: r.start_time)
+
+    events = []
+    current_chunks = [sorted_chunks[0]]
+
+    for chunk in sorted_chunks[1:]:
+        max_end = max(c.end_time for c in current_chunks)
+        gap = chunk.start_time - max_end
+        if gap <= gap_s:
+            current_chunks.append(chunk)
+        else:
+            events.append(current_chunks)
+            current_chunks = [chunk]
+    events.append(current_chunks)
+
+    def res_duration(r: str) -> float:
+        if r == "onset": return 0.5
+        if r == "1s": return 1.0
+        if r == "2s": return 2.0
+        return 1.0
+
+    import numpy as np
+    
+    for chunks in events:
+        file_id = chunks[0].file_id
+        filename = chunks[0].filename
+        start_time = min(c.start_time for c in chunks)
+        end_time = max(c.end_time for c in chunks)
+        
+        resolutions = set(c.resolution_type for c in chunks)
+        
+        best_chunk_score = min(c.score for c in chunks)
+        
+        # Localization
+        close_chunks = [c for c in chunks if c.score <= best_chunk_score + 0.05]
+        best_local_chunk = min(close_chunks, key=lambda c: res_duration(c.resolution_type))
+        seek_time = best_local_chunk.start_time
+
+        # Scoring: cross-resolution fusion
+        if len(resolutions) > 1:
+            res_best_scores = {}
+            for c in chunks:
+                ns = (c.score - min_score) / score_range
+                if c.resolution_type not in res_best_scores or ns < res_best_scores[c.resolution_type]:
+                    res_best_scores[c.resolution_type] = ns
+            
+            weighted_scores = []
+            for r, ns in res_best_scores.items():
+                w = _RESOLUTION_WEIGHTS.get(r, 1.0)
+                weighted_scores.append(ns * w)
+                
+            arr = np.array(weighted_scores)
+            arr = np.clip(arr, 1e-9, None)
+            fused_score = np.exp(np.mean(np.log(arr)))
+            
+            resolution_bonus = 0.08 * (len(resolutions) - 1)
+            fused_score *= (1.0 - min(resolution_bonus, 0.20))
+        else:
+            best_ns = (best_chunk_score - min_score) / score_range
+            w = _RESOLUTION_WEIGHTS.get(list(resolutions)[0], 1.0)
+            fused_score = best_ns * w
+
+        continuity_bonus = min(0.30, 0.04 * (len(chunks) - 1))
+        final_score = fused_score * (1.0 - continuity_bonus)
+
+        final_score_original = final_score * score_range + min_score
+
+        results.append(SearchResult(
+            file_id=file_id,
+            start_time=seek_time,  # Precise localization!
+            end_time=end_time,
+            resolution_type=best_local_chunk.resolution_type,
+            score=round(final_score_original, 6),
+            filename=filename,
+        ))
+
+    results.sort(key=lambda r: r.score)
     # 3. Non-Maximum Suppression (NMS)
     selected = []
-    for chunk in sorted_chunks:
+    for chunk in results:
         overlap = False
         for s in selected:
             start_max = max(chunk.start_time, s.start_time)
@@ -192,10 +273,16 @@ def _temporal_rerank(raw: list) -> List[SearchResult]:
 # discriminative embeddings.
 # ---------------------------------------------------------------------------
 _QUERY_EXPANSIONS = [
-    "This is a sound of {q}",
-    "{q}",
-    "A recording of {q}",
-    "The sound of {q}",
+    "a {q}",
+    "the sound of {q}",
+    "{q} audio",
+    "{q} noise",
+    "{q} sound effect",
+    "recording of {q}",
+    "audio of {q}",
+    "A high quality professional foley recording of {q}",
+    "Clear audio of {q}",
+    "{q} playing in the foreground",
 ]
 
 def _build_queries(text: str, n: int = 7) -> List[str]:
@@ -345,13 +432,23 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
         
     rows = db.execute(sql, params).fetchall()
 
-    # --- Step 5: Merge candidates and apply thresholds ---
+    # --- Step 5: Merge candidates and apply adaptive thresholds ---
     candidates = list(speech_results)
+    
+    # Compute median score and set adaptive threshold = median + 0.1
+    all_scores = [row[4] for row in rows]
+    median_score = float(np.median(all_scores)) if all_scores else 0.0
+    adaptive_threshold = median_score + 0.1
+
     for row in rows:
         res_type = row[3]
         score = row[4]
         filename = row[5]
-        if score < _ABSOLUTE_THRESHOLDS.get(res_type, 0.75):
+        
+        # Use the tighter of: adaptive threshold or per-resolution floor
+        effective_threshold = min(adaptive_threshold, _FLOOR_THRESHOLDS.get(res_type, 0.84))
+        
+        if score < effective_threshold:
             candidates.append(SearchResult(
                 file_id=row[0],
                 start_time=row[1],
@@ -410,13 +507,23 @@ async def search_audio(file: UploadFile = File(...), db: Session = Depends(get_d
     if not rows:
         return []
 
-    # 4. Absolute thresholds
+    # 4. Adaptive thresholds
     candidates = []
+    
+    # Compute median score and set adaptive threshold = median + 0.1
+    all_scores = [row[4] for row in rows]
+    median_score = float(np.median(all_scores)) if all_scores else 0.0
+    adaptive_threshold = median_score + 0.1
+
     for row in rows:
         res_type = row[3]
         score = row[4]
         filename = row[5]
-        if score < _ABSOLUTE_THRESHOLDS.get(res_type, 0.75):
+        
+        # Use the tighter of: adaptive threshold or per-resolution floor
+        effective_threshold = min(adaptive_threshold, _FLOOR_THRESHOLDS.get(res_type, 0.84))
+        
+        if score < effective_threshold:
             candidates.append(SearchResult(
                 file_id=row[0],
                 start_time=row[1],
