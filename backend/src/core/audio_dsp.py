@@ -38,7 +38,7 @@ class AudioFragmenter:
         across files recorded at different volumes.
         """
         y, _ = librosa.load(file_path, sr=self.sample_rate, mono=True, dtype=np.float32, res_type='kaiser_fast')
-        # Peak-normalise to [-1, 1]qwed
+        # Peak-normalise to [-1, 1]
         peak = np.max(np.abs(y))
         if peak > 0:
             y = y / peak
