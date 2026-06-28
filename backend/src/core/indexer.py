@@ -109,9 +109,13 @@ def _run_transcription(file_path, file_id, duration, db_session, job_id):
         if progress_val > 0.95:
             progress_val = 0.95
         _update_progress(db_session, job_id, progress_val)
-    # Ensure final transcription progress reaches 0.95 if no segments were processed
-    if not rows:
-        _update_progress(db_session, job_id, 0.95)
+    # Execute the database insert for the generated transcription rows
+    if rows:
+        db_session.execute(insert_transcript_sql, rows)
+        db_session.commit()
+    
+    # Ensure final transcription progress reaches 0.95
+    _update_progress(db_session, job_id, 0.95)
 
 
 def process_upload(job_id: int, file_path: str):
@@ -152,33 +156,20 @@ def process_upload(job_id: int, file_path: str):
         file_id = res.fetchone()[0]
         db.commit()
 
-        # Step 3 & 4: Run embedding and transcription concurrently
+        # Step 3 & 4: Run embedding and transcription sequentially
         embedder = ClapEmbedder()
-        print("Starting concurrent CLAP embedding and Whisper transcription...")
-        t_concurrent = time.time()
+        print("Starting sequential CLAP embedding and Whisper transcription...")
+        t_sequential = time.time()
         
-        with ThreadPoolExecutor(max_workers=2) as executor:
-            db_embed = SessionLocal()
-            db_transcribe = SessionLocal()
-            
-            try:
-                future_embed = executor.submit(
-                    _run_embedding, all_chunks, file_id, embedder, db_embed, job_id
-                )
-                future_transcribe = executor.submit(
-                    _run_transcription, file_path, file_id, duration, db_transcribe, job_id
-                )
+        # We run these sequentially to avoid massive CPU thread contention 
+        # on constrained hardware (like Hugging Face CPU Spaces).
+        _run_embedding(all_chunks, file_id, embedder, db, job_id)
+        print("Embedding finished.")
+        
+        _run_transcription(file_path, file_id, duration, db, job_id)
+        print("Whisper transcription finished.")
                 
-                # Wait for both to complete and propagate any exceptions
-                future_embed.result()
-                print(f"Embedding finished.")
-                future_transcribe.result()
-                print(f"Whisper transcription finished.")
-            finally:
-                db_embed.close()
-                db_transcribe.close()
-                
-        print(f"Concurrent processing finished in {time.time() - t_concurrent:.2f} seconds.")
+        print(f"Sequential processing finished in {time.time() - t_sequential:.2f} seconds.")
         _update_progress(db, job_id, 0.95)
 
         print(f"Total processing time: {time.time() - t_start:.2f} seconds.")
