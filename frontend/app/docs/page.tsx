@@ -67,6 +67,12 @@ export default function DocsPage() {
               th: ({node, ...props}) => <th className="border-b border-white/10 py-4 px-6 text-white font-semibold bg-white/[0.03]" {...props} />,
               td: ({node, ...props}) => <td className="border-b border-white/5 py-4 px-6 text-zinc-400 align-top" {...props} />,
               hr: ({node, ...props}) => <hr className="my-12 border-white/10" {...props} />,
+              img: ({node, ...props}) => (
+                <div className="my-10 flex justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="rounded-2xl border border-white/10 shadow-2xl max-w-full" {...props} alt={props.alt || ''} />
+                </div>
+              ),
             }}
           >
             {content}

@@ -13,6 +13,7 @@ EchoFind is a full-stack, semantic audio search engine. **Semantic Audio Search*
 
 The backend is built with **FastAPI** (a modern, lightning-fast web framework for building APIs with Python) and relies heavily on **PostgreSQL** (a highly advanced, open-source relational database). PostgreSQL is extended with two plugins: `pgvector` and `pg_trgm`, which enable hybrid vector and full-text search capabilities.
 
+![System Overview](/images/system_overview.png)
 ---
 
 ## 2. The Audio Processing Pipeline
@@ -43,6 +44,7 @@ EchoFind employs a method to run the acoustic analysis and speech transcription 
 - **VAD & Timestamps**: The model runs with **VAD (Voice Activity Detection)** enabled. VAD detects when human speech is happening versus when there is silence or background noise, allowing the model to skip the silent parts and save time. The model then extracts exact start and end timestamps for every spoken word.
 - **Storage**: The exact timestamps and text for every spoken word are saved into the database.
 
+![Audio Processing Pipeline](/images/processing_pipeline.png)
 ---
 
 ## 3. The Hybrid Search Engine
@@ -66,6 +68,7 @@ When a user submits a text query, EchoFind orchestrates a sophisticated hybrid s
 - **Thresholding**: Candidates are aggressively filtered using distance thresholds tuned for different chunk sizes to reject false positives.
 - **NMS (Non-Maximum Suppression)**: Because the audio was cut into overlapping chunks, a single "dog bark" might be detected in three overlapping segments. NMS is a filtering technique that looks at these overlaps, keeps the one with the highest score (the "Maximum"), and suppresses (deletes) the redundant neighboring chunks. This ensures the final results are isolated, distinct highlights.
 
+![Hybrid Search Engine](/images/hybrid_search.png)
 ---
 
 ## 4. Deployment Architecture
