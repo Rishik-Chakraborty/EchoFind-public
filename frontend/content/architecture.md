@@ -75,6 +75,8 @@ When a user submits a text query, EchoFind orchestrates a sophisticated hybrid s
 
 EchoFind is deployed using **Docker / Containerization**. Docker is a technology that packages software into standardized units called "containers." A container includes everything the software needs to run (code, runtime, tools). This ensures EchoFind runs exactly the same way on any computer, making deployment scalable and reproducible. The architecture consists of three primary services:
 
+![Deployment Architecture](/images/deployment_architecture.png)
+
 ### 1. Database (`db`)
 - Uses a PostgreSQL container pre-loaded with the `pgvector` plugin.
 - Serves as the single source of truth for relational metadata, job state tracking, word-level transcripts, and 512-dimensional acoustic vectors.
@@ -105,3 +107,19 @@ Building EchoFind required solving several advanced engineering problems related
 ### Cross-Resolution Thresholding
 - **Semantic Variability**: A 1-second audio chunk contains significantly less semantic information than a 5-second chunk, which inherently affects its vector distance to a text prompt.
 - **Dynamic Scoring**: EchoFind implements a dynamic scoring and thresholding system. It actively penalizes or rewards chunks based on their resolution to ensure short, snappy sound events (like a door slam) can compete fairly with long, ambient sounds (like rain) during the ranking phase.
+
+---
+
+## 6. Frequently Asked Questions (FAQ)
+
+### What formats of audio files are supported?
+EchoFind supports most common audio formats including `.wav`, `.mp3`, `.flac`, and `.ogg`. When an unsupported or corrupted file is uploaded, the backend will return a helpful validation error.
+
+### Do I need to provide text transcripts for my audio?
+**No.** EchoFind uses the LAION-CLAP model to "listen" to the audio directly. If you search for "a dog barking," it finds the acoustic pattern of a bark, not a text label that says "dog barking."
+
+### How fast is the Approximate Nearest Neighbor (ANN) search?
+Because the vectors are indexed using HNSW (Hierarchical Navigable Small World) graphs in PostgreSQL, retrieving the top 1000 acoustic matches from a database of millions takes less than 10 milliseconds.
+
+### Does the system work on CPU?
+Yes. The entire stack, including the Neural Networks, is designed to run efficiently on standard CPUs. We utilize `faster-whisper` with `int8` quantization to drastically reduce memory usage, allowing it to run smoothly on a Hugging Face Space or a standard laptop.
