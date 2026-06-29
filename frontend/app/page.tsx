@@ -104,7 +104,7 @@ export default function LandingPage() {
                 <Link href="/dashboard" className="bg-white text-black px-8 py-3.5 rounded-full text-sm font-semibold hover:bg-zinc-200 transition-colors w-full sm:w-auto">
                   Start searching
                 </Link>
-                <Link href="#" className="px-8 py-3.5 rounded-full text-sm font-medium text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-colors w-full sm:w-auto">
+                <Link href="/docs" className="px-8 py-3.5 rounded-full text-sm font-medium text-white bg-white/5 border border-white/10 hover:bg-white/10 transition-colors w-full sm:w-auto">
                   Read the docs
                 </Link>
              </div>
@@ -114,20 +114,27 @@ export default function LandingPage() {
           <div className="mt-20 max-w-[1000px] w-full mx-auto border border-white/10 rounded-2xl bg-black overflow-hidden relative shadow-2xl">
              <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent"></div>
              <div className="h-12 border-b border-white/10 flex items-center px-4 gap-2">
-                <div className="w-3 h-3 rounded-full bg-white/20"></div>
-                <div className="w-3 h-3 rounded-full bg-white/20"></div>
-                <div className="w-3 h-3 rounded-full bg-white/20"></div>
+                <div className="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#27c93f]"></div>
              </div>
+             <style dangerouslySetInnerHTML={{__html: `
+               @keyframes hero-waveform {
+                 0%, 100% { transform: scaleY(1); }
+                 50% { transform: scaleY(0.4); }
+               }
+             `}} />
              <div className="h-[400px] flex items-center justify-center relative overflow-hidden">
                 <div className="absolute w-[600px] h-[600px] bg-indigo-500/10 blur-[80px] rounded-full"></div>
                 <div className="flex items-center gap-1 opacity-80 mix-blend-screen">
                   {[...Array(64)].map((_, i) => (
                     <div 
                       key={i} 
-                      className="w-1.5 bg-white/60 rounded-full" 
+                      className="w-1.5 bg-white/60 rounded-full origin-center" 
                       style={{ 
                         height: `${Math.max(10, Math.sin(i * 0.3) * 60 + Math.cos(i * 0.8) * 40 + 60).toFixed(2)}px`,
-                        opacity: Number((0.2 + (Math.sin(i * 0.1) + 1) * 0.4).toFixed(3))
+                        opacity: Number((0.2 + (Math.sin(i * 0.1) + 1) * 0.4).toFixed(3)),
+                        animation: `hero-waveform ${1.5 + Math.abs(Math.sin(i)) * 0.5}s infinite ease-in-out ${Math.abs(Math.cos(i)) * 2}s`
                       }}
                     ></div>
                   ))}
@@ -255,7 +262,7 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col gap-3">
                 <h4 className="text-white font-medium mb-2">Resources</h4>
-                <Link href="#" className="text-zinc-500 hover:text-zinc-300 transition-colors">Documentation</Link>
+                <Link href="/docs" className="text-zinc-500 hover:text-zinc-300 transition-colors">Documentation</Link>
                 <Link href="#" className="text-zinc-500 hover:text-zinc-300 transition-colors">API Reference</Link>
                 <Link href="#" className="text-zinc-500 hover:text-zinc-300 transition-colors">Blog</Link>
                 <Link href="#" className="text-zinc-500 hover:text-zinc-300 transition-colors">Community</Link>
