@@ -1,4 +1,4 @@
-# Audio files — test samples should not live in the repo
+# Audio files - test samples should not live in the repo
 *.mp3
 *.wav
 *.flac

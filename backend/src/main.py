@@ -1,9 +1,16 @@
 import os
-from fastapi import FastAPI, UploadFile, File, BackgroundTasks, HTTPException, Depends
+import re
+import time
+import hashlib
+from fastapi import FastAPI, UploadFile, File, BackgroundTasks, HTTPException, Depends, Request, Security
 from fastapi.responses import JSONResponse
+from fastapi.security import APIKeyHeader
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 from typing import List
 from collections import defaultdict
 import numpy as np
@@ -12,7 +19,89 @@ from .schemas import UploadResponse, SearchRequest, SearchResult
 from .core.indexer import process_upload
 from .core.embedder import ClapEmbedder
 
+# ---------------------------------------------------------------------------
+# Security configuration
+# ---------------------------------------------------------------------------
+MAX_UPLOAD_SIZE_MB = int(os.getenv("MAX_UPLOAD_SIZE_MB", "50"))
+MAX_UPLOAD_SIZE_BYTES = MAX_UPLOAD_SIZE_MB * 1024 * 1024
+MAX_CONCURRENT_JOBS = int(os.getenv("MAX_CONCURRENT_JOBS", "3"))
+MAX_SEARCH_TEXT_LENGTH = int(os.getenv("MAX_SEARCH_TEXT_LENGTH", "500"))
+API_KEY = os.getenv("ECHOFIND_API_KEY", "")  # Set in production!
+
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://echo-find.vercel.app",
+    "https://echofind.vercel.app",
+    # Add your actual deployed frontend URL(s) here
+]
+# Allow overriding via env for flexibility
+_extra_origins = os.getenv("ALLOWED_ORIGINS", "")
+if _extra_origins:
+    ALLOWED_ORIGINS.extend([o.strip() for o in _extra_origins.split(",") if o.strip()])
+
+# Allowed audio file extensions
+ALLOWED_EXTENSIONS = {".mp3", ".wav", ".flac", ".ogg", ".m4a", ".webm", ".mp4", ".aac", ".wma"}
+
+# Rate limiter
+limiter = Limiter(key_func=get_remote_address)
+
 app = FastAPI()
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# ---------------------------------------------------------------------------
+# API key authentication
+# ---------------------------------------------------------------------------
+_api_key_header = APIKeyHeader(name="Authorization", auto_error=False)
+
+async def verify_api_key(request: Request, api_key: str = Security(_api_key_header)):
+    """Verify API key if ECHOFIND_API_KEY is set. Skip for /health."""
+    if not API_KEY:
+        # No API key configured — allow all requests (dev mode)
+        return
+    if not api_key:
+        raise HTTPException(status_code=401, detail="Missing Authorization header")
+    # Support "Bearer <key>" format
+    token = api_key.replace("Bearer ", "").strip()
+    if not hashlib.sha256(token.encode()).hexdigest() == hashlib.sha256(API_KEY.encode()).hexdigest():
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+def _sanitize_filename(filename: str) -> str:
+    """Remove path components and dangerous characters from a filename."""
+    # Strip any directory components
+    filename = os.path.basename(filename)
+    # Remove anything that isn't alphanumeric, dash, underscore, dot, or space
+    filename = re.sub(r'[^\w\s\-.]', '_', filename)
+    # Collapse multiple underscores/dots
+    filename = re.sub(r'[_]{2,}', '_', filename)
+    filename = re.sub(r'[.]{2,}', '.', filename)
+    # Ensure it's not empty
+    if not filename or filename.startswith('.'):
+        filename = f"upload_{int(time.time())}.audio"
+    return filename
+
+def _check_file_extension(filename: str):
+    """Validate that the file has an allowed audio extension."""
+    ext = os.path.splitext(filename)[1].lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"File type '{ext}' not allowed. Accepted: {', '.join(sorted(ALLOWED_EXTENSIONS))}"
+        )
+
+def _check_concurrent_jobs(db: Session):
+    """Reject uploads if too many jobs are already running."""
+    active = db.execute(
+        text("SELECT COUNT(*) FROM audio_jobs WHERE status IN ('queued', 'processing')")
+    ).scalar()
+    if active >= MAX_CONCURRENT_JOBS:
+        raise HTTPException(
+            status_code=429,
+            detail=f"Too many active jobs ({active}/{MAX_CONCURRENT_JOBS}). Please wait for current jobs to complete."
+        )
 
 @app.on_event("startup")
 def startup_event():
@@ -51,10 +140,10 @@ def startup_event():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 @app.get("/health")
@@ -62,16 +151,33 @@ def health():
     return {"status": "ok"}
 
 @app.post("/api/v1/upload", response_model=UploadResponse)
+@limiter.limit("5/minute")
 async def upload_audio(
+    request: Request,
     file: UploadFile = File(...),
     background_tasks: BackgroundTasks = None,
     db: Session = Depends(get_db),
+    _auth: None = Depends(verify_api_key),
 ):
+    # Validate filename and extension
+    safe_name = _sanitize_filename(file.filename or "unknown.audio")
+    _check_file_extension(safe_name)
+
+    # Check concurrent job limit
+    _check_concurrent_jobs(db)
+
+    # Read content with size limit enforcement
+    content = await file.read()
+    if len(content) > MAX_UPLOAD_SIZE_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail=f"File too large ({len(content) / 1024 / 1024:.1f} MB). Maximum is {MAX_UPLOAD_SIZE_MB} MB."
+        )
+
     upload_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "uploads"))
     os.makedirs(upload_dir, exist_ok=True)
-    file_path = os.path.join(upload_dir, file.filename)
+    file_path = os.path.join(upload_dir, safe_name)
 
-    content = await file.read()
     with open(file_path, "wb") as f:
         f.write(content)
 
@@ -87,7 +193,8 @@ async def upload_audio(
 
 
 @app.get("/api/v1/jobs/{job_id}")
-def get_job_status(job_id: int, db: Session = Depends(get_db)):
+@limiter.limit("60/minute")
+def get_job_status(request: Request, job_id: int, db: Session = Depends(get_db), _auth: None = Depends(verify_api_key)):
     """Poll job indexing status with progress percentage."""
     row = db.execute(
         text("SELECT id, status, COALESCE(progress, 0.0) FROM audio_jobs WHERE id = :job_id"),
@@ -109,7 +216,8 @@ def get_job_status(job_id: int, db: Session = Depends(get_db)):
 
 
 @app.get("/api/v1/audio/{file_id}")
-def get_audio_file(file_id: int, db: Session = Depends(get_db)):
+@limiter.limit("30/minute")
+def get_audio_file(request: Request, file_id: int, db: Session = Depends(get_db), _auth: None = Depends(verify_api_key)):
     """Serve the raw audio file."""
     from fastapi.responses import FileResponse
     row = db.execute(text("""
@@ -326,7 +434,8 @@ def _extract_speech_target(text: str) -> str:
 
 
 @app.post("/api/v1/search")
-def search(request: SearchRequest, db: Session = Depends(get_db)):
+@limiter.limit("20/minute")
+def search(request: Request, search_req: SearchRequest, db: Session = Depends(get_db), _auth: None = Depends(verify_api_key)):
     """Semantic audio search with query ensemble + adaptive thresholds +
     cross-resolution fusion + temporal reranking.
 
@@ -341,10 +450,17 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
     """
     import numpy as np
 
+    # Validate search text length
+    if len(search_req.text) > MAX_SEARCH_TEXT_LENGTH:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Search text too long ({len(search_req.text)} chars). Maximum is {MAX_SEARCH_TEXT_LENGTH}."
+        )
+
     # --- Step 1: Speech-to-Text transcript matching ---
     # Use PostgreSQL full-text search for exact word matching, with trigram
     # similarity fallback for fuzzy/partial matches.
-    speech_target = _extract_speech_target(request.text)
+    speech_target = _extract_speech_target(search_req.text)
     speech_results = []
     
     if speech_target:
@@ -356,7 +472,7 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
             JOIN audio_files f ON t.file_id = f.id
             WHERE to_tsvector('english', t.text) @@ plainto_tsquery('english', :speech_query)
         """
-        if request.file_id is not None:
+        if search_req.file_id is not None:
             sql_fts += " AND t.file_id = :file_id"
         sql_fts += " ORDER BY rank DESC LIMIT 200"
             
@@ -364,7 +480,7 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
             text(sql_fts),
             {
                 "speech_query": speech_target,
-                "file_id": request.file_id
+                "file_id": search_req.file_id
             }
         ).fetchall()
         
@@ -377,7 +493,7 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
                 JOIN audio_files f ON t.file_id = f.id
                 WHERE similarity(t.text, :speech_query) > 0.3
             """
-            if request.file_id is not None:
+            if search_req.file_id is not None:
                 sql_trgm += " AND t.file_id = :file_id"
             sql_trgm += " ORDER BY sim DESC LIMIT 200"
                 
@@ -385,7 +501,7 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
                 text(sql_trgm),
                 {
                     "speech_query": speech_target,
-                    "file_id": request.file_id
+                    "file_id": search_req.file_id
                 }
             ).fetchall()
         
@@ -402,7 +518,7 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
     embedder = ClapEmbedder()
 
     # --- Step 2–3: Query ensemble with weighted averaging ---
-    phrases = _build_queries(request.text, n=7)
+    phrases = _build_queries(search_req.text, n=7)
     vecs = []
     for i, p in enumerate(phrases):
         v = embedder.embed_text_query(p)
@@ -421,14 +537,14 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
         FROM audio_chunks ac
         JOIN audio_files af ON ac.file_id = af.id
     """
-    if request.file_id is not None:
+    if search_req.file_id is not None:
         sql_str += " WHERE ac.file_id = :file_id"
     sql_str += " ORDER BY score ASC LIMIT 1000;"
     
     sql = text(sql_str)
     params = {"query_vec": str(mean_vec.tolist())}
-    if request.file_id is not None:
-        params["file_id"] = request.file_id
+    if search_req.file_id is not None:
+        params["file_id"] = search_req.file_id
         
     rows = db.execute(sql, params).fetchall()
 
@@ -466,7 +582,8 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
     return events[:20]
 
 @app.post("/api/v1/search/audio")
-async def search_audio(file: UploadFile = File(...), db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+async def search_audio(request: Request, file: UploadFile = File(...), db: Session = Depends(get_db), _auth: None = Depends(verify_api_key)):
     """Semantic audio-to-audio search (KNN) with dynamic onboarding."""
     import librosa
     import tempfile
@@ -537,12 +654,21 @@ async def search_audio(file: UploadFile = File(...), db: Session = Depends(get_d
     events = _temporal_rerank(candidates)
     return events[:20]
 
+# Simple in-memory cache for corpus map (expensive PCA+KMeans)
+_corpus_map_cache: dict = {"data": None, "timestamp": 0.0}
+_CORPUS_MAP_CACHE_TTL = 60  # seconds
+
 @app.get("/api/v1/corpus/map")
-def get_corpus_map(db: Session = Depends(get_db)):
+@limiter.limit("3/minute")
+def get_corpus_map(request: Request, db: Session = Depends(get_db), _auth: None = Depends(verify_api_key)):
     """Fetch all embeddings, run PCA down to 3D, and cluster them."""
     import numpy as np
     import json
     
+    # Return cached result if available and fresh
+    if _corpus_map_cache["data"] is not None and (time.time() - _corpus_map_cache["timestamp"]) < _CORPUS_MAP_CACHE_TTL:
+        return _corpus_map_cache["data"]
+
     # Fast import inside endpoint to keep startup fast
     from sklearn.decomposition import PCA
     from sklearn.cluster import KMeans
@@ -603,14 +729,19 @@ def get_corpus_map(db: Session = Depends(get_db)):
     # Construct response
     results = []
     for i in range(len(data)):
-        results.append({
+        result_item = {
             **data[i],
             "x": float(X_3d[i][0]),
             "y": float(X_3d[i][1]),
             "z": float(X_3d[i][2]),
             "cluster": int(labels[i]),
             "is_outlier": bool(distances[i] > threshold)
-        })
+        }
+        results.append(result_item)
+
+    # Cache the result
+    _corpus_map_cache["data"] = results
+    _corpus_map_cache["timestamp"] = time.time()
 
     return results
 

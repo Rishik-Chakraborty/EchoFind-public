@@ -4,9 +4,10 @@ services:
     image: ankane/pgvector:latest
     container_name: echofind-db
     environment:
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - "5432:5432"
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    # Postgres is only accessible from other containers, not the host
+    expose:
+      - "5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
   backend:

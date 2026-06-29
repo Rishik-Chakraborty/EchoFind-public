@@ -10,3 +10,5 @@ transformers
 pydantic
 python-multipart
 faster-whisper
+slowapi
+python-dotenv

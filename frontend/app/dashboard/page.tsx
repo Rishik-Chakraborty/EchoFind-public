@@ -74,7 +74,9 @@ function DashboardContent() {
       try {
         const statuses = await Promise.all(
           activeJobs.map(async (id) => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/jobs/${id}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/jobs/${id}`, {
+              headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}` },
+            });
             if (!res.ok) return { id, status: "failed", progress: 0.0, file_id: null };
             const data = await res.json();
             return { id, status: data.status, progress: data.progress || 0.0, file_id: data.file_id };
@@ -141,7 +143,11 @@ function DashboardContent() {
       formData.append("file", selected);
       
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/upload`, { method: "POST", body: formData });
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/upload`, {
+          method: "POST",
+          headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}` },
+          body: formData,
+        });
         if (!res.ok) throw new Error("Upload failed");
         const data = await res.json();
         
@@ -177,7 +183,11 @@ function DashboardContent() {
         const formData = new FormData();
         formData.append("file", f);
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/upload`, { method: "POST", body: formData });
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/upload`, {
+            method: "POST",
+            headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}` },
+            body: formData,
+          });
           if (!res.ok) throw new Error("Upload failed");
           const data = await res.json();
           jobIds.push(data.job_id);
@@ -206,7 +216,11 @@ function DashboardContent() {
       if (searchFile) {
         const formData = new FormData();
         formData.append("file", searchFile);
-        res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/search/audio`, { method: "POST", body: formData });
+        res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/search/audio`, {
+          method: "POST",
+          headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}` },
+          body: formData,
+        });
       } else {
         const body: { text: string; file_id?: number } = { text: query };
         if (ingestionType === "single" && currentFileId !== null) {
@@ -214,7 +228,7 @@ function DashboardContent() {
         }
         res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/search`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}` },
           body: JSON.stringify(body),
         });
       }

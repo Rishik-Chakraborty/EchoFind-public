@@ -2,7 +2,7 @@
 
 The **EchoFind** project is a high-frequency neural audio retrieval system and temporal spatial search indexer. Its core objective is to solve the limitation of traditional text-based search engines, which rely on speech-to-text transcriptions and discard acoustic context.
 
-Unlike traditional systems that sanitize the acoustic landscape of a file, EchoFind maps native waveforms—tracking pitch, timbre, rhythm, and structural sound distributions—directly into a spatial geometric coordinate system ($D = 512$) using Multi-Modal Contrastive Learning (specifically the LAION-CLAP transformer model). This allows users to perform semantic "Control + F" operations across unstructured audio to find not just spoken words, but raw sonic signatures (e.g., glass shattering, background sirens, mechanical grinding, or emotional shifts).
+Unlike traditional systems that sanitize the acoustic landscape of a file, EchoFind maps native waveforms - tracking pitch, timbre, rhythm, and structural sound distributions - directly into a spatial geometric coordinate system ($D = 512$) using Multi-Modal Contrastive Learning (specifically the LAION-CLAP transformer model). This allows users to perform semantic "Control + F" operations across unstructured audio to find not just spoken words, but raw sonic signatures (e.g., glass shattering, background sirens, mechanical grinding, or emotional shifts).
 
 ## System Architecture & Technical Design
 
