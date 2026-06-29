@@ -122,4 +122,9 @@ EchoFind supports most common audio formats including `.wav`, `.mp3`, `.flac`, a
 Because the vectors are indexed using HNSW (Hierarchical Navigable Small World) graphs in PostgreSQL, retrieving the top 1000 acoustic matches from a database of millions takes less than 10 milliseconds.
 
 ### Does the system work on CPU?
-Yes. The entire stack, including the Neural Networks, is designed to run efficiently on standard CPUs. We utilize `faster-whisper` with `int8` quantization to drastically reduce memory usage, allowing it to run smoothly on a Hugging Face Space or a standard laptop.
+Yes. The entire stack, including the Neural Networks, is currently designed to run efficiently on standard CPUs. We utilize `faster-whisper` with `int8` quantization to drastically reduce memory usage, allowing it to run smoothly without triggering Out-Of-Memory errors.
+
+**Why CPU instead of GPU?**  
+We are currently running on a CPU-only architecture primarily due to hosting costs. Cloud providers (like Hugging Face) charge approximately 10x more for their cheapest GPU tier compared to a standard 8-core CPU environment. 
+
+However, migrating the backend to a dedicated NVIDIA GPU (utilizing CUDA and `float16` precision) is the long-term objective. A GPU would remove the need for extreme model quantization and speed up the audio ingestion pipeline by an order of magnitude.
