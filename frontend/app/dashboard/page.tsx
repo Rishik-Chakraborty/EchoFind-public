@@ -74,9 +74,7 @@ function DashboardContent() {
       try {
         const statuses = await Promise.all(
           activeJobs.map(async (id) => {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/jobs/${id}`, {
-              headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}` },
-            });
+            const res = await fetch(`/api/proxy/jobs/${id}`);
             if (!res.ok) return { id, status: "failed", progress: 0.0, file_id: null };
             const data = await res.json();
             return { id, status: data.status, progress: data.progress || 0.0, file_id: data.file_id };
@@ -110,7 +108,7 @@ function DashboardContent() {
       } catch (err) {
         console.error("Error polling jobs:", err);
       }
-    }, 2000);
+    }, 5000);
 
     return () => {
       isMounted = false;
@@ -143,9 +141,8 @@ function DashboardContent() {
       formData.append("file", selected);
       
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/upload`, {
+        const res = await fetch(`/api/proxy/upload`, {
           method: "POST",
-          headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}` },
           body: formData,
         });
         if (!res.ok) throw new Error("Upload failed");
@@ -183,9 +180,8 @@ function DashboardContent() {
         const formData = new FormData();
         formData.append("file", f);
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/upload`, {
+          const res = await fetch(`/api/proxy/upload`, {
             method: "POST",
-            headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}` },
             body: formData,
           });
           if (!res.ok) throw new Error("Upload failed");
@@ -216,9 +212,8 @@ function DashboardContent() {
       if (searchFile) {
         const formData = new FormData();
         formData.append("file", searchFile);
-        res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/search/audio`, {
+        res = await fetch(`/api/proxy/search/audio`, {
           method: "POST",
-          headers: { 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}` },
           body: formData,
         });
       } else {
@@ -226,9 +221,9 @@ function DashboardContent() {
         if (ingestionType === "single" && currentFileId !== null) {
           body.file_id = currentFileId;
         }
-        res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/search`, {
+        res = await fetch(`/api/proxy/search`, {
           method: "POST",
-          headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${process.env.NEXT_PUBLIC_API_KEY}` },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         });
       }
@@ -246,7 +241,7 @@ function DashboardContent() {
     if (currentFileId !== res.file_id) {
        setCurrentFileId(res.file_id);
        setCurrentFileName(res.filename);
-       setAudioUrl(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/audio/${res.file_id}`);
+       setAudioUrl(`/api/proxy/audio/${res.file_id}`);
        if (audioRef.current) {
          audioRef.current.dataset.pendingSeek = res.start_time.toString();
        }

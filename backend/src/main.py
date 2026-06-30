@@ -42,8 +42,14 @@ if _extra_origins:
 # Allowed audio file extensions
 ALLOWED_EXTENSIONS = {".mp3", ".wav", ".flac", ".ogg", ".m4a", ".webm", ".mp4", ".aac", ".wma"}
 
-# Rate limiter
-limiter = Limiter(key_func=get_remote_address)
+# Rate limiter using X-User-Id header from Next.js proxy, falling back to IP
+def get_user_or_ip(request: Request):
+    user_id = request.headers.get("X-User-Id")
+    if user_id:
+        return user_id
+    return get_remote_address(request)
+
+limiter = Limiter(key_func=get_user_or_ip)
 
 app = FastAPI()
 app.state.limiter = limiter
