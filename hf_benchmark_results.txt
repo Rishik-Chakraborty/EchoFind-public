@@ -1,0 +1,2 @@
+Total Processing Time for 60s audio: 66.11 seconds
+Real-Time Factor (RTF): 1.10x
