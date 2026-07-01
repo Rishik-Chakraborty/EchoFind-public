@@ -1,6 +1,9 @@
-FROM python:3.11-slim
+# PyTorch 2.1 with CUDA 12.1 + cuDNN 8 — pre-built for T4 NVIDIA GPU
+# Using the official PyTorch image avoids having to install the CUDA toolkit
+# from scratch and guarantees torch is built against the correct CUDA version.
+FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-runtime
 
-# Install system dependencies (ffmpeg is needed for librosa and whisper!)
+# Install system dependencies (ffmpeg for librosa/audio decoding, libsndfile for soundfile)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends gcc git libsndfile1 ffmpeg && \
     rm -rf /var/lib/apt/lists/*

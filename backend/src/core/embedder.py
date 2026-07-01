@@ -39,8 +39,13 @@ class ClapEmbedder:
             return cls._instance
 
     def _initialize(self):
-        # Use MPS if available on Apple Silicon, otherwise fallback to CPU
-        self.device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+        # Use CUDA if available on NVIDIA GPUs, MPS on Apple Silicon, otherwise fallback to CPU
+        if torch.cuda.is_available():
+            self.device = torch.device("cuda")
+        elif torch.backends.mps.is_available():
+            self.device = torch.device("mps")
+        else:
+            self.device = torch.device("cpu")
         print(f"ClapEmbedder initialized with {self.device} device.")
         model_name = "laion/clap-htsat-fused"
         self.model = ClapModel.from_pretrained(model_name).to(self.device)

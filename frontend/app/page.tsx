@@ -6,8 +6,10 @@ import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 export default function LandingPage() {
   const [scrollY, setScrollY] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
@@ -127,7 +129,7 @@ export default function LandingPage() {
              <div className="h-[400px] flex items-center justify-center relative overflow-hidden">
                 <div className="absolute w-[600px] h-[600px] bg-indigo-500/10 blur-[80px] rounded-full"></div>
                 <div className="flex items-center gap-1 opacity-80 mix-blend-screen">
-                  {[...Array(64)].map((_, i) => (
+                  {mounted && [...Array(64)].map((_, i) => (
                     <div 
                       key={i} 
                       className="w-1.5 bg-white/60 rounded-full origin-center" 
@@ -209,7 +211,7 @@ export default function LandingPage() {
                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0%,transparent_70%)]"></div>
                {/* Elegant Scatter Plot Mockup */}
                <div className="relative w-full h-full p-8">
-                 {[...Array(40)].map((_, i) => (
+                 {mounted && [...Array(40)].map((_, i) => (
                    <div 
                      key={i}
                      className="absolute rounded-full bg-white transition-opacity"

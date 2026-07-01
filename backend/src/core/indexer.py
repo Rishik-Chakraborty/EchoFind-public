@@ -9,9 +9,12 @@ from ..db import SessionLocal
 
 from faster_whisper import WhisperModel
 
-print("Loading faster-whisper model (tiny, int8)...")
-_WHISPER_MODEL = WhisperModel("tiny", device="cpu", compute_type="int8", cpu_threads=os.cpu_count() or 4)
-print("faster-whisper model loaded.")
+import torch
+print("Loading faster-whisper model (tiny)...")
+device = "cuda" if torch.cuda.is_available() else "cpu"
+compute_type = "float16" if device == "cuda" else "int8"
+_WHISPER_MODEL = WhisperModel("tiny", device=device, compute_type=compute_type, cpu_threads=os.cpu_count() or 4)
+print(f"faster-whisper model loaded on {device} with {compute_type}.")
 
 def get_whisper_model():
     return _WHISPER_MODEL

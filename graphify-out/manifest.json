@@ -5,14 +5,14 @@
     "semantic_hash": "239f3ebf717465dc636818a1a619398d"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/next-env.d.ts": {
-    "mtime": 1782144377.6089027,
+    "mtime": 1782948022.1526659,
     "ast_hash": "d0f8375ae1199dc7acd3977fc33b78b8",
     "semantic_hash": "d0f8375ae1199dc7acd3977fc33b78b8"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/package.json": {
-    "mtime": 1782233909.8834574,
-    "ast_hash": "6e68f7f98dc0ca9fa30e0f9c43f22f22",
-    "semantic_hash": "6e68f7f98dc0ca9fa30e0f9c43f22f22"
+    "mtime": 1782743745.0733979,
+    "ast_hash": "5c2b297f289b60e9f58f621b69229909",
+    "semantic_hash": "5c2b297f289b60e9f58f621b69229909"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/tsconfig.json": {
     "mtime": 1782094217.1486158,
@@ -25,9 +25,9 @@
     "semantic_hash": "dfa1f5f6a7037bf39dc510f30b180002"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/next.config.ts": {
-    "mtime": 1782094217.1472566,
-    "ast_hash": "9b77af189a21a7a64e4bd7a426f64176",
-    "semantic_hash": "9b77af189a21a7a64e4bd7a426f64176"
+    "mtime": 1782948218.3059406,
+    "ast_hash": "4a1cdcff7faeccdd6f2cf499b0e1377f",
+    "semantic_hash": "4a1cdcff7faeccdd6f2cf499b0e1377f"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/app/layout.tsx": {
     "mtime": 1782174821.0820224,
@@ -35,9 +35,9 @@
     "semantic_hash": "32a97c0c7de771b93ce5524a6bf642a2"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/app/page.tsx": {
-    "mtime": 1782398242.5015357,
-    "ast_hash": "ee62d0bad7d910255f72477383f25358",
-    "semantic_hash": "ee62d0bad7d910255f72477383f25358"
+    "mtime": 1782947984.7935538,
+    "ast_hash": "54e564dbd11a09d30739eec19cc46dea",
+    "semantic_hash": "54e564dbd11a09d30739eec19cc46dea"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/test_auto.py": {
     "mtime": 1782426463.3212473,
@@ -45,9 +45,9 @@
     "semantic_hash": "33eab00898c8b3f299928b33ac592c39"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/db/migrations/01_init.sql": {
-    "mtime": 1782440382.6470964,
-    "ast_hash": "0b083d5a3c33f2e5df01c48b3a44fda4",
-    "semantic_hash": "0b083d5a3c33f2e5df01c48b3a44fda4"
+    "mtime": 1782865895.0154855,
+    "ast_hash": "a3194f865e7de800cba752c44d793c9a",
+    "semantic_hash": "a3194f865e7de800cba752c44d793c9a"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/src/db.py": {
     "mtime": 1782098935.1208787,
@@ -60,24 +60,24 @@
     "semantic_hash": "135acf1cd3364a72761ee121485843e9"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/src/main.py": {
-    "mtime": 1782442026.9019513,
-    "ast_hash": "639cd7cbd01edd49c58a479583ce7c71",
-    "semantic_hash": "639cd7cbd01edd49c58a479583ce7c71"
+    "mtime": 1782948888.257323,
+    "ast_hash": "c0f7f67c70b234efa94442d0aa6f8d82",
+    "semantic_hash": "c0f7f67c70b234efa94442d0aa6f8d82"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/src/core/audio_dsp.py": {
-    "mtime": 1782443704.2100673,
-    "ast_hash": "58f6e189bad190e024ba07a0643e362c",
-    "semantic_hash": "58f6e189bad190e024ba07a0643e362c"
+    "mtime": 1782665011.8557,
+    "ast_hash": "3f5d248995dc1350bac0cc98a57e218f",
+    "semantic_hash": "3f5d248995dc1350bac0cc98a57e218f"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/src/core/indexer.py": {
-    "mtime": 1782489848.4521976,
-    "ast_hash": "5f2e0e97945a07bfd389881bb705a254",
-    "semantic_hash": "5f2e0e97945a07bfd389881bb705a254"
+    "mtime": 1782873855.7294917,
+    "ast_hash": "7aa8c6e2d588f715b182c41dab4b5cab",
+    "semantic_hash": "7aa8c6e2d588f715b182c41dab4b5cab"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/src/core/embedder.py": {
-    "mtime": 1782443712.7542112,
-    "ast_hash": "7548defc9bed523e1d1b5718042426b5",
-    "semantic_hash": "7548defc9bed523e1d1b5718042426b5"
+    "mtime": 1782873847.8847241,
+    "ast_hash": "befafe6640010d65615fe85ea8bda009",
+    "semantic_hash": "befafe6640010d65615fe85ea8bda009"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/dummy.txt": {
     "mtime": 1782093861.493066,
@@ -90,14 +90,14 @@
     "semantic_hash": "2781ee3750324af9ddfba54d6b7a98c7"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/README.md": {
-    "mtime": 1782492732.3522265,
-    "ast_hash": "a2136a879e747c4fb5b82e4764cf1191",
-    "semantic_hash": "a2136a879e747c4fb5b82e4764cf1191"
+    "mtime": 1782748055.4713812,
+    "ast_hash": "cab2b8962cf69fbfd0a20c45679e963b",
+    "semantic_hash": "cab2b8962cf69fbfd0a20c45679e963b"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/docker-compose.yml": {
-    "mtime": 1782094159.8546748,
-    "ast_hash": "28d5fc3914f3a794ba353e7a060da8a5",
-    "semantic_hash": "28d5fc3914f3a794ba353e7a060da8a5"
+    "mtime": 1782752401.119169,
+    "ast_hash": "34462268c6952613350712d88a8dc65e",
+    "semantic_hash": "34462268c6952613350712d88a8dc65e"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/README.md": {
     "mtime": 1782094217.1463263,
@@ -105,9 +105,9 @@
     "semantic_hash": "f15aaa42d5d299d091b1171097ea56ad"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/AGENTS.md": {
-    "mtime": 1782094276.7966018,
-    "ast_hash": "9e09241799026ac05be315a2f0b50055",
-    "semantic_hash": "9e09241799026ac05be315a2f0b50055"
+    "mtime": 1782748055.4733994,
+    "ast_hash": "03a364e841bcf90a618ce1551be45116",
+    "semantic_hash": "03a364e841bcf90a618ce1551be45116"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/CLAUDE.md": {
     "mtime": 1782094276.7966933,
@@ -170,28 +170,88 @@
     "semantic_hash": "c9cebf6c1fe30f8a11c9925691d20271"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/app/dashboard/page.tsx": {
-    "mtime": 1782442554.642933,
-    "ast_hash": "113266a8a9724393e360c2919fbdfdad",
-    "semantic_hash": "113266a8a9724393e360c2919fbdfdad"
-  },
-  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/proxy.ts": {
-    "mtime": 1782144285.8267264,
-    "ast_hash": "fdec9a2492590f7704464a5eccc28700",
-    "semantic_hash": "fdec9a2492590f7704464a5eccc28700"
+    "mtime": 1782763083.1077888,
+    "ast_hash": "f220f04da0ece40ecb52cf0a8de20d9b",
+    "semantic_hash": "f220f04da0ece40ecb52cf0a8de20d9b"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/requirements.txt": {
-    "mtime": 1782492746.8214552,
-    "ast_hash": "5976feed559d89c94c8f15516d75eddf",
-    "semantic_hash": "5976feed559d89c94c8f15516d75eddf"
-  },
-  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/file_list.txt": {
-    "mtime": 1782402252.6864493,
-    "ast_hash": "acb4a0491718fbd4efa3f489da606549",
-    "semantic_hash": "acb4a0491718fbd4efa3f489da606549"
+    "mtime": 1782948922.257578,
+    "ast_hash": "c1a90b7f5072c860999556c9b428a90f",
+    "semantic_hash": "c1a90b7f5072c860999556c9b428a90f"
   },
   "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/scroll-entry.md": {
     "mtime": 1782228584.9206753,
     "ast_hash": "702cda51c3d2d8053cb33e0b65c8ce58",
     "semantic_hash": "702cda51c3d2d8053cb33e0b65c8ce58"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/scripts/benchmark.py": {
+    "mtime": 1782849809.3297968,
+    "ast_hash": "bcbb52517a95155f4d3fd8c0f7321365",
+    "semantic_hash": "bcbb52517a95155f4d3fd8c0f7321365"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/scripts/benchmark_hf.py": {
+    "mtime": 1782872315.098682,
+    "ast_hash": "b1ba999f6b6ae23e3c9d1473deaa7d85",
+    "semantic_hash": "b1ba999f6b6ae23e3c9d1473deaa7d85"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/app/api/proxy/[...path]/route.ts": {
+    "mtime": 1782948793.7461228,
+    "ast_hash": "0ab2f3de6e97c355473241d4704731e6",
+    "semantic_hash": "0ab2f3de6e97c355473241d4704731e6"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/app/docs/page.tsx": {
+    "mtime": 1782748659.665554,
+    "ast_hash": "a5adefc30d40e1e021e57ee526868ce8",
+    "semantic_hash": "a5adefc30d40e1e021e57ee526868ce8"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/middleware.ts": {
+    "mtime": 1782752308.4556994,
+    "ast_hash": "fdec9a2492590f7704464a5eccc28700",
+    "semantic_hash": "fdec9a2492590f7704464a5eccc28700"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/backend/README.md": {
+    "mtime": 1782948903.0255566,
+    "ast_hash": "c9f7f63235652dded5218c9c71ed3e98",
+    "semantic_hash": "c9f7f63235652dded5218c9c71ed3e98"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/docs/architecture.md": {
+    "mtime": 1782748554.5296478,
+    "ast_hash": "c7e2d9bc3de743107a22b52a4435d00c",
+    "semantic_hash": "c7e2d9bc3de743107a22b52a4435d00c"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/docs/benchmarks.md": {
+    "mtime": 1782851809.7587152,
+    "ast_hash": "3cb3658977aea680a7d67120867f0078",
+    "semantic_hash": "3cb3658977aea680a7d67120867f0078"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/content/architecture.md": {
+    "mtime": 1782748554.4449651,
+    "ast_hash": "c7e2d9bc3de743107a22b52a4435d00c",
+    "semantic_hash": "c7e2d9bc3de743107a22b52a4435d00c"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/hf_benchmark_results.txt": {
+    "mtime": 1782851491.243955,
+    "ast_hash": "de671d8428316fcf7f70707773008d54",
+    "semantic_hash": "de671d8428316fcf7f70707773008d54"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/public/images/deployment_architecture.png": {
+    "mtime": 1782745254.6922133,
+    "ast_hash": "6abfe14fdf61e10809a54b0e426342dd",
+    "semantic_hash": "6abfe14fdf61e10809a54b0e426342dd"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/public/images/hybrid_search.png": {
+    "mtime": 1782744458.7407043,
+    "ast_hash": "e1d27945dc792084dd7b215f35927774",
+    "semantic_hash": "e1d27945dc792084dd7b215f35927774"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/public/images/processing_pipeline.png": {
+    "mtime": 1782744458.7367318,
+    "ast_hash": "d630b0d0900f2debae234b158a94b6e1",
+    "semantic_hash": "d630b0d0900f2debae234b158a94b6e1"
+  },
+  "/Users/rishikchakraborty/Documents/GitHub/EchoFind/frontend/public/images/system_overview.png": {
+    "mtime": 1782744458.7321117,
+    "ast_hash": "5359b1d288655ef3bfd183eb5fcf8c13",
+    "semantic_hash": "5359b1d288655ef3bfd183eb5fcf8c13"
   }
 }

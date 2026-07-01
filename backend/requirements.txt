@@ -5,10 +5,14 @@ psycopg[binary]
 librosa==0.10.2
 soundfile==0.12.1
 numpy
-torch
+# torch is NOT listed here — it is pre-installed in the
+# pytorch/pytorch:2.1.2-cuda12.1-cudnn8-runtime base image.
+# Adding it again would download the CPU wheel and overwrite the CUDA build.
 transformers
 pydantic
 python-multipart
-faster-whisper
+faster-whisper>=1.0.0
+ctranslate2>=4.0.0
+scikit-learn
 slowapi
 python-dotenv

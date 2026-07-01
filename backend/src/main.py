@@ -112,8 +112,37 @@ def _check_concurrent_jobs(db: Session):
 @app.on_event("startup")
 def startup_event():
     import logging
-    logging.info("Ensuring database tables exist...")
     from .db import SessionLocal
+
+    # ---------------------------------------------------------------------------
+    # Zombie job recovery: any job left in 'queued' or 'processing' from a
+    # previous crashed/restarted server run will never complete. Mark them all
+    # as 'failed' immediately so they don't permanently consume concurrent job
+    # slots and block new uploads.
+    # ---------------------------------------------------------------------------
+    logging.info("Recovering zombie jobs from previous server run...")
+    db = SessionLocal()
+    try:
+        result = db.execute(text("""
+            UPDATE audio_jobs
+            SET status = 'failed', updated_at = now()
+            WHERE status IN ('queued', 'processing')
+            RETURNING id
+        """))
+        recovered = result.fetchall()
+        db.commit()
+        if recovered:
+            ids = [str(r[0]) for r in recovered]
+            logging.warning(f"Marked {len(ids)} zombie job(s) as failed: {', '.join(ids)}")
+        else:
+            logging.info("No zombie jobs found.")
+    except Exception as e:
+        db.rollback()
+        logging.error(f"Error during zombie job recovery: {e}")
+    finally:
+        db.close()
+
+    logging.info("Ensuring database tables exist...")
     db = SessionLocal()
     try:
         db.execute(text("""
