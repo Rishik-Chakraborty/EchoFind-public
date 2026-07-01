@@ -6,9 +6,12 @@ import numpy as np
 import soundfile as sf
 import tempfile
 
-API_URL = "https://rishikchakraborty-echofind-api.hf.space"
-# Using the API key from the original environment variables
-API_KEY = "***REDACTED***"
+API_URL = os.getenv("ECHOFIND_API_URL", "https://rishikchakraborty-echofind-api.hf.space")
+API_KEY = os.getenv("ECHOFIND_API_KEY", "")
+if not API_KEY:
+    print("ERROR: ECHOFIND_API_KEY environment variable is not set.")
+    print("Set it with: export ECHOFIND_API_KEY='your-key-here'")
+    sys.exit(1)
 
 def wait_for_wakeup():
     print(f"Pinging {API_URL}/health to wake up the space...")
