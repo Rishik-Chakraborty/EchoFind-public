@@ -46,3 +46,8 @@ CREATE TABLE IF NOT EXISTS audio_transcripts (
 -- Index for fast file-specific transcript lookups
 CREATE INDEX IF NOT EXISTS idx_audio_transcripts_file_id ON audio_transcripts(file_id);
 
+-- Enable Row-Level Security on all tables to prevent public access
+ALTER TABLE audio_jobs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE audio_files ENABLE ROW LEVEL SECURITY;
+ALTER TABLE audio_chunks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE audio_transcripts ENABLE ROW LEVEL SECURITY;
