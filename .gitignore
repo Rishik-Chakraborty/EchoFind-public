@@ -30,3 +30,7 @@ graphify-out/
 # Node / Next.js (handled in frontend/.gitignore but belt-and-suspenders)
 node_modules/
 .next/
+
+# Local databases, downloads, and app folders
+local/
+downloads/
