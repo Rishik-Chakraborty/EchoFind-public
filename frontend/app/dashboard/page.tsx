@@ -135,18 +135,42 @@ function DashboardContent() {
       setIngestionType("single");
       setIngestionStatus("uploading");
       setUploadedFiles([selected.name]);
-      setUploadProgress("Uploading file to server...");
-      
-      const formData = new FormData();
-      formData.append("file", selected);
       
       try {
-        const res = await fetch(`/api/proxy/upload`, {
+        const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
+        const totalChunks = Math.ceil(selected.size / CHUNK_SIZE);
+        const uploadId = `upload_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+        
+        for (let i = 0; i < totalChunks; i++) {
+          setUploadProgress(`Uploading chunk ${i + 1} of ${totalChunks}...`);
+          const start = i * CHUNK_SIZE;
+          const end = Math.min(start + CHUNK_SIZE, selected.size);
+          const chunk = selected.slice(start, end);
+          
+          const formData = new FormData();
+          formData.append("file", chunk, selected.name);
+          formData.append("upload_id", uploadId);
+          formData.append("chunk_index", i.toString());
+          
+          const res = await fetch(`/api/proxy/upload/chunk`, {
+            method: "POST",
+            body: formData,
+          });
+          if (!res.ok) throw new Error(`Chunk ${i} upload failed`);
+        }
+        
+        setUploadProgress("Finalizing upload...");
+        const completeFormData = new FormData();
+        completeFormData.append("upload_id", uploadId);
+        completeFormData.append("filename", selected.name);
+        completeFormData.append("total_chunks", totalChunks.toString());
+        
+        const completeRes = await fetch(`/api/proxy/upload/complete`, {
           method: "POST",
-          body: formData,
+          body: completeFormData,
         });
-        if (!res.ok) throw new Error("Upload failed");
-        const data = await res.json();
+        if (!completeRes.ok) throw new Error("Upload finalization failed");
+        const data = await completeRes.json();
         
         setCurrentFileName(selected.name);
         setAudioUrl(URL.createObjectURL(selected));

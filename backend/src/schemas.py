@@ -7,6 +7,14 @@ class UploadResponse(BaseModel):
     job_id: int
     status: str
 
+class ChunkUploadResponse(BaseModel):
+    status: str
+    message: str
+
+class CompleteUploadResponse(BaseModel):
+    job_id: int
+    status: str
+
 class SearchRequest(BaseModel):
     text: str
     file_id: Optional[int] = None

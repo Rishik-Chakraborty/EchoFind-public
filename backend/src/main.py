@@ -2,7 +2,7 @@ import os
 import re
 import time
 import hashlib
-from fastapi import FastAPI, UploadFile, File, BackgroundTasks, HTTPException, Depends, Request, Security
+from fastapi import FastAPI, UploadFile, File, Form, BackgroundTasks, HTTPException, Depends, Request, Security
 from fastapi.responses import JSONResponse
 from fastapi.security import APIKeyHeader
 from sqlalchemy.orm import Session
@@ -15,7 +15,7 @@ from typing import List
 from collections import defaultdict
 import numpy as np
 from .db import get_db
-from .schemas import UploadResponse, SearchRequest, SearchResult
+from .schemas import UploadResponse, ChunkUploadResponse, CompleteUploadResponse, SearchRequest, SearchResult
 from .core.indexer import process_upload
 from .core.embedder import ClapEmbedder
 
@@ -215,6 +215,72 @@ async def upload_audio(
 
     with open(file_path, "wb") as f:
         f.write(content)
+
+    result = db.execute(
+        text("INSERT INTO audio_jobs (file_url, status) VALUES (:file_url, 'queued') RETURNING id"),
+        {"file_url": file_path},
+    )
+    job_id = result.fetchone()[0]
+    db.commit()
+
+    background_tasks.add_task(process_upload, job_id=job_id, file_path=file_path)
+    return {"job_id": job_id, "status": "queued"}
+
+@app.post("/api/v1/upload/chunk", response_model=ChunkUploadResponse)
+@limiter.limit("60/minute")
+async def upload_chunk(
+    request: Request,
+    file: UploadFile = File(...),
+    upload_id: str = Form(...),
+    chunk_index: int = Form(...),
+    _auth: None = Depends(verify_api_key),
+):
+    upload_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "uploads", "chunks", upload_id))
+    os.makedirs(upload_dir, exist_ok=True)
+    
+    content = await file.read()
+    chunk_path = os.path.join(upload_dir, f"chunk_{chunk_index}")
+    with open(chunk_path, "wb") as f:
+        f.write(content)
+        
+    return {"status": "ok", "message": f"Chunk {chunk_index} received"}
+
+@app.post("/api/v1/upload/complete", response_model=CompleteUploadResponse)
+@limiter.limit("5/minute")
+async def upload_complete(
+    request: Request,
+    upload_id: str = Form(...),
+    filename: str = Form(...),
+    total_chunks: int = Form(...),
+    background_tasks: BackgroundTasks = None,
+    db: Session = Depends(get_db),
+    _auth: None = Depends(verify_api_key),
+):
+    # Check concurrent job limit
+    _check_concurrent_jobs(db)
+    
+    safe_name = _sanitize_filename(filename or "unknown.audio")
+    _check_file_extension(safe_name)
+    
+    chunk_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "uploads", "chunks", upload_id))
+    if not os.path.exists(chunk_dir):
+        raise HTTPException(status_code=400, detail="Upload ID not found")
+        
+    upload_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "uploads"))
+    os.makedirs(upload_dir, exist_ok=True)
+    file_path = os.path.join(upload_dir, f"{upload_id}_{safe_name}")
+    
+    # Reassemble chunks
+    with open(file_path, "wb") as outfile:
+        for i in range(total_chunks):
+            chunk_path = os.path.join(chunk_dir, f"chunk_{i}")
+            if not os.path.exists(chunk_path):
+                raise HTTPException(status_code=400, detail=f"Missing chunk {i}")
+            with open(chunk_path, "rb") as infile:
+                outfile.write(infile.read())
+            os.remove(chunk_path)
+            
+    os.rmdir(chunk_dir)
 
     result = db.execute(
         text("INSERT INTO audio_jobs (file_url, status) VALUES (:file_url, 'queued') RETURNING id"),

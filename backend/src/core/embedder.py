@@ -13,7 +13,7 @@ logging.getLogger("transformers").setLevel(logging.ERROR)
 # inside uvicorn's background thread pool.
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
-torch.set_num_threads(os.cpu_count() or 4)
+torch.set_num_threads(4)
 
 
 class ClapEmbedder:
@@ -60,7 +60,7 @@ class ClapEmbedder:
         """
         arrays = [arr.astype(np.float32) for arr in chunk_arrays]
         inputs = self.processor(
-            audio=arrays,
+            audios=arrays,
             sampling_rate=48000,
             return_tensors="pt",
             padding=True,

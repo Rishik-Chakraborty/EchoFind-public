@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
     },
     middlewareClientMaxBodySize: '50mb',
   },
+  api: {
+    bodyParser: {
+      sizeLimit: '50mb',
+    },
+    responseLimit: false,
+  },
 };
 
 export default nextConfig;
