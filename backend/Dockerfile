@@ -5,6 +5,7 @@ FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-runtime
 
 # Install system dependencies (ffmpeg for librosa/audio decoding, libsndfile for soundfile)
 ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
 RUN apt-get update && \
     apt-get install -y --no-install-recommends gcc git libsndfile1 ffmpeg && \
     rm -rf /var/lib/apt/lists/*
