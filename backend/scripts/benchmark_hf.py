@@ -13,10 +13,10 @@ if not API_KEY:
     print("Set it with: export ECHOFIND_API_KEY='your-key-here'")
     sys.exit(1)
 
-def wait_for_wakeup():
+def wait_for_wakeup(max_retries=20):
     print(f"Pinging {API_URL}/health to wake up the space...")
     start_time = time.time()
-    while True:
+    for attempt in range(1, max_retries + 1):
         try:
             response = requests.get(f"{API_URL}/health", timeout=10)
             if response.status_code == 200:
@@ -24,11 +24,14 @@ def wait_for_wakeup():
                 print(f"Space is awake! Took {elapsed:.2f} seconds.")
                 return
             else:
-                print(f"Status code {response.status_code}. Still waking up...")
+                print(f"Status code {response.status_code}. Still waking up... (attempt {attempt}/{max_retries})")
         except requests.exceptions.RequestException as e:
-            print(f"Connection error. Space is likely sleeping/booting. Retrying in 15s...")
+            print(f"Connection error (attempt {attempt}/{max_retries}). Space is likely sleeping/booting. Retrying in 15s...")
         
         time.sleep(15)
+    
+    print(f"ERROR: Space did not wake up after {max_retries} attempts ({time.time() - start_time:.0f}s).")
+    sys.exit(1)
 
 def benchmark_hf_space():
     wait_for_wakeup()
@@ -60,16 +63,17 @@ def benchmark_hf_space():
         job_id = data.get("job_id")
         print(f"Upload successful. Job ID: {job_id}")
         
-        # 2. Poll for completion
+        # 2. Poll for completion (max ~2 minutes of polling)
         print("Polling job status...")
-        while True:
-            job_res = requests.get(f"{API_URL}/api/v1/jobs/{job_id}", headers=headers)
+        max_polls = 60
+        for poll in range(1, max_polls + 1):
+            job_res = requests.get(f"{API_URL}/api/v1/jobs/{job_id}", headers=headers, timeout=10)
             if job_res.status_code == 200:
                 job_data = job_res.json()
                 status = job_data.get("status")
                 progress = job_data.get("progress", 0.0)
                 
-                print(f"Status: {status} | Progress: {progress*100:.1f}%")
+                print(f"Status: {status} | Progress: {progress*100:.1f}% (poll {poll}/{max_polls})")
                 
                 if status == "completed":
                     break
@@ -80,6 +84,9 @@ def benchmark_hf_space():
                 print(f"Error polling: {job_res.status_code} - {job_res.text}")
                 
             time.sleep(2)
+        else:
+            print(f"ERROR: Job did not complete after {max_polls} polls.")
+            return
             
         t_total = time.time() - t0
         rtf = t_total / duration_s

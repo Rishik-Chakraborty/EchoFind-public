@@ -113,35 +113,13 @@ def _check_concurrent_jobs(db: Session):
 def startup_event():
     import logging
     from .db import SessionLocal
+    from .core.indexer import get_whisper_model
 
     # ---------------------------------------------------------------------------
-    # Zombie job recovery: any job left in 'queued' or 'processing' from a
-    # previous crashed/restarted server run will never complete. Mark them all
-    # as 'failed' immediately so they don't permanently consume concurrent job
-    # slots and block new uploads.
+    # Step 1: Ensure database tables exist FIRST.
+    # This must run before zombie recovery because on a fresh deployment the
+    # audio_jobs / audio_transcripts tables may not exist yet.
     # ---------------------------------------------------------------------------
-    logging.info("Recovering zombie jobs from previous server run...")
-    db = SessionLocal()
-    try:
-        result = db.execute(text("""
-            UPDATE audio_jobs
-            SET status = 'failed', updated_at = now()
-            WHERE status IN ('queued', 'processing')
-            RETURNING id
-        """))
-        recovered = result.fetchall()
-        db.commit()
-        if recovered:
-            ids = [str(r[0]) for r in recovered]
-            logging.warning(f"Marked {len(ids)} zombie job(s) as failed: {', '.join(ids)}")
-        else:
-            logging.info("No zombie jobs found.")
-    except Exception as e:
-        db.rollback()
-        logging.error(f"Error during zombie job recovery: {e}")
-    finally:
-        db.close()
-
     logging.info("Ensuring database tables exist...")
     db = SessionLocal()
     try:
@@ -169,9 +147,51 @@ def startup_event():
     finally:
         db.close()
 
+    # ---------------------------------------------------------------------------
+    # Step 2: Zombie job recovery — any job left in 'queued' or 'processing'
+    # from a previous crashed/restarted server run will never complete. Mark
+    # them as 'failed' so they don't permanently consume concurrent job slots.
+    # ---------------------------------------------------------------------------
+    logging.info("Recovering zombie jobs from previous server run...")
+    db = SessionLocal()
+    try:
+        result = db.execute(text("""
+            UPDATE audio_jobs
+            SET status = 'failed', updated_at = now()
+            WHERE status IN ('queued', 'processing')
+            RETURNING id
+        """))
+        recovered = result.fetchall()
+        db.commit()
+        if recovered:
+            ids = [str(r[0]) for r in recovered]
+            logging.warning(f"Marked {len(ids)} zombie job(s) as failed: {', '.join(ids)}")
+        else:
+            logging.info("No zombie jobs found.")
+    except Exception as e:
+        db.rollback()
+        logging.error(f"Error during zombie job recovery: {e}")
+    finally:
+        db.close()
+
+    # ---------------------------------------------------------------------------
+    # Step 3: Pre-warm ML models (with retry logic built into each loader).
+    # If HF is unreachable after retries, the server will still start but
+    # the models will be loaded on first request instead.
+    # ---------------------------------------------------------------------------
     logging.info("Initializing CLAP embedder model...")
-    ClapEmbedder()
-    logging.info("CLAP embedder initialized.")
+    try:
+        ClapEmbedder()
+        logging.info("CLAP embedder initialized.")
+    except Exception as e:
+        logging.error(f"CLAP embedder failed to initialize (will retry on first request): {e}")
+
+    logging.info("Pre-warming Whisper model...")
+    try:
+        get_whisper_model()
+        logging.info("Whisper model initialized.")
+    except Exception as e:
+        logging.error(f"Whisper model failed to initialize (will retry on first request): {e}")
 
 app.add_middleware(
     CORSMiddleware,
@@ -618,16 +638,15 @@ def search(request: Request, search_req: SearchRequest, db: Session = Depends(ge
 
     embedder = ClapEmbedder()
 
-    # --- Step 2–3: Query ensemble with weighted averaging ---
+    # --- Step 2–3: Query ensemble with weighted averaging (single forward pass) ---
+    # All 7 phrases are embedded together in one model call, saving 6 redundant
+    # kernel launches compared to the previous per-phrase loop.
     phrases = _build_queries(search_req.text, n=7)
-    vecs = []
-    for i, p in enumerate(phrases):
-        v = embedder.embed_text_query(p)
-        # Weight the original query 2x for emphasis
-        weight = 2.0 if i == 0 else 1.0
-        vecs.append(v * weight)
-    vecs = np.stack(vecs)
-    mean_vec = vecs.mean(axis=0)
+    all_vecs = embedder.embed_text_batch(phrases)
+    # Weight the original (first) phrase 2× for emphasis
+    weights = np.array([2.0] + [1.0] * (len(phrases) - 1), dtype=np.float32)
+    weighted_vecs = all_vecs * weights[:, np.newaxis]
+    mean_vec = weighted_vecs.mean(axis=0)
     mean_vec = mean_vec / (np.linalg.norm(mean_vec) + 1e-9)
 
     # --- Step 4: Retrieve candidates from pgvector ---

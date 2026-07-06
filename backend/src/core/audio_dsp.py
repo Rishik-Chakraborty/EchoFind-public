@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import librosa
 from typing import List, Dict
 
@@ -6,8 +7,7 @@ class AudioFragmenter:
     """Process raw audio files into multi-resolution overlapping chunks.
 
     Resolution tiers (no overlap — onset detection handles transients):
-    - 1s     (short events):      0% overlap → 1s step   — door slams, barks, coughs, single words
-    - 2s     (localized speech):  0% overlap → 2s step   — balanced coverage
+    - 2s     (localized events): 0% overlap → 2s step   — balanced coverage
 
     The 250ms dense grid was removed because the onset detector catches
     transients more precisely with far fewer chunks. The 5s tier was removed
@@ -34,10 +34,34 @@ class AudioFragmenter:
     def load_audio(self, file_path: str) -> np.ndarray:
         """Load an audio file, resample to target sample_rate, mono, float32.
 
+        For WAV files (produced by the ffmpeg segmenter at 48 kHz) we use
+        ``soundfile`` for a direct native read that bypasses librosa's heavy
+        Python resampling stack — roughly 5–10× faster for the common case.
+        Other formats fall back to librosa as before.
+
         Applies peak-normalization to [-1, 1] so embeddings are consistent
         across files recorded at different volumes.
         """
-        y, _ = librosa.load(file_path, sr=self.sample_rate, mono=True, dtype=np.float32, res_type='kaiser_fast')
+        ext = os.path.splitext(file_path)[1].lower()
+
+        if ext == ".wav":
+            # Fast path: native C read via soundfile (libsndfile)
+            import soundfile as sf
+            y, sr = sf.read(file_path, dtype="float32", always_2d=False)
+            # Convert multi-channel to mono by averaging
+            if y.ndim > 1:
+                y = y.mean(axis=1)
+            # Resample only if the actual sample rate differs from target
+            # (shouldn't happen when ffmpeg is called with -ar 48000)
+            if sr != self.sample_rate:
+                y = librosa.resample(y, orig_sr=sr, target_sr=self.sample_rate)
+        else:
+            # Slow path: librosa handles arbitrary compressed formats
+            y, _ = librosa.load(
+                file_path, sr=self.sample_rate, mono=True,
+                dtype=np.float32, res_type="kaiser_fast",
+            )
+
         # Peak-normalise to [-1, 1]
         peak = np.max(np.abs(y))
         if peak > 0:
@@ -68,7 +92,7 @@ class AudioFragmenter:
         Each chunk dict:
           - start_time       (seconds, float)
           - end_time         (seconds, float)
-          - resolution_type  ("1s" | "2s" | "onset")
+          - resolution_type  (\"1s\" | \"2s\" | \"onset\")
           - array            (np.ndarray view, float32, shape=(n_samples,))
 
         Silent chunks (below SILENCE_THRESHOLD_DB) are automatically excluded.
