@@ -169,7 +169,10 @@ function DashboardContent() {
           method: "POST",
           body: completeFormData,
         });
-        if (!completeRes.ok) throw new Error("Upload finalization failed");
+        if (!completeRes.ok) {
+            const errText = await completeRes.text();
+            throw new Error(`Upload finalization failed (${completeRes.status}): ${errText}`);
+        }
         const data = await completeRes.json();
         
         setCurrentFileName(selected.name);
