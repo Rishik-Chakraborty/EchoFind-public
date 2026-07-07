@@ -16,3 +16,4 @@ ctranslate2>=4.0.0
 scikit-learn
 slowapi
 python-dotenv
+av>=12.0.0

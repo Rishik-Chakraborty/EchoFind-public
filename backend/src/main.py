@@ -148,6 +148,30 @@ def startup_event():
         db.close()
 
     # ---------------------------------------------------------------------------
+    # Step 1b: HNSW vector index — enables sub-linear approximate nearest-
+    # neighbour search. Without this, pgvector does an exact sequential scan
+    # over every row, which degrades with scale. HNSW makes search time nearly
+    # constant regardless of how many audio chunks are indexed.
+    # This runs as a separate non-fatal step because index creation on a large
+    # existing table can be slow and we don't want to block server startup.
+    # ---------------------------------------------------------------------------
+    logging.info("Ensuring HNSW vector index exists...")
+    db = SessionLocal()
+    try:
+        db.execute(text("""
+            CREATE INDEX IF NOT EXISTS idx_audio_chunks_embedding_hnsw
+            ON audio_chunks USING hnsw (embedding vector_cosine_ops)
+            WITH (m = 16, ef_construction = 64);
+        """))
+        db.commit()
+        logging.info("HNSW index verified.")
+    except Exception as e:
+        db.rollback()
+        logging.warning(f"HNSW index creation skipped (non-fatal): {e}")
+    finally:
+        db.close()
+
+    # ---------------------------------------------------------------------------
     # Step 2: Zombie job recovery — any job left in 'queued' or 'processing'
     # from a previous crashed/restarted server run will never complete. Mark
     # them as 'failed' so they don't permanently consume concurrent job slots.
@@ -649,7 +673,12 @@ def search(request: Request, search_req: SearchRequest, db: Session = Depends(ge
     mean_vec = weighted_vecs.mean(axis=0)
     mean_vec = mean_vec / (np.linalg.norm(mean_vec) + 1e-9)
 
-    # --- Step 4: Retrieve candidates from pgvector ---
+    # --- Step 4: Retrieve candidates from pgvector (HNSW ANN search) ---
+    # ef_search=100 controls the search beam width of the HNSW graph traversal.
+    # Higher = better recall at the cost of more time. 100 is a good trade-off.
+    # SET LOCAL is session-scoped and resets automatically after this request.
+    db.execute(text("SET LOCAL hnsw.ef_search = 100;"))
+
     sql_str = """
         SELECT ac.file_id, ac.start_time, ac.end_time, ac.resolution_type,
                (ac.embedding <=> CAST(:query_vec AS vector)) AS score,
@@ -660,12 +689,12 @@ def search(request: Request, search_req: SearchRequest, db: Session = Depends(ge
     if search_req.file_id is not None:
         sql_str += " WHERE ac.file_id = :file_id"
     sql_str += " ORDER BY score ASC LIMIT 1000;"
-    
+
     sql = text(sql_str)
     params = {"query_vec": str(mean_vec.tolist())}
     if search_req.file_id is not None:
         params["file_id"] = search_req.file_id
-        
+
     rows = db.execute(sql, params).fetchall()
 
     # --- Step 5: Merge candidates and apply adaptive thresholds ---
