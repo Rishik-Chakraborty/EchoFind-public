@@ -8,10 +8,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-
-
-
-
 @layer base {
   :root {
     --background: #050505;
