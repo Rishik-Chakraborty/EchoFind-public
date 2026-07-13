@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 # CLAP batch size — 32 utilises GPU throughput far better than the old 8.
 # The OOM-halving fallback in ClapEmbedder ensures safety on smaller GPUs.
 # ---------------------------------------------------------------------------
-_EMBED_BATCH_SIZE = 32
+_EMBED_BATCH_SIZE = 64
 
 # ---------------------------------------------------------------------------
 # Lazy Whisper model singleton — avoids module-level network calls that
@@ -241,8 +241,7 @@ def _collect_embeddings(all_chunks, embedder) -> list:
         embeddings = embedder.embed_audio_batch(arrays)
 
         for idx, chunk in enumerate(batch):
-            embedding_list = embeddings[idx].tolist()
-            embedding_str = "[" + ",".join(str(x) for x in embedding_list) + "]"
+            embedding_str = str(embeddings[idx].tolist())
             rows.append({
                 "start_time":      chunk["start_time"],
                 "end_time":        chunk["end_time"],
@@ -395,25 +394,11 @@ def process_upload(job_id: int, file_path: str):
                 chunk["start_time"] += seg_offset
                 chunk["end_time"]   += seg_offset
 
-            # -----------------------------------------------------------------
-            # 2. CLAP embedding (GPU) and Whisper transcription (CPU) run in
-            #    parallel via ThreadPoolExecutor.  Both helpers are pure
-            #    collect functions — they never touch the DB, so there are no
-            #    SQLAlchemy session conflicts.  Python's GIL is released during
-            #    both CUDA kernel launches and ctranslate2 C++ inference, so
-            #    true concurrency is achieved.
-            #
-            #    Whisper now receives the numpy array directly (no temp file).
-            # -----------------------------------------------------------------
-            with ThreadPoolExecutor(max_workers=2) as executor:
-                embed_future      = executor.submit(_collect_embeddings, seg_chunks, embedder)
-                transcribe_future = executor.submit(
-                    _collect_transcription, seg_audio, seg_duration, seg_offset,
-                )
-
-                # Wait for both — propagate the first exception if either fails
-                embed_rows      = embed_future.result()
-                transcript_rows = transcribe_future.result()
+            # 2. CLAP embedding and Whisper transcription run sequentially.
+            #    Running them concurrently on a single consumer GPU (like T4) or CPU
+            #    causes severe context thrashing and resource contention.
+            embed_rows      = _collect_embeddings(seg_chunks, embedder)
+            transcript_rows = _collect_transcription(seg_audio, seg_duration, seg_offset)
 
             # 3. Write results to DB (sequential, safe with single session)
             _insert_embeddings(db, file_id, embed_rows)

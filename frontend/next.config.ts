@@ -5,13 +5,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: '50mb',
     },
-    middlewareClientMaxBodySize: '50mb',
-  },
-  api: {
-    bodyParser: {
-      sizeLimit: '50mb',
-    },
-    responseLimit: false,
+    proxyClientMaxBodySize: '50mb',
   },
 };
 

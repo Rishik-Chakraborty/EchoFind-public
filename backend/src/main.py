@@ -391,7 +391,7 @@ def get_audio_file(request: Request, file_id: int, db: Session = Depends(get_db)
 _RESOLUTION_WEIGHTS = {
     "onset": 1.0,
     "1s":    0.97,
-    "2s":    0.95,
+    "3s":    0.93,
 }
 
 # Hard floor thresholds per resolution. Even with adaptive thresholds we
@@ -399,7 +399,7 @@ _RESOLUTION_WEIGHTS = {
 _FLOOR_THRESHOLDS = {
     "onset": 0.92,
     "1s":    0.86,
-    "2s":    0.84,
+    "3s":    0.82,
 }
 
 
@@ -442,7 +442,7 @@ def _temporal_rerank(raw: list, gap_s: float = 1.0) -> List[SearchResult]:
     def res_duration(r: str) -> float:
         if r == "onset": return 0.5
         if r == "1s": return 1.0
-        if r == "2s": return 2.0
+        if r == "3s": return 3.0
         return 1.0
 
     import numpy as np

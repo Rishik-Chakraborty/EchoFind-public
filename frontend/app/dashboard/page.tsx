@@ -137,12 +137,16 @@ function DashboardContent() {
       setUploadedFiles([selected.name]);
       
       try {
-        const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
+        const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB chunks (lower HTTP overhead)
+        const MAX_CONCURRENT = 2; // 2 in parallel prevents connection timeouts on slow networks
         const totalChunks = Math.ceil(selected.size / CHUNK_SIZE);
         const uploadId = `upload_${Date.now()}_${Math.random().toString(36).substring(7)}`;
         
-        for (let i = 0; i < totalChunks; i++) {
-          setUploadProgress(`Uploading chunk ${i + 1} of ${totalChunks}...`);
+        setUploadProgress(`Uploading: 0% (0/${totalChunks} chunks)`);
+        
+        // Parallel chunk upload with concurrency limiter
+        let completedChunks = 0;
+        const uploadChunk = async (i: number) => {
           const start = i * CHUNK_SIZE;
           const end = Math.min(start + CHUNK_SIZE, selected.size);
           const chunk = selected.slice(start, end);
@@ -156,8 +160,27 @@ function DashboardContent() {
             method: "POST",
             body: formData,
           });
-          if (!res.ok) throw new Error(`Chunk ${i} upload failed`);
+          if (!res.ok) {
+            const errText = await res.text().catch(() => "Unknown error");
+            throw new Error(`Chunk ${i} upload failed (${res.status}): ${errText}`);
+          }
+          completedChunks++;
+          const pct = Math.round((completedChunks / totalChunks) * 100);
+          setUploadProgress(`Uploading: ${pct}% (${completedChunks}/${totalChunks} chunks)`);
+        };
+
+        // Process chunks with bounded concurrency (semaphore pattern)
+        // Uses .finally() so failed chunks are removed from the Set — .then()
+        // would leave rejected promises stuck, causing Promise.race to hang.
+        const executing = new Set<Promise<void>>();
+        for (let i = 0; i < totalChunks; i++) {
+          const p = uploadChunk(i).finally(() => { executing.delete(p); });
+          executing.add(p);
+          if (executing.size >= MAX_CONCURRENT) {
+            await Promise.race(executing);
+          }
         }
+        await Promise.all(executing);
         
         setUploadProgress("Finalizing upload...");
         const completeFormData = new FormData();

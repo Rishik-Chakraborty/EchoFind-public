@@ -10,7 +10,7 @@ class AudioFragmenter:
     """Process raw audio files into multi-resolution overlapping chunks.
 
     Resolution tiers (no overlap — onset detection handles transients):
-    - 2s     (localized events): 0% overlap → 2s step   — balanced coverage
+    - 3s     (localized events): 0% overlap → 3s step   — balanced coverage
 
     The 250ms dense grid was removed because the onset detector catches
     transients more precisely with far fewer chunks. The 5s tier was removed
@@ -18,7 +18,7 @@ class AudioFragmenter:
     """
 
     RESOLUTIONS = {
-        "2s":    {"duration": 2.0,   "overlap": 0.00},
+        "3s":    {"duration": 3.0,   "overlap": 0.00},
     }
 
     # Chunks with RMS energy below this dB threshold are considered silence
@@ -184,7 +184,7 @@ class AudioFragmenter:
         Each chunk dict:
           - start_time       (seconds, float)
           - end_time         (seconds, float)
-          - resolution_type  ("2s" | "onset")
+          - resolution_type  ("3s" | "onset")
           - array            (np.ndarray view, float32, shape=(n_samples,))
 
         Silent chunks (below SILENCE_THRESHOLD_DB) are automatically excluded.
@@ -227,10 +227,10 @@ class AudioFragmenter:
         try:
             onset_times = self._detect_onsets_fast(audio)
 
-            # Cap at 50 onsets — subsample evenly if there are more
-            if len(onset_times) > 50:
-                step_f = len(onset_times) / 50
-                onset_times = np.array([onset_times[int(i * step_f)] for i in range(50)])
+            # Cap at 25 onsets — subsample evenly if there are more
+            if len(onset_times) > 25:
+                step_f = len(onset_times) / 25
+                onset_times = np.array([onset_times[int(i * step_f)] for i in range(25)])
 
             total_time = total_samples / self.sample_rate
             for t in onset_times:
