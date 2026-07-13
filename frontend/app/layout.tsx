@@ -21,11 +21,17 @@ export const metadata: Metadata = {
     "A sophisticated neural audio retrieval system. Search through sound using natural language.",
 };
 
-export default function RootLayout({
+import { cookies } from "next/headers";
+import Paywall from "./components/Paywall";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const hasAccess = cookieStore.has("echofind_dev_access");
+
   return (
     <html
       lang="en"
@@ -33,7 +39,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ClerkProvider>
-          {children}
+          {hasAccess ? children : <Paywall />}
         </ClerkProvider>
       </body>
     </html>

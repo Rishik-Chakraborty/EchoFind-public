@@ -38,8 +38,8 @@ Apple's unified memory architecture and built-in GPU acceleration provide a mass
 
 ---
 
-## 3. NVIDIA T4 Small (Estimated)
-*Target deployment hardware via Hugging Face GPU Community Grant.*
+## 3. NVIDIA T4 Small (Current Production Hardware)
+*The active deployment environment for the backend API.*
 
 NVIDIA T4 GPUs (with 16GB VRAM) are highly optimized for inference workloads. With CUDA and CTranslate2 optimizations for Faster-Whisper, the processing times drop to fractions of a second.
 

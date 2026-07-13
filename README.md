@@ -10,8 +10,8 @@ EchoFind operates a multi-modal, hybrid-search backend architecture combining tr
 
 ### 1. Ingestion & DSP Pipeline
 Raw files are ingested via FastAPI and processed asynchronously in the background. The **Digital Signal Processing (DSP) Layer** uses `librosa` to execute a **Multi-Resolution Chunking Engine**.
-- **Dynamic Onset Segmentation:** Instead of an exhaustive dense temporal grid, the system uses Librosa's onset detection to identify transient acoustic events. It extracts precise 500ms chunks (-100ms to +400ms around the onset, capped at 50 onsets per file) to capture sharp sounds.
-- **Localized Speech (2s Tiers):** For continuous sounds and speech, the audio is segmented into 2-second chunks with 0% overlap.
+- **Dynamic Onset Segmentation:** Instead of an exhaustive dense temporal grid, the system uses Librosa's onset detection to identify transient acoustic events. It extracts precise 500ms chunks (-100ms to +400ms around the onset, capped at 25 onsets per file) to capture sharp sounds.
+- **Localized Speech (3s Tiers):** For continuous sounds and speech, the audio is segmented into 3-second chunks with 0% overlap.
 - **Silence Pruning & Normalization:** Chunks with RMS energy below -60.0 dB are aggressively pruned to prevent vector space pollution. Peak-normalization to [-1, 1] ensures embeddings remain consistent across varying recording volumes.
 
 ### 2. Multi-Modal Indexing
@@ -25,7 +25,7 @@ EchoFind employs an advanced retrieval pipeline to handle complex natural langua
 - **Hybrid Search Execution:** 
   1. The query text is scrubbed for speech prefixes (e.g., "sound of a person saying") and first run against the PostgreSQL full-text search index (with a `pg_trgm` fallback) to catch exact spoken words, ranking these at the top of the search results.
   2. Simultaneously, a cosine distance calculation (`<=>`) via `pgvector` retrieves the top 1000 acoustic candidates that match the ensemble query vector.
-- **Temporal Attention Reranking & NMS:** Acoustic candidates are strictly filtered via absolute distance thresholds specific to their resolution tier (e.g., 0.72 for onsets, 0.75 for 2s chunks). Finally, **Non-Maximum Suppression (NMS)** is applied to prevent overlapping highlight events, returning precise, isolated temporal hits (Top-20).
+- **Temporal Attention Reranking & NMS:** Acoustic candidates are strictly filtered via absolute distance thresholds specific to their resolution tier (e.g., 0.72 for onsets, 0.82 for 3s chunks). Finally, **Non-Maximum Suppression (NMS)** is applied to prevent overlapping highlight events, returning precise, isolated temporal hits (Top-20).
 
 ### 4. Corpus Mapping (Dimensionality Reduction)
 To visualize the unstructured audio landscape, the backend implements a `/api/v1/corpus/map` endpoint. It fetches embeddings from the vector database, applies **Principal Component Analysis (PCA)** via `scikit-learn` to reduce the 512D space down to 3D, and runs **K-Means clustering** ($k=5$). It also calculates 95th-percentile distances from cluster centers to flag acoustic outliers for the user interface.
