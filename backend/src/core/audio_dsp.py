@@ -34,7 +34,7 @@ class AudioFragmenter:
     # A sample is an onset if its RMS is this many dB above the local mean.
     _ONSET_THRESHOLD_DB = 12.0
     # Minimum gap in seconds between consecutive onsets to avoid duplicates.
-    _ONSET_MIN_GAP_S = 0.15
+    _ONSET_MIN_GAP_S = 0.5
 
     def __init__(self, sample_rate: int = 48000):
         self.sample_rate = sample_rate

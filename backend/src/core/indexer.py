@@ -226,33 +226,72 @@ def _decode_audio_segments(file_path: str, target_sr: int = 48000):
 # Collect-only helpers (no DB writes — safe to call from background threads)
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Pre-padding targets — keeps all arrays in a batch the same length so the
+# CLAP processor doesn't have to dynamically pad.  More importantly, onset
+# chunks (0.5 s / 24 k samples) are never inflated to the 3 s / 144 k length
+# that grid chunks use, which eliminates ~6× wasted mel-spectrogram compute.
+# ---------------------------------------------------------------------------
+_RESOLUTION_TARGET_SAMPLES = {
+    "3s":    3 * 48000,           # 144,000
+    "onset": int(0.5 * 48000),    #  24,000
+}
+
+
 def _collect_embeddings(all_chunks, embedder) -> list:
-    """Run CLAP embedding and return a list of row dicts ready for bulk insert.
+    """Run CLAP embedding grouped by resolution type for efficiency.
+
+    Batching chunks of the same resolution together avoids the processor
+    padding short onset chunks (0.5 s) to the length of 3 s grid chunks,
+    which wastes up to 6× GPU compute on zero-padded mel frames.
 
     Deliberately avoids any DB interaction so it can run concurrently with
     ``_collect_transcription`` without SQLAlchemy session conflicts.
     """
-    rows = []
-    for i in range(0, len(all_chunks), _EMBED_BATCH_SIZE):
-        batch = all_chunks[i : i + _EMBED_BATCH_SIZE]
-        arrays = [c["array"] for c in batch]
+    # Build output list preserving original ordering
+    rows = [None] * len(all_chunks)
 
-        # embed_audio_batch has built-in OOM fallback
-        embeddings = embedder.embed_audio_batch(arrays)
+    # Group chunk indices by resolution type
+    groups: dict[str, list[int]] = {}
+    for i, chunk in enumerate(all_chunks):
+        res = chunk["resolution_type"]
+        if res not in groups:
+            groups[res] = []
+        groups[res].append(i)
 
-        for idx, chunk in enumerate(batch):
-            embedding_str = str(embeddings[idx].tolist())
-            rows.append({
-                "start_time":      chunk["start_time"],
-                "end_time":        chunk["end_time"],
-                "resolution_type": chunk["resolution_type"],
-                "embedding":       embedding_str,
-            })
+    for res_type, indices in groups.items():
+        target_len = _RESOLUTION_TARGET_SAMPLES.get(res_type, 3 * 48000)
 
-        del arrays, embeddings
-        gc.collect()
+        for batch_start in range(0, len(indices), _EMBED_BATCH_SIZE):
+            batch_indices = indices[batch_start : batch_start + _EMBED_BATCH_SIZE]
 
-    return rows
+            # Pre-pad / trim every array to a fixed length so the processor
+            # skips its own dynamic-padding logic.
+            arrays = []
+            for idx in batch_indices:
+                arr = all_chunks[idx]["array"]
+                if len(arr) >= target_len:
+                    arr = arr[:target_len]
+                elif len(arr) < target_len:
+                    arr = np.pad(arr, (0, target_len - len(arr)))
+                arrays.append(arr)
+
+            # embed_audio_batch has built-in OOM fallback
+            embeddings = embedder.embed_audio_batch(arrays)
+
+            for j, idx in enumerate(batch_indices):
+                chunk = all_chunks[idx]
+                rows[idx] = {
+                    "start_time":      chunk["start_time"],
+                    "end_time":        chunk["end_time"],
+                    "resolution_type": chunk["resolution_type"],
+                    "embedding":       str(embeddings[j].tolist()),
+                }
+
+            del arrays, embeddings
+            gc.collect()
+
+    return [r for r in rows if r is not None]
 
 
 def _collect_transcription(file_path_or_array, duration: float, time_offset: float) -> list:
@@ -268,8 +307,17 @@ def _collect_transcription(file_path_or_array, duration: float, time_offset: flo
     """
     pipeline = _get_batched_pipeline()
 
-    # BatchedInferencePipeline.transcribe() accepts numpy arrays directly
-    transcribe_kwargs = dict(word_timestamps=True, vad_filter=True)
+    # BatchedInferencePipeline.transcribe() accepts numpy arrays directly.
+    # A higher speech_pad_ms keeps word boundaries tight; the raised
+    # threshold makes the VAD skip more marginal non-speech regions.
+    transcribe_kwargs = dict(
+        word_timestamps=True,
+        vad_filter=True,
+        vad_parameters=dict(
+            threshold=0.6,                # default 0.5 — stricter speech gate
+            min_silence_duration_ms=1000,  # default 2000 — split on shorter gaps
+        ),
+    )
 
     # If the pipeline supports batch_size (BatchedInferencePipeline), use it
     from faster_whisper import BatchedInferencePipeline as _BIP
@@ -387,22 +435,41 @@ def process_upload(job_id: int, file_path: str):
             _update_progress(db, job_id, base_progress)
 
             # 1. Fragment audio into chunks (directly from numpy array — no disk)
+            t_frag = time.time()
             seg_chunks = fragmenter.fragment_from_array(seg_audio, seg_sr)
 
             # Apply global time offset
             for chunk in seg_chunks:
                 chunk["start_time"] += seg_offset
                 chunk["end_time"]   += seg_offset
+            t_frag_end = time.time()
 
-            # 2. CLAP embedding and Whisper transcription run sequentially.
-            #    Running them concurrently on a single consumer GPU (like T4) or CPU
-            #    causes severe context thrashing and resource contention.
-            embed_rows      = _collect_embeddings(seg_chunks, embedder)
+            # 2. CLAP embedding (grouped by resolution type for efficiency).
+            t_embed = time.time()
+            embed_rows = _collect_embeddings(seg_chunks, embedder)
+            t_embed_end = time.time()
+
+            # 3. Whisper transcription (sequential — running both models
+            #    concurrently on a single consumer GPU causes context thrashing).
+            t_whisper = time.time()
             transcript_rows = _collect_transcription(seg_audio, seg_duration, seg_offset)
+            t_whisper_end = time.time()
 
-            # 3. Write results to DB (sequential, safe with single session)
+            # 4. Write results to DB (sequential, safe with single session)
+            t_db = time.time()
             _insert_embeddings(db, file_id, embed_rows)
             _insert_transcription(db, file_id, transcript_rows)
+            t_db_end = time.time()
+
+            logger.info(
+                "Segment %d timings — fragment: %.2fs, CLAP embed: %.2fs "
+                "(%d chunks), Whisper: %.2fs, DB insert: %.2fs",
+                seg_index,
+                t_frag_end - t_frag,
+                t_embed_end - t_embed, len(seg_chunks),
+                t_whisper_end - t_whisper,
+                t_db_end - t_db,
+            )
 
             # Update progress to end of this segment
             _update_progress(db, job_id, seg_end)
